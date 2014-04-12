@@ -99,5 +99,10 @@ class TestSchema(unittest.TestCase):
             Schema(('A', int), ('C', float),)
         )
 
+    def test_test_get_index_by_name(self):
+        s = Schema(('A', int), ('B', str), ('C', float))
+        result = s.get_column_index_by_name('A')
+        self.assertEquals(0, result)
+
 if __name__ == '__main__':
     unittest.main()

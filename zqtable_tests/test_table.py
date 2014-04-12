@@ -92,3 +92,6 @@ class TestTable(unittest.TestCase):
         t1 = Table(s)
         t0.append([2, 2.22, 1])
         self.assertNotEquals(t0, t1)
+
+
+

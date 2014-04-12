@@ -54,6 +54,9 @@ class Schema(list):
         cols = [c for c in self if not c.name in remove]
         return Schema(*cols)
 
+    def get_column_index_by_name(self, key):
+        return self.column_names.index(key) 
+
     @property
     def column_names(self):
         return [cm.name for cm in self]

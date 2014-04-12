@@ -25,6 +25,10 @@ class Table(list):
             return SlicedTable(t=self, sl=key)
         return list.__getitem__(self, key)
 
+    def __getattr__(self, key):
+        if key in self.schema.name_to_col:
+            return Column(self, key)
+
 class SlicedTable(object):
     def __init__(self, t, sl):
         self.t = t
@@ -42,3 +46,15 @@ class SlicedTable(object):
         start, stop, stride = self.sl.indices(len(self.t))
         adjusted_key = start + (stride * key)
         return self.t[adjusted_key]
+
+class Column(object):
+    def __init__(self, t, column_name):
+        self.t = t
+        self.column_name = column_name
+
+    @property
+    def schema(self):
+        return self.t.schema.project([self.column_name])
+
+    def to_list(self):
+        return []

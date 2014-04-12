@@ -1,15 +1,16 @@
 import unittest
 
-from zqtable.table import Table, Schema, InvalidSchema, InvalidData, SlicedTable
+from zqtable.table import Table, Schema, InvalidSchema, InvalidData, SlicedTable, Column
+
 
 class TestTableRowAccess(unittest.TestCase):
 
     def setUp(self):
         self.s = Schema(
-                ('A', int),
-                ('B', float),
-                ('C', str),
-            )
+            ('A', int),
+            ('B', float),
+            ('C', str),
+        )
         self.t = Table(self.s)
 
         self.t.extend([
@@ -50,5 +51,23 @@ class TestTableRowAccess(unittest.TestCase):
         with self.assertRaises(IndexError):
             t[3]
 
+    def test_get_single_column(self):
+        a = self.t.A
+        self.assertIsInstance(a, Column)
 
+    def test_get_column_schema(self):
+        b = self.t.B
+        colB = self.t.schema.name_to_col['B']
+        self.assertEquals(
+            b.schema,
+            Schema(colB
+                )
+        )
 
+    # def test_get_col_to_list(self):
+    #     c = self.t.C
+
+    #     self.assertEquals(
+    #         c.to_list(),
+    #         ['hello', 'goodbye', 'yaloo', 'fnu']
+    #     )
