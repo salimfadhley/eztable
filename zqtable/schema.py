@@ -48,9 +48,8 @@ class Schema(list):
         return s
 
     def project(self, order):
-        return Schema(
-            self.name_to_col[cn] for cn in order
-        )
+        cols = [self.name_to_col[cn] for cn in order]
+        return Schema(*cols)
 
 
     @property
