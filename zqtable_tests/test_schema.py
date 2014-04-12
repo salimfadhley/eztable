@@ -93,5 +93,12 @@ class TestSchema(unittest.TestCase):
             Schema(('B', str), ('C', float),  ('A', int))
         )
 
+    def test_anti_project(self):
+        s = Schema(('A', int), ('B', str), ('C', float))
+        self.assertEquals(
+            s.anti_project(['B']),
+            Schema(('A', int), ('C', float),)
+        )
+
 if __name__ == '__main__':
     unittest.main()

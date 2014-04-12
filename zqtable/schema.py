@@ -50,7 +50,10 @@ class Schema(list):
     def project(self, order):
         cols = [self.name_to_col[cn] for cn in order]
         return Schema(*cols)
-
+ 
+    def anti_project(self, remove):
+        cols = [c for c in self if not c.name in remove]
+        return Schema(*cols)
 
     @property
     def column_names(self):
