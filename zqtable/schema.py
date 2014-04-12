@@ -20,10 +20,6 @@ class Schema(list):
         padded_row = itertools.chain(row, NONES)
         return all(c.validate(v) for c, v in zip(self, padded_row))
 
-    def extend(self, rows):
-        for row in rows:
-            self.append(row)
-
     def append(self, c):
         if not isinstance(c, ColMeta):
             raise InvalidColumn(c)

@@ -12,3 +12,7 @@ class Table(list):
         if not self.schema.validate(row):
             raise InvalidData(row)
         list.append(self, row)
+
+    def extend(self, rows):
+        for row in rows:
+            self.append(row)
