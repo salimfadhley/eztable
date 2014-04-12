@@ -1,0 +1,2 @@
+class Table(self):
+    pass

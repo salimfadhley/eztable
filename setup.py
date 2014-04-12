@@ -24,7 +24,7 @@ setup(
     packages=['zqtable', 'zqtable_tests'],
     zip_safe=True,
     include_package_data=False,
-    install_requires=['requests>=1.2.3', 'pytz>=2013b'],
+    install_requires=[],
     test_suite='nose.collector',
     tests_require=['mock', 'nose', 'coverage'],
     url=PROJECT_URL,
@@ -32,7 +32,7 @@ setup(
     long_description=DESCRIPTION,
     license='MIT',
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 2 - Pre-Alpha',
         'Environment :: Console',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
