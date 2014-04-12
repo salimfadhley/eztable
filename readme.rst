@@ -12,6 +12,6 @@ Build Status
 How to contact the developer
 ----------------------------
 
-* If you want the lastst released version: https://pypi.python.org/pypi/zqtable/0.0.2
+* If you want the lastst released version: https://pypi.python.org/pypi/zqtable/
 * Latest source: https://bitbucket.org/salimfadhley/zqtable
 * Problems & Bugs: sal@stodge.org
