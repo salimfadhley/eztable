@@ -1,6 +1,6 @@
 import unittest
 
-from zqtable.schema import ColMeta, InvalidColumn, Schema
+from zqtable.schema import ColMeta, InvalidColumn, Schema, InvalidSchema
 
 
 class TestSchema(unittest.TestCase):
@@ -73,6 +73,25 @@ class TestSchema(unittest.TestCase):
 
         self.assertEquals(a + b, s)
 
+    def testColumnNames(self):
+        s = Schema(('A', int), ('B', str), ('C', float))
+        self.assertEquals(s.column_names, ['A', 'B', 'C'])
+
+    def testColumnTypes(self):
+        s = Schema(('A', int), ('B', str), ('C', float))
+        self.assertEquals(s.column_types, [int, str, float])
+
+    def testInvalidSchemaRepeat(self):
+        with self.assertRaises(InvalidSchema):
+            Schema(('A', int), ('A', str))
+
+    # def testProject(self):
+    #     s = Schema(('A', int), ('B', str), ('C', float))
+        
+    #     self.assertEquals(
+    #         s.project(['B', 'C', 'A']),
+    #         Schema(('B', str), ('C', float),  ('A', int))
+    #     )
 
 if __name__ == '__main__':
     unittest.main()
