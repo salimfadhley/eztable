@@ -26,6 +26,40 @@ class TestTable(unittest.TestCase):
         t = Table(s)
         t.append([1, 2.2, 'hello'])
 
+    def test_extend_rows(self):
+        t = Table(Schema(
+            ('A', int),
+            ('B', float),
+            ('C', str),
+        ))
+        t.extend([
+            [1, 1.1, 'hello'],
+            [2, 2.2, 'goodbye']
+        ])
+        self.assertEquals(len(t), 2)
+
+    def test_append_invalid_row(self):
+        t = Table(Schema(
+            ('A', int),
+            ('B', float),
+            ('C', str),
+        ))
+
+        with self.assertRaises(InvalidData):
+            t.append([2, 2.2, int])
+
+    def test_extend_invalid_rows(self):
+        t = Table(Schema(
+            ('A', int),
+            ('B', float),
+            ('C', str),
+        ))
+
+        with self.assertRaises(InvalidData):
+            t.extend([
+                [1, 1.1, 0],
+            ])
+
     def test_append_invalid_row(self):
         s = Schema(
                 ('A', int),
