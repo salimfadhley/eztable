@@ -39,6 +39,22 @@ class TestTable(unittest.TestCase):
         ])
         self.assertEquals(len(t), 2)
 
+
+    def test_to_list(self):
+        t = Table(Schema(
+            ('A', int),
+            ('B', float),
+            ('C', str),
+        ))
+
+        input = [
+            [1, 1.1, 'hello'],
+            [2, 2.2, 'goodbye']
+        ]
+
+        t.extend(input)
+        self.assertEquals(input, t.to_list())
+
     def test_append_invalid_row(self):
         t = Table(Schema(
             ('A', int),
