@@ -65,7 +65,6 @@ class TestSchema(unittest.TestCase):
         s = Schema(('A', int), ('B', float))
         self.assertTrue(str(s[0]) in repr(s))
 
-
     def testSchemaConcat(self):
         a = Schema(('A', int))
         b = Schema(('B', str))
@@ -87,7 +86,7 @@ class TestSchema(unittest.TestCase):
 
     def testProject(self):
         s = Schema(('A', int), ('B', str), ('C', float))
-        
+
         self.assertEquals(
             s.project(['B', 'C', 'A']),
             Schema(('B', str), ('C', float),  ('A', int))

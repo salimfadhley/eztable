@@ -6,8 +6,6 @@ from .exceptions import InvalidColumn, InvalidSchema
 NONES = itertools.cycle([None, ])
 
 
-
-
 class Schema(list):
 
     def __init__(self, *cols):
@@ -25,9 +23,9 @@ class Schema(list):
     def append(self, c):
         if not isinstance(c, ColMeta):
             raise InvalidColumn(c)
-        
+
         if c.name in self.name_to_col:
-            raise InvalidSchema(c) 
+            raise InvalidSchema(c)
 
         list.append(self, c)
         self.name_to_col[c.name] = c
@@ -50,7 +48,7 @@ class Schema(list):
     def project(self, order):
         cols = [self.name_to_col[cn] for cn in order]
         return Schema(*cols)
- 
+
     def anti_project(self, remove):
         cols = [c for c in self if not c.name in remove]
         return Schema(*cols)
@@ -62,5 +60,3 @@ class Schema(list):
     @property
     def column_types(self):
         return [cm.col_type for cm in self]
-
-
