@@ -85,13 +85,13 @@ class TestSchema(unittest.TestCase):
         with self.assertRaises(InvalidSchema):
             Schema(('A', int), ('A', str))
 
-    # def testProject(self):
-    #     s = Schema(('A', int), ('B', str), ('C', float))
+    def testProject(self):
+        s = Schema(('A', int), ('B', str), ('C', float))
         
-    #     self.assertEquals(
-    #         s.project(['B', 'C', 'A']),
-    #         Schema(('B', str), ('C', float),  ('A', int))
-    #     )
+        self.assertEquals(
+            s.project(['B', 'C', 'A']),
+            Schema(('B', str), ('C', float),  ('A', int))
+        )
 
 if __name__ == '__main__':
     unittest.main()
