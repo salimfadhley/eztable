@@ -2,8 +2,21 @@ from .schema import Schema
 from .exceptions import InvalidSchema, InvalidData
 from .colmeta import ColMeta
 
-class Table(list):
-    
+
+class BaseTable(object):
+
+    def project(self, col_names):
+        return ProjectedTable(self, col_names)
+
+    def to_list(self):
+        return list(self)
+
+    def expand_const(self, column_name, column_type, value):
+        return ExpandedTable(self, column_name, column_type, value)
+
+
+class Table(BaseTable, list):
+
     def __init__(self, schema):
         if not isinstance(schema, Schema):
             raise InvalidSchema(schema)
@@ -26,18 +39,14 @@ class Table(list):
             return SlicedTable(t=self, sl=key)
         return list.__getitem__(self, key)
 
-    def to_list(self):
-        return list(self)
-
     def __getattr__(self, key):
         if key in self.schema.name_to_col:
             return Column(self, key)
         raise AttributeError(key)
 
-    def expand_const(self, column_name, column_type, value):
-        return ExpandedTable(self, column_name, column_type, value)
 
-class ExpandedTable(object):
+class ExpandedTable(BaseTable):
+
     def __init__(self, t, column_name, column_type, value):
         self.t = t
         self.column_name = column_name
@@ -47,15 +56,21 @@ class ExpandedTable(object):
     @property
     def schema(self):
         return self.t.schema + Schema(ColMeta(self.column_name, self.column_type))
-    
+
     def __getitem__(self, key):
         return list(self.t[key]) + [self.value]
 
     def __len__(self):
         return self.t.__len__()
 
+    def __getattr__(self, key):
+        if key == self.column_name:
+            return Column(self, key)
+        raise AttributeError(key)
 
-class SlicedTable(object):
+
+class SlicedTable(BaseTable):
+
     def __init__(self, t, sl):
         self.t = t
         self.sl = sl
@@ -73,14 +88,44 @@ class SlicedTable(object):
         adjusted_key = start + (stride * key)
         return self.t[adjusted_key]
 
-class Column(object):
+
+class Column(BaseTable):
+
     def __init__(self, t, column_name):
         self.t = t
         self.column_name = column_name
+
 
     @property
     def schema(self):
         return self.t.schema.project([self.column_name])
 
     def to_list(self):
-        return []
+        col_index = self.t.schema.get_column_index_by_name(self.column_name)
+        return [row[col_index] for row in self.t.to_list()]
+
+
+class ProjectedTable(BaseTable):
+
+    def __init__(self, t, column_names):
+        self.t = t
+        self.column_names = column_names
+
+    def column_order(self):
+        return [self.t.schema.get_column_index_by_name(cn) for cn in self.column_names]
+
+    @property
+    def schema(self):
+        return self.t.schema.project(self.column_names)
+
+    def _to_list(self):
+        index_order = self.column_order()
+        for row in self.t:
+            yield [row[i] for row in index_order]
+
+    def to_list(self):
+        return list(self._to_list())
+
+    def __getitem__(self, key):
+        index_order = self.column_order()
+        return [self.t[key][i] for i in index_order]
