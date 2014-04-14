@@ -21,7 +21,7 @@ setup(
     version=REVISION,
     author=PROJECT_AUTHORS,
     author_email=PROJECT_EMAILS,
-    packages=['zqtable', 'zqtable_tests'],
+    py_modules=['zqtable'],
     zip_safe=True,
     include_package_data=False,
     install_requires=[],
@@ -30,6 +30,7 @@ setup(
     url=PROJECT_URL,
     description=SHORT_DESCRIPTION,
     long_description=DESCRIPTION,
+    use_2to3=True,
     license='MIT',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
@@ -39,6 +40,7 @@ setup(
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
         'Topic :: Software Development :: Testing',
     ],
 )

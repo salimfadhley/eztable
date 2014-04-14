@@ -1,11 +1,11 @@
 
-from zqtable.table import Table, Schema
+from zqtable import Table
 
-t = Table(Schema(
-            ('A', int),
-            ('B', float),
-            ('C', str),
-        ))
+t = Table([
+    ('A', int),
+    ('B', float),
+    ('C', str),
+])
 
 
 t.extend([

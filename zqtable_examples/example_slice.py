@@ -1,12 +1,12 @@
 
-from zqtable.table import Table, Schema
+from zqtable import Table
 
-s = Schema(
-                ('A', int),
-                ('B', float),
-                ('C', str),
-            )
-t = Table(s)
+
+t = Table([
+    ('A', int),
+    ('B', float),
+    ('C', str),
+])
 
 t.extend([
     (1, 1.1, 'hello'),
