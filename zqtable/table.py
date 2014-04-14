@@ -26,6 +26,15 @@ class BaseTable(object):
             input_columns=input_columns,
             fn=fn)
 
+    def hash(self, column_name, input_columns):
+        return ExpandedTable(
+            t=self,
+            column_name=column_name,
+            column_type=int,
+            input_columns=input_columns,
+            fn=hash
+        )
+
     def column_order(self, column_names):
         return [self.schema.get_column_index_by_name(cn) for cn in column_names]
 
@@ -38,6 +47,11 @@ class BaseTable(object):
         if isinstance(key, slice):
             return SlicedTable(t=self, sl=key)
         return list.__getitem__(self, key)
+
+    def __getattr__(self, key):
+        if key in self.schema.name_to_col:
+            return Column(self, key)
+        raise AttributeError(key)
 
 
 class Table(BaseTable, list):
@@ -59,11 +73,6 @@ class Table(BaseTable, list):
     def __getslice__(self, start, stop):
         return self.__getitem__(slice(start, stop, 1))
 
-    def __getattr__(self, key):
-        if key in self.schema.name_to_col:
-            return Column(self, key)
-        raise AttributeError(key)
-
 
 class ExpandedTable(BaseTable):
 
@@ -83,16 +92,10 @@ class ExpandedTable(BaseTable):
     def compute_value(self, row):
         if not self.fn:
             return self.value
-        return self.fn(**self.kwargs_dict(row))
+        return self.fn(*self.args_tuple(row))
 
-    def kwargs_dict(self, row):
-        result = {}
-        for cn, i in zip(self.input_columns, self.input_column_order):
-            try:
-                result[cn] = row[i]
-            except IndexError:
-                raise IndexError('Missing #%i (%s) in %s' % (i, cn, repr(row)))
-        return result
+    def args_tuple(self, row):
+        return tuple(row[i] for i in self.input_column_order)
 
     def __getitem__(self, key):
         if isinstance(key, slice):
