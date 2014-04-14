@@ -12,8 +12,22 @@ class BaseTable(object):
         return list(self)
 
     def expand_const(self, column_name, column_type, value):
-        return ExpandedTable(self, column_name, column_type, value)
+        return ExpandedTable(
+            t = self,
+            column_name = column_name,
+            column_type = column_type,
+            value = value)
 
+    def expand(self, column_name, column_type, input_columns, fn):
+        return ExpandedTable(
+            t = self,
+            column_name = column_name,
+            column_type = column_type,
+            input_columns=input_columns,
+            fn=fn)
+
+    def column_order(self, column_names):
+        return [self.schema.get_column_index_by_name(cn) for cn in column_names]
 
 class Table(BaseTable, list):
 
@@ -47,18 +61,34 @@ class Table(BaseTable, list):
 
 class ExpandedTable(BaseTable):
 
-    def __init__(self, t, column_name, column_type, value):
+    def __init__(self, t, column_name, column_type, input_columns=None, value=None, fn=None):
         self.t = t
         self.column_name = column_name
         self.column_type = column_type
         self.value = value
+        self.input_columns = input_columns or []
+        self.input_column_order = self.column_order(self.input_columns)
+        self.fn = fn
 
     @property
     def schema(self):
         return self.t.schema + Schema(ColMeta(self.column_name, self.column_type))
 
+    def compute_value(self, row):
+        if not self.fn:
+            return self.value
+        return self.fn(**self.kwargs_dict(row))
+        
+    def kwargs_dict(self, row):
+        result = {}
+        
+        for cn, i in zip(self.input_columns, self.input_column_order):
+            result[cn] = row[i]
+        return result
+
     def __getitem__(self, key):
-        return list(self.t[key]) + [self.value]
+        row = list(self.t[key])
+        return  row + [self.compute_value(row)]
 
     def __len__(self):
         return self.t.__len__()
@@ -111,21 +141,25 @@ class ProjectedTable(BaseTable):
         self.t = t
         self.column_names = column_names
 
-    def column_order(self):
-        return [self.t.schema.get_column_index_by_name(cn) for cn in self.column_names]
 
     @property
     def schema(self):
         return self.t.schema.project(self.column_names)
 
     def _to_list(self):
-        index_order = self.column_order()
+        index_order = self.column_order(self.column_names)
         for row in self.t:
             yield [row[i] for row in index_order]
 
     def to_list(self):
         return list(self._to_list())
 
+    def _projected_column_order(self):
+        return self.column_order(self.column_names)
+
+    def column_order(self, column_names):
+        return [self.t.schema.get_column_index_by_name(cn) for cn in column_names]
+
     def __getitem__(self, key):
-        index_order = self.column_order()
+        index_order = self._projected_column_order()
         return [self.t[key][i] for i in index_order]

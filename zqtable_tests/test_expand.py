@@ -58,5 +58,15 @@ class TestExpandTable(unittest.TestCase):
         t = self.t.project(['A', 'C'])
         self.assertEquals(t.schema.column_names, ['A', 'C'])
         self.assertEquals(t.schema.column_types, [int, str])
-        self.assertEquals(t.column_order(), [0,2])
+        self.assertEquals(t.column_order(['A', 'C']), [0,2])
+        self.assertEquals(t._projected_column_order(), [0, 2])
         self.assertEquals(t[0], [1,'hello'])
+
+    def test_simple_expand(self):
+        t = self.t.expand(
+            column_name='D',
+            column_type=int,
+            input_columns=['C'],
+            fn=lambda C: len(C)
+        )
+        self.assertEquals(t.D.to_list(), [5,5])
