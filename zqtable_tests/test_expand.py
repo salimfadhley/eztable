@@ -1,6 +1,6 @@
 import unittest
 
-from zqtable.table import Table, Schema, InvalidSchema, InvalidData, ExpandedTable
+from zqtable.table import Table, Schema, InvalidSchema, InvalidData, ExpandedTable, SlicedTable
 
 
 class TestExpandTable(unittest.TestCase):
@@ -86,3 +86,20 @@ class TestExpandTable(unittest.TestCase):
 
         self.assertEquals(t.to_list(), expected)
         self.assertIsInstance(t, Table)
+
+    def test_simple_expand_and_slice(self):
+        t = self.t.expand(
+            column_name='D',
+            column_type=int,
+            input_columns=['C'],
+            fn=lambda C: len(C) + 1
+        )[1:]
+
+        expected = [
+            [2, 2.2, 'yello', 6],
+        ]
+
+        self.assertIsInstance(t, SlicedTable)
+        self.assertEquals(t.to_list(), expected)
+        
+

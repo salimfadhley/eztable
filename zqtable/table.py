@@ -22,7 +22,7 @@ class BaseTable(object):
         return ExpandedTable(
             t=self,
             column_name=column_name,
-            column_type=column_type,
+            column_type=column_type,    
             input_columns=input_columns,
             fn=fn)
 
@@ -33,6 +33,11 @@ class BaseTable(object):
         t = Table(self.schema)
         t.extend(self.to_list())
         return t
+
+    def __getitem__(self, key):
+        if isinstance(key, slice):
+            return SlicedTable(t=self, sl=key)
+        return list.__getitem__(self, key)
 
 
 class Table(BaseTable, list):
@@ -53,11 +58,6 @@ class Table(BaseTable, list):
 
     def __getslice__(self, start, stop):
         return self.__getitem__(slice(start, stop, 1))
-
-    def __getitem__(self, key):
-        if isinstance(key, slice):
-            return SlicedTable(t=self, sl=key)
-        return list.__getitem__(self, key)
 
     def __getattr__(self, key):
         if key in self.schema.name_to_col:
@@ -87,14 +87,19 @@ class ExpandedTable(BaseTable):
 
     def kwargs_dict(self, row):
         result = {}
-
         for cn, i in zip(self.input_columns, self.input_column_order):
-            result[cn] = row[i]
+            try:
+                result[cn] = row[i]
+            except IndexError:
+                raise IndexError('Missing #%i (%s) in %s' % (i, cn, repr(row)))
         return result
 
     def __getitem__(self, key):
-        row = list(self.t[key])
-        return row + [self.compute_value(row)]
+        if isinstance(key, slice):
+            return SlicedTable(t=self, sl=key)
+        else:
+            row = list(self.t[key])
+            return row + [self.compute_value(row)]
 
     def __len__(self):
         return self.t.__len__()
@@ -108,6 +113,7 @@ class ExpandedTable(BaseTable):
 class SlicedTable(BaseTable):
 
     def __init__(self, t, sl):
+        assert isinstance(sl, slice), 'Expected a slice, got %s' % repr(sl)
         self.t = t
         self.sl = sl
 
