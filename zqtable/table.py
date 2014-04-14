@@ -22,7 +22,7 @@ class BaseTable(object):
         return ExpandedTable(
             t=self,
             column_name=column_name,
-            column_type=column_type,    
+            column_type=column_type,
             input_columns=input_columns,
             fn=fn)
 

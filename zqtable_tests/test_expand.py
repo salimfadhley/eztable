@@ -101,5 +101,3 @@ class TestExpandTable(unittest.TestCase):
 
         self.assertIsInstance(t, SlicedTable)
         self.assertEquals(t.to_list(), expected)
-        
-
