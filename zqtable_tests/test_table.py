@@ -11,7 +11,7 @@ class TestTable(unittest.TestCase):
             ('C', str)
         ]
         t = Table(s)
-        self.assertEquals(s, t.schema)
+        self.assertEqual(s, t.schema)
 
     def test_append_row(self):
         t = Table([
@@ -32,7 +32,7 @@ class TestTable(unittest.TestCase):
             [1, 1.1, 'hello'],
             [2, 2.2, 'goodbye']
         ])
-        self.assertEquals(len(t), 2)
+        self.assertEqual(len(t), 2)
 
     def test_append_invalid_row(self):
         t = Table([
@@ -56,7 +56,7 @@ class TestTable(unittest.TestCase):
                 [1, 1.1, 0],
             ])
 
-    def test_append_invalid_row(self):
+    def test_append_invalid_row2(self):
         t = Table([
             ('A', int),
             ('B', float),
@@ -74,7 +74,7 @@ class TestTable(unittest.TestCase):
         t0 = Table(s)
         t1 = Table(s)
 
-        self.assertEquals(t0, t1)
+        self.assertEqual(t0, t1)
 
     def test_empty_table_not_equal_when_schemas_same_but_data_different(self):
         s = [
@@ -85,4 +85,4 @@ class TestTable(unittest.TestCase):
         t0 = Table(s)
         t1 = Table(s)
         t0.append([2, 2.22, 1])
-        self.assertNotEquals(t0, t1)
+        self.assertNotEqual(t0, t1)

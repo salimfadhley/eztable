@@ -1,4 +1,4 @@
-from itertools import izip, repeat, islice
+from itertools import izip, repeat, islice, izip_longest
 
 
 class InvalidSchema(TypeError):
@@ -66,7 +66,6 @@ class TableRow(tuple):
         return tuple.__new__(cls, row)
 
     def __init__(self, row, schema):
-        tuple.__init__(self, row)
         self.schema = schema
 
     def __getattr__(self, name):
@@ -219,7 +218,7 @@ class Table(object):
 
     def __getitem__(self, key):
         if isinstance(key, slice):
-            if key.step < 0:
+            if key.step and key.step < 0:
                 # islice doesn't support negative indices, convert to a list
                 f = lambda: list(self._indices_func())[key]
             else:
@@ -257,11 +256,28 @@ class Table(object):
         if self.schema != ano.schema:
             return False
 
-        for a, b in izip(self, ano):
+        for a, b in izip_longest(self, ano):
             if a != b:
                 return False
 
         return True
+
+    def __repr__(self):
+        cl = [len(c.name) for c in self._columns]
+        for r in self:
+            for i, (m, c) in enumerate(zip(cl, r)):
+                if c > m:
+                    cl[i] = c
+
+        out = []
+        def row(r):
+            out.append(
+                '| %s |' % (' | '.join(str(c).ljust(l) for l, c in zip(cl, r)))
+            )
+        row(c.name for c in self._columns)
+        for r in self:
+            row(r)
+        return '\n'.join(out)
 
 
 class DerivedTable(Table):

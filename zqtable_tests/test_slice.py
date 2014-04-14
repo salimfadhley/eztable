@@ -20,25 +20,25 @@ class TestTableRowAccess(unittest.TestCase):
 
     def test_basic_slice(self):
         t = self.t[0:2:]
-        self.assertEquals(len(t), 2)
-        self.assertEquals(t.schema, self.s)
+        self.assertEqual(len(t), 2)
+        self.assertEqual(t.schema, self.s)
 
     def test_get_row(self):
-        self.assertEquals(
+        self.assertEqual(
             self.t[0],
             (1, 1.1, 'hello')
         )
 
     def test_get_sliced_row(self):
         t = self.t[1:]
-        self.assertEquals(
+        self.assertEqual(
             t[0],
             (2, 2.2, 'goodbye'),
         )
 
     def test_get_sliced_row_reverse(self):
         t = self.t[::-1]
-        self.assertEquals(
+        self.assertEqual(
             t[0],
             (4, 4.4, 'fnuu'),
         )

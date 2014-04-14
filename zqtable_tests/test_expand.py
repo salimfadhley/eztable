@@ -24,12 +24,12 @@ class TestExpandTable(unittest.TestCase):
             type=str
         )
 
-        self.assertEquals(
+        self.assertEqual(
             t.column_names,
             ['A', 'B', 'C', 'D']
         )
 
-        self.assertEquals(
+        self.assertEqual(
             t[0],
             (1, 1.1, 'hello', 'X')
         )
@@ -40,20 +40,20 @@ class TestExpandTable(unittest.TestCase):
             type=str,
             value='X'
         )
-        self.assertEquals(len(t), len(self.t))
+        self.assertEqual(len(t), len(self.t))
 
     def test_expand_const_on_project(self):
         t0 = self.t.project(['C'])
         t1 = t0.expand_const('D', 0)
-        self.assertEquals(
+        self.assertEqual(
             list(t1.D),
             [0] * len(self.t)
         )
 
     def test_simple_project(self):
         t = self.t.project(['A', 'C'])
-        self.assertEquals(t.schema, [('A', int), ('C', str)])
-        self.assertEquals(t[0], (1, 'hello'))
+        self.assertEqual(t.schema, [('A', int), ('C', str)])
+        self.assertEqual(t[0], (1, 'hello'))
 
     def test_simple_expand(self):
         t = self.t.expand(
@@ -62,7 +62,7 @@ class TestExpandTable(unittest.TestCase):
             input_columns=['C'],
             fn=lambda C: len(C)
         )
-        self.assertEquals(list(t.D), [5, 5])
+        self.assertEqual(list(t.D), [5, 5])
 
     def test_simple_expand_and_materialize(self):
         t = self.t.expand(
@@ -77,7 +77,7 @@ class TestExpandTable(unittest.TestCase):
             (2, 2.2, 'yello', 6),
         ]
 
-        self.assertEquals(list(t), expected)
+        self.assertEqual(list(t), expected)
         self.assertIsInstance(t, Table)
 
     def test_simple_expand_and_slice(self):
@@ -92,4 +92,4 @@ class TestExpandTable(unittest.TestCase):
             (2, 2.2, 'yello', 6),
         ]
 
-        self.assertEquals(list(t), expected)
+        self.assertEqual(list(t), expected)

@@ -12,7 +12,7 @@ SHORT_DESCRIPTION = 'Tabular and time-sequence data in pure python'
 
 try:
     DESCRIPTION = open(os.path.join(PROJECT_ROOT, "readme.rst")).read()
-except IOError, _:
+except IOError as _:
     DESCRIPTION = SHORT_DESCRIPTION
 
 
