@@ -307,6 +307,10 @@ class Table(object):
         self.indexes[index_key] = i
         return i
 
+    def left_join(self, keys, other):
+        """Left join the other table onto this, return a table"""
+        pass
+
     def __getitem__(self, key):
         if isinstance(key, slice):
             if key.step and key.step < 0:

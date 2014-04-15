@@ -2,7 +2,7 @@ import unittest
 from zqtable import Table, InvalidIndex
 
 
-class TestTableRowAccess(unittest.TestCase):
+class TestIndex(unittest.TestCase):
 
     def setUp(self):
         self.s = ['A', 'B', 'C']
