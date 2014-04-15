@@ -15,19 +15,7 @@ class TestTableRowAccess(unittest.TestCase):
             (4, 4.4, 'fnuu'),
             (5, 6.4, 'Animal Crossing'),
         ])
-
-    def test_indexes_have_names(self):
-        i = self.t.add_index(
-            name='my_first_index',
-            cols=('A', 'C')
-        )
-
-        self.assertEquals(i.name, 'my_first_index')
-
-        # Indexes get references to their parent table's relevant columsn
-        self.assertEquals(
-            i.cols,
-            [self.t.A, self.t.C])
+        
 
     def test_create_and_destroy_index(self):
         """Verify that indexes can be both created, detected and removed.
@@ -42,8 +30,10 @@ class TestTableRowAccess(unittest.TestCase):
         )
         self.assertTrue('my_first_index' in self.t.indexes)
         self.assertIn(i, self.t._listeners)
+
+        # Indexes are automatically deleted when references
+        # are destroyed
         i = None
-        del self.t.indexes['my_first_index']
         self.assertFalse('my_first_index' in self.t.indexes)
         self.assertFalse(i in self.t._listeners)
 
@@ -89,3 +79,19 @@ class TestTableRowAccess(unittest.TestCase):
         )
         self.t.append((6, 7.4, 'Starfox Adventures'))
         self.assertEquals(len(i), 1)
+
+    def test_indexes_can_be_reindexed(self):
+        i = self.t.add_index(
+            name='my_first_index',
+            cols=('C')
+        )
+        i.reindex()
+        self.assertEquals(len(i), len(self.t))
+
+    # def test_indexes_can_be_used_to_look_things_up(self):
+    #     i = self.t.add_index(
+    #         name='my_first_index',
+    #         cols=('C')
+    #     )
+    #     i.reindex()
+

@@ -1,4 +1,5 @@
 import blist
+import itertools
 from weakref import WeakValueDictionary, WeakSet
 from itertools import izip, repeat, islice, izip_longest
 
@@ -106,25 +107,28 @@ class TableRow(tuple):
 
 class Index(blist.blist):
 
-    def __init__(self, table, name, cols):
-        self.name = name
+    def __init__(self, table, cols):
         self.cols = [getattr(table, c) for c in cols] 
         table._listeners.add(self)
 
     def __hash__(self):
-        return hash(self.name)
+        return hash(c.name for c in self.cols)
 
     def notify(self, op, pos):
         if op=='append':
             value = tuple(c[pos] for c in self.cols) + (pos,)
             self.append(value)
 
+    def reindex(self):
+        del self[:]
+        self.extend(itertools.izip(*self.cols))
+
 
 class Table(object):
 
     def __init__(self, schema, data=[]):
         self._columns = []
-        self.indexes = {}
+        self.indexes = WeakValueDictionary()
         self._listeners = WeakSet()
 
         for s in schema:
@@ -266,7 +270,7 @@ class Table(object):
         return t
 
     def add_index(self, name, cols):
-        i = Index(self, name=name, cols=cols)
+        i = Index(self, cols=cols)
         self.indexes[name] = i
         return i
 
