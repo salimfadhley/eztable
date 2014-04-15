@@ -1,5 +1,5 @@
 import unittest
-from zqtable import Table
+from zqtable import Table, InvalidIndex
 
 
 class TestTableRowAccess(unittest.TestCase):
@@ -16,6 +16,14 @@ class TestTableRowAccess(unittest.TestCase):
             (5, 6.4, 'Animal Crossing'),
         ])
 
+
+    def test_indexes_must_have_at_least_one_col(self):
+        with self.assertRaises(InvalidIndex):
+            self.t.add_index([])
+
+    def test_can_only_index_columns_which_exist(self):
+        with self.assertRaises(InvalidIndex):
+            self.t.add_index(['ZQx9'])        
 
     def test_indexes_have_reprs(self):
         i = self.t.add_index(
@@ -91,10 +99,15 @@ class TestTableRowAccess(unittest.TestCase):
         i.reindex()
         self.assertEquals(len(i), len(self.t))
 
-    # def test_indexes_can_be_used_to_look_things_up(self):
-    #     i = self.t.add_index(
-    #         name='my_first_index',
-    #         cols=('C')
-    #     )
-    #     i.reindex()
+    def test_indexes_can_be_used_to_look_things_up(self):
+        i = self.t.add_index(
+            cols=('C')
+        )
+        i.reindex()
+
+        self.assertEquals(
+            i[('fnuu',)],
+            self.t[3]
+            )
+        
 
