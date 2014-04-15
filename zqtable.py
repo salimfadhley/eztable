@@ -1,19 +1,25 @@
+import blist
+from weakref import WeakValueDictionary, WeakSet
 from itertools import izip, repeat, islice, izip_longest
 
 
 class InvalidSchema(TypeError):
+
     """Raised when a schema appears to be invalid"""
 
 
 class InvalidColumn(TypeError):
+
     """Raised when a column in a schema appears to be invalid"""
 
 
 class InvalidData(TypeError):
+
     "An insert cannot complete because the row does not conform to the schema"
 
 
 class Column(list):
+
     def __init__(self, name, values=[], type=object):
         list.__init__(self)
         self.name = name
@@ -22,6 +28,7 @@ class Column(list):
 
 
 class StaticColumn(object):
+
     def __init__(self, name, value, len_func, type=object):
         self.name = name
         self._value = value
@@ -36,6 +43,7 @@ class StaticColumn(object):
 
 
 class DerivedColumn(object):
+
     def __init__(self, name, inputs, func, type=object):
         self.name = name
         self.type = type
@@ -53,6 +61,7 @@ class DerivedColumn(object):
 
 
 class TableRow(tuple):
+
     """Table row tuple.
 
     Also has dict-like behaviour.
@@ -95,19 +104,28 @@ class TableRow(tuple):
         return zip(self.schema, self)
 
 
-# class Index(rbtree):
-#     def __init__(self, table, cols):
-#         table._listeners.add(self)
-#         self.cols = cols
-#         super().__init__(...)
+class Index(blist.blist):
 
-#     def notify(self, op, pos, row):
-#         ...
+    def __init__(self, table, name, cols):
+        self.name = name
+        self.cols = [getattr(table, c) for c in cols] 
+        table._listeners.add(self)
+
+    def __hash__(self):
+        return hash(self.name)
+
+    def notify(self, op, pos):
+        if op=='append':
+            value = tuple(c[pos] for c in self.cols) + (pos,)
+            self.append(value)
 
 
 class Table(object):
+
     def __init__(self, schema, data=[]):
         self._columns = []
+        self.indexes = {}
+        self._listeners = WeakSet()
 
         for s in schema:
             if isinstance(s, basestring):
@@ -115,9 +133,6 @@ class Table(object):
             else:
                 name, type = s
                 self._columns.append(Column(name, type=type))
-
-        #self._indexes = WeakValueDictionary()
-        #self._listeners = WeakSet()
 
         for row in data:
             self.append(row)
@@ -158,8 +173,8 @@ class Table(object):
         for v, c in zipped:
             c.append(v)
 
-        #for l in self._listeners:
-        #    l.notify('insert', len(self), self[len(self) - 1])
+        for l in self._listeners:
+           l.notify('append',len(self) - 1)
 
     def extend(self, iterable):
         """Append all rows in iterable to this table.
@@ -206,7 +221,6 @@ class Table(object):
         keep_cols = [c for c in self.column_names if not c in col_names]
         return self._project(keep_cols)
 
-
     def project(self, *col_names):
         if len(col_names) and not isinstance(col_names[0], basestring):
             col_names = col_names[0]
@@ -250,6 +264,11 @@ class Table(object):
         t = Table(self.schema)
         t.extend(self)
         return t
+
+    def add_index(self, name, cols):
+        i = Index(self, name=name, cols=cols)
+        self.indexes[name] = i
+        return i
 
     def __getitem__(self, key):
         if isinstance(key, slice):
@@ -305,6 +324,7 @@ class Table(object):
                     cl[i] = c
 
         out = []
+
         def row(r):
             out.append(
                 '| %s |' % (' | '.join(str(c).ljust(l) for l, c in zip(cl, r)))
@@ -316,6 +336,7 @@ class Table(object):
 
 
 class DerivedTable(Table):
+
     def __init__(self, indices_func, columns):
         self._indices_func = indices_func
         self._columns = columns

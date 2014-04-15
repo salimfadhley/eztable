@@ -1,0 +1,91 @@
+import unittest
+from zqtable import Table
+
+
+class TestTableRowAccess(unittest.TestCase):
+
+    def setUp(self):
+        self.s = ['A', 'B', 'C']
+        self.t = Table(self.s)
+
+        self.t.extend([
+            (1, 1.1, 'hello'),
+            (2, 2.2, 'goodbye'),
+            (3, 3.3, 'yaloo'),
+            (4, 4.4, 'fnuu'),
+            (5, 6.4, 'Animal Crossing'),
+        ])
+
+    def test_indexes_have_names(self):
+        i = self.t.add_index(
+            name='my_first_index',
+            cols=('A', 'C')
+        )
+
+        self.assertEquals(i.name, 'my_first_index')
+
+        # Indexes get references to their parent table's relevant columsn
+        self.assertEquals(
+            i.cols,
+            [self.t.A, self.t.C])
+
+    def test_create_and_destroy_index(self):
+        """Verify that indexes can be both created, detected and removed.
+
+        For the correct plural of index see:
+        http://grammarist.com/usage/indexes-indices/
+        """
+        self.assertEquals(len(self.t.indexes), 0)
+        i = self.t.add_index(
+            name='my_first_index',
+            cols=('A', 'C')
+        )
+        self.assertTrue('my_first_index' in self.t.indexes)
+        self.assertIn(i, self.t._listeners)
+        i = None
+        del self.t.indexes['my_first_index']
+        self.assertFalse('my_first_index' in self.t.indexes)
+        self.assertFalse(i in self.t._listeners)
+
+    def test_indexes_can_be_hashed(self):
+        i = self.t.add_index(
+            name='my_first_index',
+            cols=('A', 'C')
+        )
+        self.assertIsInstance(hash(i), int)
+
+    def test_indexes_start_out_empty(self):
+        i = self.t.add_index(
+            name='my_first_index',
+            cols=('A', 'C')
+        )
+        self.assertEquals(len(i), 0)
+
+    def test_indexes_can_receive_events(self):
+        i = self.t.add_index(
+            name='my_second_index',
+            cols=('A', 'C')
+        )
+        i.notify(
+            op='do_nothing!',
+            pos=0,
+        )
+
+    def test_indexes_can_receive_events_that_grow_length(self):
+        i = self.t.add_index(
+            name='my_second_index',
+            cols=('A', 'C')
+        )
+        i.notify(
+            op='append',
+            pos=0,
+        )
+        self.assertEquals(i[0], (1, 'hello', 0))
+
+    def test_adding_to_a_table_adds_to_indexes(self):
+    	i = self.t.add_index(
+            name='my_first_index',
+            cols=('A', 'C')
+        )
+        self.t.append((6, 7.4, 'Starfox Adventures'))
+        self.assertEquals(len(i), 1)
