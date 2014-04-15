@@ -25,7 +25,7 @@ setup(
     py_modules=['zqtable'],
     zip_safe=True,
     include_package_data=False,
-    install_requires=['blist'],
+    #install_requires=['blist'],
     test_suite='nose.collector',
     tests_require=['mock', 'nose', 'coverage'],
     url=PROJECT_URL,
