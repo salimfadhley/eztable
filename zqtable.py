@@ -108,20 +108,26 @@ class TableRow(tuple):
 class Index(blist.blist):
 
     def __init__(self, table, cols):
-        self.cols = [getattr(table, c) for c in cols] 
+        self.cols = [getattr(table, c) for c in cols]
         table._listeners.add(self)
 
     def __hash__(self):
         return hash(c.name for c in self.cols)
 
     def notify(self, op, pos):
-        if op=='append':
+        if op == 'append':
             value = tuple(c[pos] for c in self.cols) + (pos,)
             self.append(value)
 
     def reindex(self):
         del self[:]
         self.extend(itertools.izip(*self.cols))
+
+    def __str__(self):
+        return ','.join(c.name for c in self.cols)
+
+    def __repr__(self):
+        return '<%s.%s %s>' % (self.__class__.__module__, self.__class__.__name__, str(self))
 
 
 class Table(object):
@@ -178,7 +184,7 @@ class Table(object):
             c.append(v)
 
         for l in self._listeners:
-           l.notify('append',len(self) - 1)
+            l.notify('append', len(self) - 1)
 
     def extend(self, iterable):
         """Append all rows in iterable to this table.
@@ -269,9 +275,10 @@ class Table(object):
         t.extend(self)
         return t
 
-    def add_index(self, name, cols):
+    def add_index(self, cols):
         i = Index(self, cols=cols)
-        self.indexes[name] = i
+        index_key = tuple(cols)
+        self.indexes[index_key] = i
         return i
 
     def __getitem__(self, key):

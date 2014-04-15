@@ -15,7 +15,17 @@ class TestTableRowAccess(unittest.TestCase):
             (4, 4.4, 'fnuu'),
             (5, 6.4, 'Animal Crossing'),
         ])
-        
+
+
+    def test_indexes_have_reprs(self):
+        i = self.t.add_index(
+            cols=('A', 'C')
+        )
+        expected_str = 'A,C'
+        expected_repr = '<zqtable.Index %s>' % expected_str
+
+        self.assertEquals(str(i), expected_str)
+        self.assertEquals(repr(i), expected_repr)
 
     def test_create_and_destroy_index(self):
         """Verify that indexes can be both created, detected and removed.
@@ -25,10 +35,9 @@ class TestTableRowAccess(unittest.TestCase):
         """
         self.assertEquals(len(self.t.indexes), 0)
         i = self.t.add_index(
-            name='my_first_index',
             cols=('A', 'C')
         )
-        self.assertTrue('my_first_index' in self.t.indexes)
+        self.assertTrue(('A', 'C') in self.t.indexes)
         self.assertIn(i, self.t._listeners)
 
         # Indexes are automatically deleted when references
@@ -39,21 +48,18 @@ class TestTableRowAccess(unittest.TestCase):
 
     def test_indexes_can_be_hashed(self):
         i = self.t.add_index(
-            name='my_first_index',
             cols=('A', 'C')
         )
         self.assertIsInstance(hash(i), int)
 
     def test_indexes_start_out_empty(self):
         i = self.t.add_index(
-            name='my_first_index',
             cols=('A', 'C')
         )
         self.assertEquals(len(i), 0)
 
     def test_indexes_can_receive_events(self):
         i = self.t.add_index(
-            name='my_second_index',
             cols=('A', 'C')
         )
         i.notify(
@@ -63,7 +69,6 @@ class TestTableRowAccess(unittest.TestCase):
 
     def test_indexes_can_receive_events_that_grow_length(self):
         i = self.t.add_index(
-            name='my_second_index',
             cols=('A', 'C')
         )
         i.notify(
@@ -74,7 +79,6 @@ class TestTableRowAccess(unittest.TestCase):
 
     def test_adding_to_a_table_adds_to_indexes(self):
     	i = self.t.add_index(
-            name='my_first_index',
             cols=('A', 'C')
         )
         self.t.append((6, 7.4, 'Starfox Adventures'))
@@ -82,7 +86,6 @@ class TestTableRowAccess(unittest.TestCase):
 
     def test_indexes_can_be_reindexed(self):
         i = self.t.add_index(
-            name='my_first_index',
             cols=('C')
         )
         i.reindex()
