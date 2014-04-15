@@ -95,6 +95,16 @@ class TableRow(tuple):
         return zip(self.schema, self)
 
 
+# class Index(rbtree):
+#     def __init__(self, table, cols):
+#         table._listeners.add(self)
+#         self.cols = cols
+#         super().__init__(...)
+
+#     def notify(self, op, pos, row):
+#         ...
+
+
 class Table(object):
     def __init__(self, schema, data=[]):
         self._columns = []
@@ -105,6 +115,9 @@ class Table(object):
             else:
                 name, type = s
                 self._columns.append(Column(name, type=type))
+
+        #self._indexes = WeakValueDictionary()
+        #self._listeners = WeakSet()
 
         for row in data:
             self.append(row)
@@ -119,6 +132,10 @@ class Table(object):
     @property
     def column_names(self):
         return [c.name for c in self._columns]
+
+    def _create_index(self, cols):
+        cols = tuple(cols)
+        self._indexes[cols] = Index(self, cols)
 
     def append(self, row):
         """Append a row to this table.
@@ -140,6 +157,9 @@ class Table(object):
                 )
         for v, c in zipped:
             c.append(v)
+
+        #for l in self._listeners:
+        #    l.notify('insert', len(self), self[len(self) - 1])
 
     def extend(self, iterable):
         """Append all rows in iterable to this table.

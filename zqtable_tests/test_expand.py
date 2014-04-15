@@ -42,18 +42,8 @@ class TestExpandTable(unittest.TestCase):
         )
         self.assertEqual(len(t), len(self.t))
 
-    def test_expand_const_on_project(self):
-        t0 = self.t.project(['C'])
-        t1 = t0.expand_const('D', 0)
-        self.assertEqual(
-            list(t1.D),
-            [0] * len(self.t)
-        )
-
-    def test_simple_project(self):
-        t = self.t.project(['A', 'C'])
-        self.assertEqual(t.schema, [('A', int), ('C', str)])
-        self.assertEqual(t[0], (1, 'hello'))
+    
+    
 
     def test_simple_expand(self):
         t = self.t.expand(
