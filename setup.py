@@ -3,7 +3,7 @@ from setuptools import setup
 import os
 
 PROJECT_ROOT, _ = os.path.split(__file__)
-REVISION = '0.0.4'
+REVISION = '0.0.5'
 PROJECT_NAME = 'ZQTable'
 PROJECT_AUTHORS = "Salim Fadhley"
 # Please see readme.rst for a complete list of contributors
@@ -25,7 +25,7 @@ setup(
     py_modules=['zqtable'],
     zip_safe=True,
     include_package_data=False,
-    install_requires=[],
+    install_requires=['blist'],
     test_suite='nose.collector',
     tests_require=['mock', 'nose', 'coverage'],
     url=PROJECT_URL,
