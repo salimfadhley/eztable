@@ -192,6 +192,21 @@ class Table(object):
                 return c
         raise KeyError(name)
 
+    def anti_project(self, *col_names):
+        if len(col_names) and not isinstance(col_names[0], basestring):
+            col_names = col_names[0]
+
+        if (not col_names or
+                not all(isinstance(c, basestring) for c in col_names)):
+            raise TypeError(
+                "anti_project() takes either a list of strings, or positional "
+                "arguments of type string"
+            )
+
+        keep_cols = [c for c in self.column_names if not c in col_names]
+        return self._project(keep_cols)
+
+
     def project(self, *col_names):
         if len(col_names) and not isinstance(col_names[0], basestring):
             col_names = col_names[0]
