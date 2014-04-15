@@ -82,10 +82,10 @@ class TestTableRowAccess(unittest.TestCase):
         )
         self.assertEquals(i[0], (1, 'hello', 0))
 
-    # def test_adding_to_a_table_adds_to_indexes(self):
-    # 	i = self.t.add_index(
-    #         name='my_first_index',
-    #         cols=('A', 'C')
-    #     )
-    #     self.t.append((6, 7.4, 'Starfox Adventures'))
-    #     self.assertEquals(len(i), 1)
+    def test_adding_to_a_table_adds_to_indexes(self):
+    	i = self.t.add_index(
+            name='my_first_index',
+            cols=('A', 'C')
+        )
+        self.t.append((6, 7.4, 'Starfox Adventures'))
+        self.assertEquals(len(i), 1)

@@ -173,8 +173,8 @@ class Table(object):
         for v, c in zipped:
             c.append(v)
 
-        # for l in self._listeners:
-        #    l.notify('insert', len(self), self[len(self) - 1])
+        for l in self._listeners:
+           l.notify('append',len(self) - 1)
 
     def extend(self, iterable):
         """Append all rows in iterable to this table.
