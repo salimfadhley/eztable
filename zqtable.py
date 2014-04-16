@@ -1,5 +1,6 @@
 import blist
 import itertools
+from six import string_types
 from weakref import WeakValueDictionary, WeakSet
 
 
@@ -87,7 +88,7 @@ class TableRow(tuple):
             return tuple.__getitem__(self, i)
 
     def __getitem__(self, k):
-        if isinstance(k, basestring):
+        if isinstance(k, string_types):
             try:
                 return self.__getattr__(k)
             except AttributeError:
