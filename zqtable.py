@@ -311,6 +311,19 @@ class Table(object):
         """Left join the other table onto this, return a table"""
         pass
 
+    def restrict(self, col_names, fn=None):
+        cols = [self._get_column(cn) for cn in col_names]
+        def indices_func():
+            for i in self._indices_func():
+                vals = [c[i] for c in cols]
+                if fn(*vals):
+                    yield i
+        return DerivedTable(
+            indices_func=indices_func,
+            columns=self._columns
+         )
+
+
     def __getitem__(self, key):
         if isinstance(key, slice):
             if key.step and key.step < 0:
