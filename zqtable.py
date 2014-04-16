@@ -389,8 +389,23 @@ class Table(object):
         return '\n'.join(out)
 
 
-class DerivedTable(Table):
+class DerivedTableColumn(object):
+    """Not so much a derived column, but a column on a
+    derived table"""
+    def __init__(self, indices_func, column):
+        self._indices_func = indices_func
+        self._column = column
 
+    def __iter__(self):
+        for i in self._indices_func():
+            yield self._column[i]
+
+
+class DerivedTable(Table):
+    """A view on an actual table, can include
+    a smaller number of rows or columns than the orginal
+    for performance reasons, certain functions are prohibited.
+    """
     def __init__(self, indices_func, columns):
         self._indices_func = indices_func
         self._columns = columns
@@ -403,6 +418,10 @@ class DerivedTable(Table):
             # Slightly optimised, eg. we don't do LOAD_GLOBAL in this loop
             r = (c[i] for c in cs)
             yield cls(r, s)
+
+    def _get_column(self, name):
+        actual_col = Table._get_column(self, name)
+        return DerivedTableColumn(self._indices_func, actual_col)
 
     def append(self, row):
         raise TypeError("Cannot do append on a non-materialised table.")
