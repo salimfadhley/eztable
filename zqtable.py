@@ -1,7 +1,6 @@
 import blist
 import itertools
 from weakref import WeakValueDictionary, WeakSet
-from itertools import izip, repeat, islice, izip_longest
 
 
 class InvalidSchema(TypeError):
@@ -38,7 +37,7 @@ class StaticColumn(object):
         self.type = type
 
     def __iter__(self):
-        return islice(repeat(self._value), self._len_func())
+        return itertools.islice(itertools.repeat(self._value), self._len_func())
 
     def __getitem__(self, _):
         return self._value
@@ -58,7 +57,7 @@ class DerivedColumn(object):
         return self.func(*row)
 
     def __iter__(self):
-        for row in izip(*self.inputs):
+        for row in itertools.izip(*self.inputs):
             yield self.func(*row)
 
 
@@ -228,7 +227,7 @@ class Table(object):
 
         """
         s = self._tablerow_schema()
-        for r in izip(*self._columns):
+        for r in itertools.izip(*self._columns):
             yield TableRow(r, s)
 
     def _tablerow_schema(self):
@@ -317,7 +316,7 @@ class Table(object):
                 # islice doesn't support negative indices, convert to a list
                 f = lambda: list(self._indices_func())[key]
             else:
-                f = lambda: islice(
+                f = lambda: itertools.islice(
                     self._indices_func(),
                     key.start,
                     key.stop,
@@ -351,7 +350,7 @@ class Table(object):
         if self.schema != ano.schema:
             return False
 
-        for a, b in izip_longest(self, ano):
+        for a, b in itertools.izip_longest(self, ano):
             if a != b:
                 return False
 
@@ -406,7 +405,7 @@ class DerivedTable(Table):
 
     def get_row(self, key):
         try:
-            idx = next(islice(self._indices_func(), key, None))
+            idx = next(itertools.islice(self._indices_func(), key, None))
         except StopIteration:
             raise IndexError(key)
         return Table.get_row(self, idx)

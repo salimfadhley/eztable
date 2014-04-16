@@ -16,14 +16,13 @@ class TestIndex(unittest.TestCase):
             (5, 6.4, 'Animal Crossing'),
         ])
 
-
     def test_indexes_must_have_at_least_one_col(self):
         with self.assertRaises(InvalidIndex):
             self.t.add_index([])
 
     def test_can_only_index_columns_which_exist(self):
         with self.assertRaises(InvalidIndex):
-            self.t.add_index(['ZQx9'])        
+            self.t.add_index(['ZQx9'])
 
     def test_indexes_have_reprs(self):
         i = self.t.add_index(
@@ -86,7 +85,7 @@ class TestIndex(unittest.TestCase):
         self.assertEquals(i[0], (1, 'hello', 0))
 
     def test_adding_to_a_table_adds_to_indexes(self):
-    	i = self.t.add_index(
+        i = self.t.add_index(
             cols=('A', 'C')
         )
         self.t.append((6, 7.4, 'Starfox Adventures'))
@@ -108,6 +107,4 @@ class TestIndex(unittest.TestCase):
         self.assertEquals(
             i[('fnuu',)],
             self.t[3]
-            )
-        
-
+        )
