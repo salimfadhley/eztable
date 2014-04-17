@@ -11,7 +11,13 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+zqtable contents
+----------------
 
+.. automodule:: zqtable
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 Indices and tables
 ==================
