@@ -22,7 +22,7 @@ setup(
     version=REVISION,
     author=PROJECT_AUTHORS,
     author_email=PROJECT_EMAILS,
-    py_modules=['zqtable'],
+    paclages=['zqtable', 'zqtable_tests'],
     zip_safe=True,
     include_package_data=False,
     install_requires=['blist', 'six'],
