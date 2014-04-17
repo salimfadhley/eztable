@@ -10,6 +10,8 @@ from .index import Index
 
 
 class Table(object):
+    """The basic table class.
+    """
 
     def __init__(self, schema, data=[]):
         self._columns = []
@@ -243,7 +245,6 @@ class Table(object):
 
 
 class DerivedTable(Table):
-
     """A view on an actual table, can include
     a smaller number of rows or columns than the orginal
     for performance reasons, certain functions are prohibited.
