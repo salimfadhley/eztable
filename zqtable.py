@@ -400,6 +400,9 @@ class DerivedTableColumn(object):
         for i in self._indices_func():
             yield self._column[i]
 
+    def __len__(self):
+        return len([None for i in self._indices_func()])
+
 
 class DerivedTable(Table):
     """A view on an actual table, can include
