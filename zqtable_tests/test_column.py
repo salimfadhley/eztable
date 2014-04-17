@@ -1,5 +1,5 @@
 from unittest import TestCase
-from zqtable import Column
+from zqtable.columns import Column
 
 
 class TestColumn(TestCase):
