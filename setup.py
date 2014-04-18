@@ -11,6 +11,7 @@ PROJECT_EMAILS = 'salimfadhley@gmail.com'
 PROJECT_URL = "https://bitbucket.org/salimfadhley/zqtable"
 SHORT_DESCRIPTION = 'Tabular and time-sequence data in pure python'
 
+
 try:
     DESCRIPTION = open(os.path.join(PROJECT_ROOT, "readme.rst")).read()
 except IOError as _:
