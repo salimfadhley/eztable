@@ -10,10 +10,31 @@ from .index import Index
 
 
 class Table(object):
-    """The basic table class.
-    """
+
+    """The basic table class. Table objects contain
+    any Python data type, however some features may be unavailable
+    if the types are non-hashable."""
 
     def __init__(self, schema, data=[]):
+        """
+        Every Table object has a sschema. In it's simple form, the schema can be
+        nothing more than a list of string column-names. Specifying a schema
+        this way will produce a non-typed table, in which any Python type can be stored in
+        any column.
+
+        Alternativly the schema can include type information. Instead of Specifying the
+        schema item as a string, use (column_name, type), where type is a python type
+        or class object, for example int, str.
+
+        It is expected that most of the values stored in the table will be simple objects or native
+        types such as numbers and strings, however it is also possible to store any python
+        object as long as they are hashable.
+
+        param schema: Column names as a sequence of strings, or ('col_name', type)
+        type schema: list
+        param data: Optional rows of data to initialize the table.
+        type data: list of lists
+        """
         self._columns = []
         self.indexes = WeakValueDictionary()
         self._listeners = WeakSet()
@@ -28,25 +49,12 @@ class Table(object):
         for row in data:
             self.append(row)
 
-    @property
-    def schema(self):
-        s = []
-        for c in self._columns:
-            s.append((c.name, c.type))
-        return s
-
-    @property
-    def column_names(self):
-        return [c.name for c in self._columns]
-
-    def _create_index(self, cols):
-        cols = tuple(cols)
-        self._indexes[cols] = Index(self, cols)
-
     def append(self, row):
-        """Append a row to this table.
-
-        row must match the table's schema.
+        """Append a single row to this table. The row must match the table's
+        schema, typically this means that the row should have the same number
+        of items, however if types were specified then the type of each
+        positional element must conform to the required type of the corresponding
+        schema column.
 
         """
         if len(row) != len(self._columns):
@@ -68,19 +76,39 @@ class Table(object):
             l.notify('append', len(self) - 1)
 
     def extend(self, iterable):
-        """Append all rows in iterable to this table.
-
-        Each row must conform to this table's schema.
-
+        """Append all rows in iterable to this table. Each row
+        must conform to this table's schema.
         """
         for row in iterable:
             self.append(row)
+
+    @property
+    def schema(self):
+        """Get the table's schema. This is a list of
+        (name (string), type) tuples.
+        """
+        s = []
+        for c in self._columns:
+            s.append((c.name, c.type))
+        return s
+
+    @property
+    def column_names(self):
+        """Get the table's column names as a list of strings.
+        """
+        return [c.name for c in self._columns]
+
+    # def _create_index(self, cols):
+
+    #     cols = tuple(cols)
+    #     i = Index(self, cols)
+    #     self._indexes[cols] = i
+    #     return i
 
     def __iter__(self):
         """Iterate through the rows of this table.
 
         Each row is a namedtuple.
-
         """
         s = self._tablerow_schema()
         for r in itertools.izip(*self._columns):
@@ -93,12 +121,24 @@ class Table(object):
         return self.__getitem__(slice(start, stop, 1))
 
     def _get_column(self, name):
+        """Get a single Column object by name. Columns are list-like sequences.
+        """
         for c in self._columns:
             if c.name == name:
                 return c
         raise KeyError(name)
 
     def anti_project(self, *col_names):
+        """Returns a new DerivedTable in which the named columns
+        have been removed.
+
+        Unless the new table is materialised it shares the same
+        data as the table it was made from, hence extending or appending
+        from the new table will also modify the projected table.
+
+        Ordering of the original columns will be retained, except that
+        the specified columns will no longer be accessible.
+        """
         if len(col_names) and not isinstance(col_names[0], string_types):
             col_names = col_names[0]
 
@@ -113,6 +153,9 @@ class Table(object):
         return self._project(keep_cols)
 
     def project(self, *col_names):
+        """Returns a new DerivedTable in which only the named
+        columns remain in the order specified by col_names.
+        """
         if len(col_names) and not isinstance(col_names[0], string_types):
             col_names = col_names[0]
 
@@ -126,19 +169,39 @@ class Table(object):
         return self._project(col_names)
 
     def _indices_func(self):
+        """Internal function: This specifies the order in which the
+        __iter__ method retreives rows.
+        """
         return xrange(len(self))
 
     def _project(self, col_names):
+        """Implementation of project and anti_project"""
         cols = [self._get_column(c) for c in col_names]
         return DerivedTable(self._indices_func, cols)
 
     def expand_const(self, name, value, type=object):
+        """Returns a new DerivedTable in which a single column of
+        static data has been added.
+        """
         return DerivedTable(
             self._indices_func,
             self._columns + [StaticColumn(name, value, self.__len__, type)]
         )
 
     def expand(self, name, input_columns, fn, type=object):
+        """Returns a new DerivedTable in which a new calculated
+        column has been added.
+
+        This column's value is determined by a function and
+        a set of input columns.
+
+        param name: The name of the new derived coulumn.
+        type name: str
+        param input_columns: The input column names.
+        type input_columns: list of str
+        param fn; A function or lambda
+        param type: Optionally, constrain the value of this column by type
+        """
         incols = []
         for c in input_columns:
             incols.append(self._get_column(c))
@@ -148,25 +211,58 @@ class Table(object):
         )
 
     def hash(self, name, input_columns):
+        """A convenience function that expands the table
+        with a new hash column.
+        """
         return self.expand(name, input_columns, hash, int)
 
     def copy(self):
-        """Create a materialised copy of this table."""
+        """Create a 'materialised' copy of this table.
+
+        This converts all dynamically generated columns into
+        StaticColumn objects.
+        """
         t = Table(self.schema)
         t.extend(self)
         return t
 
     def add_index(self, cols):
+        """Create a new index on a set of columns.
+
+        Indexes are list-like objects which can be used to
+        speed-up access to rows of data. Indexes improve the
+        preformance of operations (e.g. joins).
+
+        The Table class only holds a weak-reference to this object,
+        hence the user must retain a reference to the index
+        in order to prevent it from being garbage collected.
+
+        param cols: Column names to be included into the index.
+        type cols: List of strings.
+        """
         i = Index(self, cols=cols)
         index_key = tuple(cols)
         self.indexes[index_key] = i
         return i
 
     def left_join(self, keys, other):
-        """Left join the other table onto this, return a table"""
+        """Left join the other table onto this, return a table.
+
+        Not yet working.
+        """
         pass
 
     def restrict(self, col_names, fn=None):
+        """
+        Return a new DerivedTable object in which
+        all visible rows satisfy some kind of logical
+        constraint given by fn.
+
+        param col_names: List of column names to feed into fn
+        type col_names: list of strings
+        param fn: Should return True for any retained row.
+        type fn: fuunction or lambda
+        """
         cols = [self._get_column(cn) for cn in col_names]
 
         def indices_func():

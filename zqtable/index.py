@@ -1,9 +1,12 @@
+"""An index is an ordered list-like object implemented using a btree.blist. 
+"""
+
 import blist
 import itertools
 from .exceptions import InvalidIndex
 
 class Index(blist.blist):
-
+    
     def __init__(self, table, cols):
         if not cols:
             raise InvalidIndex('Please provide at least one column to index.')

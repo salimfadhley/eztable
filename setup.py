@@ -3,8 +3,8 @@ from setuptools import setup
 import os
 
 PROJECT_ROOT, _ = os.path.split(__file__)
-REVISION = '0.0.12'
-PROJECT_NAME = 'ZQTable'
+REVISION = '0.0.13'
+PROJECT_NAME = 'zqtable'
 PROJECT_AUTHORS = "Salim Fadhley"
 # Please see readme.rst for a complete list of contributors
 PROJECT_EMAILS = 'salimfadhley@gmail.com'
