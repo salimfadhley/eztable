@@ -1,20 +1,24 @@
-"""An index is an ordered list-like object implemented using a btree.blist. 
+"""An index is an ordered list-like object implemented using a btree.blist.
 """
 
 import blist
 import itertools
 from .exceptions import InvalidIndex
 
+
 class Index(blist.blist):
-    
+
     def __init__(self, table, cols):
         if not cols:
             raise InvalidIndex('Please provide at least one column to index.')
-        
+
         try:
             self.cols = [getattr(table, c) for c in cols]
         except AttributeError as ae:
-            raise InvalidIndex('Column %s does not exist in this table' % ae[0])
+
+            raise InvalidIndex(
+                'Column %s does not exist in this table' %
+                ae[0])
 
         table._listeners.add(self)
         self.table = table
@@ -40,16 +44,22 @@ class Index(blist.blist):
         elif isinstance(key, tuple):
             return self.table[self.index(key)]
         raise TypeError(
-            'Index keys must be an integer or a tuple, got %r (%s)' % 
-                (key, type(key))
+            'Index keys must be an integer or a tuple, got %r (%s)' %
+            (key, type(key))
         )
 
     def reindex(self):
         del self[:]
         self.extend(itertools.izip(*self.cols))
+        return self
 
     def __str__(self):
         return ','.join(c.name for c in self.cols)
 
     def __repr__(self):
-        return '<%s.%s %s>' % (self.__class__.__module__, self.__class__.__name__, str(self))
+        return (
+            '<%s.%s %s>' % (
+                self.__class__.__module__,
+                self.__class__.__name__,
+                str(self))
+        )

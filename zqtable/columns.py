@@ -1,5 +1,6 @@
 import itertools
 
+
 class Column(list):
 
     def __init__(self, name, values=[], type=object):
@@ -18,7 +19,9 @@ class StaticColumn(object):
         self.type = type
 
     def __iter__(self):
-        return itertools.islice(itertools.repeat(self._value), self._len_func())
+        return (
+            itertools.islice(itertools.repeat(self._value), self._len_func())
+        )
 
     def __getitem__(self, _):
         return self._value
@@ -41,12 +44,23 @@ class DerivedColumn(object):
         for row in itertools.izip(*self.inputs):
             yield self.func(*row)
 
+
 class DerivedTableColumn(object):
+
     """Not so much a derived column, but a column on a
     derived table"""
+
     def __init__(self, indices_func, column):
         self._indices_func = indices_func
         self._column = column
+
+    @property
+    def name(self):
+        return self._column.name
+
+    @property
+    def type(self):
+        return self._column.type
 
     def __iter__(self):
         for i in self._indices_func():
@@ -54,3 +68,16 @@ class DerivedTableColumn(object):
 
     def __len__(self):
         return len([None for i in self._indices_func()])
+
+    def __getitem__(self, key):
+        if isinstance(key, int):
+            i = itertools.islice(
+                self._indices_func(),
+                key,
+                key + 1
+            ).next()
+            return self._column[i]
+
+
+class JoinColumn(DerivedTableColumn):
+    pass

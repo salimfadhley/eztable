@@ -1,9 +1,9 @@
 import itertools
-
+from collections import namedtuple
 from six import string_types
 from weakref import WeakValueDictionary, WeakSet
 
-from .columns import DerivedColumn, Column, DerivedTableColumn, StaticColumn
+from .columns import DerivedColumn, Column, DerivedTableColumn, StaticColumn, JoinColumn
 from .row import TableRow
 from .exceptions import InvalidData
 from .index import Index
@@ -97,13 +97,6 @@ class Table(object):
         """Get the table's column names as a list of strings.
         """
         return [c.name for c in self._columns]
-
-    # def _create_index(self, cols):
-
-    #     cols = tuple(cols)
-    #     i = Index(self, cols)
-    #     self._indexes[cols] = i
-    #     return i
 
     def __iter__(self):
         """Iterate through the rows of this table.
@@ -240,7 +233,7 @@ class Table(object):
         param cols: Column names to be included into the index.
         type cols: List of strings.
         """
-        i = Index(self, cols=cols)
+        i = Index(table=self, cols=cols)
         index_key = tuple(cols)
         self.indexes[index_key] = i
         return i
@@ -250,7 +243,12 @@ class Table(object):
 
         Not yet working.
         """
-        pass
+        return JoinTable(
+            indices_func=self._indices_func,
+            columns=self._columns,
+            keys=keys,
+            other=other
+        )
 
     def restrict(self, col_names, fn=None):
         """
@@ -341,6 +339,7 @@ class Table(object):
 
 
 class DerivedTable(Table):
+
     """A view on an actual table, can include
     a smaller number of rows or columns than the orginal
     for performance reasons, certain functions are prohibited.
@@ -382,3 +381,109 @@ class DerivedTable(Table):
         except StopIteration:
             raise IndexError(key)
         return Table.get_row(self, idx)
+
+
+class JoinTable(DerivedTable):
+
+    """The result of a table join operation.
+    """
+
+    def __init__(self, indices_func, columns, keys, other):
+        self._indices_func = indices_func
+        self._columns = columns
+        self._keys = keys
+        self._other = other
+
+        # Finally build an index
+        self._join_index = other.add_index(
+            cols=keys
+        ).reindex()
+
+    def _both_indices_func(self):
+        """Generator function which gives a sequence of pairs:
+        The first value is the index for the row in this table.
+        The second value is the index for the row in the joined table.
+        """
+        kcs = self._key_columns
+        for i in self._indices_func():
+            key = tuple(kc[i] for kc in kcs)
+            try:
+                yield i, self._join_index.index(key)
+            except IndexError:
+                yield i, None
+
+    def _join_indices_func(self):
+        """Generator function giving only the sequence
+        of indices in the joined columns
+        """
+        for _, ji in self._both_indices_func():
+            yield ji
+
+    def _get_column(self, name):
+        """Get a single Column object by name. Columns are list-like sequences.
+        """
+        for c in self._columns + self._join_columns:
+            if c.name == name:
+                return c
+        raise KeyError(name)
+
+    @property
+    def _all_columns(self):
+        return self._columns + self._join_columns
+
+    @property
+    def _key_columns(self):
+        return [self._get_column(k) for k in self._keys]
+
+    @property
+    def _join_columns(self):
+        return (
+            [JoinColumn(indices_func=self._join_indices_func, column=c)
+             for c in self._other._columns if not c.name in self._keys]
+        )
+
+    @property
+    def column_names(self):
+        """Get the table's column names as a list of strings.
+        """
+        return [c.name for c in (self._columns + self._join_columns)]
+
+    @property
+    def schema(self):
+        """Get the table's schema. This is a list of
+        (name (string), type) tuples.
+
+        The method on Table is overriden because
+        we need to get the schema from both the original
+        and joined columns.
+        """
+        s = []
+        for c in self._all_columns:
+            s.append((c.name, c.type))
+        return s
+
+    def __getitem__(self, key):
+        cs = self._columns
+        jcs = self._join_columns
+        i, ji = itertools.islice(
+            self._both_indices_func(), key, key + 1).next()
+
+        s = dict((c.name, i) for i, c in enumerate(self._all_columns))
+        r = itertools.chain(
+            (c[i] for c in cs),
+            (jc._column[ji]
+             for jc in jcs)  # Act on the underlying columns here
+        )
+        return TableRow(r, s)
+
+    def __iter__(self):
+        cs = self._columns
+        jcs = self._join_columns
+        kcs = self._key_columns
+        s = dict((c.name, i) for i, c in enumerate(self._all_columns))
+        for i, ji in self._both_indices_func():
+            r = itertools.chain(
+                (c[i] for c in cs),
+                (jc._column[ji] for jc in jcs)
+            )
+            yield TableRow(r, s)

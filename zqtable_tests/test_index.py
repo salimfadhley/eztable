@@ -108,3 +108,14 @@ class TestIndex(unittest.TestCase):
             i[('fnuu',)],
             self.t[3]
         )
+
+    def test_indexes_can_be_used_to_locate_a_record(self):
+        i = self.t.add_index(
+            cols=('C')
+        )
+        i.reindex()
+
+        self.assertEquals(
+            i.index(('fnuu',)),
+            3
+        )
