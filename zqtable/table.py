@@ -168,6 +168,12 @@ class Table(object):
         return xrange(len(self))
 
     def rename(self, old_names, new_names):
+        """Rename columns in the table. Does not affect the order of
+        columns.
+
+        :param old_names: list of column names to rename.
+        :param new_names: list of the new names to asign to the renamed columns.
+        """
         rename_dict = dict(zip(old_names, new_names))
         return self._project(
             col_names=self.column_names,
@@ -175,7 +181,7 @@ class Table(object):
         )
 
     def _project(self, col_names, rename_dict=None):
-        """Implementation of project and anti_project"""
+        """Implementation of project, anti_project and rename function"""
         rename_dict = rename_dict or {}
         cols = [self._get_column(c) for c in col_names]
         column_names = [rename_dict.get(cn) for cn in self.column_names]
@@ -252,7 +258,8 @@ class Table(object):
     def left_join(self, keys, other):
         """Left join the other table onto this, return a table.
 
-        Not yet working.
+        :param keys: List of column names which will be matched.
+        :param other: the other table to join on to this table.
         """
         return JoinTable(
             indices_func=self._indices_func,
