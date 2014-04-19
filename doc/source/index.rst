@@ -23,16 +23,17 @@ Egg-files for this project are hosted on PyPi. Most Python users should be able 
 
 Most users can do the following:
 ::
-    pip install jenkinsapi
+    pip install zqtable
 
 Or..
 ::
-    easy_install jenkinsapi
+    easy_install zqtable
 
 You can also install this project from source. Check ou the code from mercurial
 and then build the project.
 
-::
+.. code-block:: none
+    :linenos:
     hg clone https://salimfadhley@bitbucket.org/salimfadhley/zqtable <project dir>
     cd <project dir>
     python setup.py install
