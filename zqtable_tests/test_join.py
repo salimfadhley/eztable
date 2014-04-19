@@ -98,5 +98,50 @@ class TestJoin(unittest.TestCase):
         )
 
 
+class TestJoinWithNonMatchingKeys(unittest.TestCase):
+
+    def setUp(self):
+        self.pokedex = Table(['pokemon', 'owner', 'level'])
+        self.pokedex.extend([
+            ['Charmander', 'Ash', 12],
+            ['Pikachu', 'Ash', 15],
+            ['Squirtle', 'Ash', 19],
+            ['Starmie', 'Misty', 19],
+            ['Togepi', 'Misty', 5],
+            ['Onyx', 'Brock', 22],
+            ['Meowth', 'Team Rocket', 22],
+        ])
+
+        self.types = Table(['pkmn', 'type'])
+        self.types.extend([
+            ['Togepi', 'Fairy'],
+            ['Onyx', 'Rock'],
+            ['Meowth', 'Normal'],
+            ['Pikachu', 'Electric'],
+            ['Squirtle', 'Water'],
+            ['Starmie', 'Water'],
+            ['Charmander', 'Fire'],
+        ])
+
+    def test_basic_join(self):
+
+        t = self.pokedex.left_join(
+            keys=('pokemon', ),
+            other = self.types,
+            other_keys = ('pkmn',),
+        )
+
+        self.assertIsInstance(t, JoinTable)
+
+        self.assertEquals(
+            t._key_columns,
+            [t.pokemon, ]
+        )
+
+        self.assertEquals(
+            t.column_names,
+            ['pokemon', 'owner', 'level', 'type']
+        )
+
 if __name__ == '__main__':
     unittest.main()

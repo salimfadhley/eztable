@@ -17,7 +17,7 @@ class Table(object):
 
     def __init__(self, schema, data=[]):
         """
-        Every Table object has a sschema. In it's simple form, the schema can be
+        Every Table     object has a sschema. In it's simple form, the schema can be
         nothing more than a list of string column-names. Specifying a schema
         this way will produce a non-typed table, in which any Python type can be stored in
         any column.
@@ -255,17 +255,20 @@ class Table(object):
         self.indexes[index_key] = i
         return i
 
-    def left_join(self, keys, other):
+    def left_join(self, keys, other, other_keys=None):
         """Left join the other table onto this, return a table.
 
         :param keys: List of column names which will be matched.
         :param other: the other table to join on to this table.
+        :param other_keys: Optional list of foreign keys
         """
+        other_keys = other_keys or keys
         return JoinTable(
             indices_func=self._indices_func,
             columns=self._columns,
             keys=keys,
-            other=other
+            other=other,
+            other_keys=other_keys
         )
 
     def restrict(self, col_names, fn=None):
@@ -417,15 +420,16 @@ class JoinTable(DerivedTable):
     """The result of a table join operation.
     """
 
-    def __init__(self, indices_func, columns, keys, other):
+    def __init__(self, indices_func, columns, keys, other, other_keys):
         self._indices_func = indices_func
         self._columns = columns
         self._keys = keys
         self._other = other
+        self._other_keys = other_keys
 
         # Finally build an index
         self._join_index = other.add_index(
-            cols=keys
+            cols=other_keys
         ).reindex()
 
     def _both_indices_func(self):
@@ -466,9 +470,10 @@ class JoinTable(DerivedTable):
 
     @property
     def _join_columns(self):
+        all_keys = set(self._keys + self._other_keys)
         return (
             [JoinColumn(indices_func=self._join_indices_func, column=c)
-             for c in self._other._columns if not c.name in self._keys]
+             for c in self._other._columns if not c.name in all_keys]
         )
 
     @property
