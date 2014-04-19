@@ -98,6 +98,16 @@ class Table(object):
         """
         return [c.name for c in self._columns]
 
+    @property
+    def column_types(self):
+        """Get the table's column types as a list of types.
+        """
+        return [c.type for c in self._columns]
+
+    @property
+    def _column_descriptions(self):
+        return [c.description for c in self._columns]
+
     def __iter__(self):
         """Iterate through the rows of this table.
 
@@ -344,11 +354,12 @@ class Table(object):
         return True
 
     def __repr__(self):
-        cl = [len(c.name) for c in self._columns]
+        cl = [len(cn) for cn in self._column_descriptions]
         for r in self:
             for i, (m, c) in enumerate(zip(cl, r)):
-                if c > m:
-                    cl[i] = c
+                this_col_len = len(repr(c))
+                if this_col_len > m:
+                    cl[i] = this_col_len
 
         out = []
 
@@ -356,7 +367,7 @@ class Table(object):
             out.append(
                 '| %s |' % (' | '.join(str(c).ljust(l) for l, c in zip(cl, r)))
             )
-        row(c.name for c in self._columns)
+        row(c.description for c in self._columns)
         for r in self:
             row(r)
         return '\n'.join(out)

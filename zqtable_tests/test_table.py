@@ -1,9 +1,11 @@
 import unittest
+import datetime
 
 from zqtable import Table, InvalidSchema, InvalidData
 
 
 class TestTable(unittest.TestCase):
+
     def test_simple_table(self):
         s = [
             ('A', int),
@@ -12,6 +14,39 @@ class TestTable(unittest.TestCase):
         ]
         t = Table(s)
         self.assertEqual(s, t.schema)
+
+    def test_column_types(self):
+        s = [
+            ('A', int),
+            ('B', float),
+            ('C', str),
+            ('D', datetime.datetime),
+            'F'
+        ]
+        t = Table(s)
+        self.assertEqual(
+            t.column_types,
+            [int, float, str, datetime.datetime, object]
+
+        )
+
+    def test_formatted_column_descriptions(self):
+        s = [
+            ('A', int),
+            ('B', float),
+            ('C', str),
+            ('D', datetime.datetime),
+            'E'
+        ]
+        t = Table(s)
+        self.assertEqual(
+            t._column_descriptions,
+            ['A (int)',
+             'B (float)',
+             'C (str)',
+             'D (datetime.datetime)',
+             'E']
+        )
 
     def test_append_row(self):
         t = Table([
@@ -86,3 +121,6 @@ class TestTable(unittest.TestCase):
         t1 = Table(s)
         t0.append([2, 2.22, 1])
         self.assertNotEqual(t0, t1)
+
+if __name__ == '__main__':
+    unittest.main()

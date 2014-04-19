@@ -17,8 +17,10 @@ class Index(blist.blist):
         except AttributeError as ae:
 
             raise InvalidIndex(
-                'Column %s does not exist in this table' %
-                ae[0])
+                'Column %s does not exist. Valid columns are %s' % (
+                    ae[0],
+                    ', '.join(table.column_names)
+                ))
 
         table._listeners.add(self)
         self.table = table

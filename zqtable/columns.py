@@ -1,4 +1,5 @@
 import itertools
+import types
 
 
 class Column(list):
@@ -8,6 +9,19 @@ class Column(list):
         self.name = name
         self.type = type
         self[:] = values
+
+    @property
+    def description(self):
+        if self.type == object:
+            return self.name
+        if self.type in vars(types).values():
+            return "%s (%s)" % (self.name, self.type.__name__)
+
+        return "%s (%s.%s)" % (
+            self.name,
+            self.type.__module__,
+            self.type.__name__
+        )
 
 
 class StaticColumn(object):
@@ -77,6 +91,10 @@ class DerivedTableColumn(object):
                 key + 1
             ).next()
             return self._column[i]
+
+
+class JoinColumn(DerivedTableColumn):
+    pass
 
 
 class JoinColumn(DerivedTableColumn):

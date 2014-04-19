@@ -143,5 +143,36 @@ class TestJoinWithNonMatchingKeys(unittest.TestCase):
             ['pokemon', 'owner', 'level', 'type']
         )
 
+
+class TestJoinSelf(unittest.TestCase):
+
+    def test_simple(self):
+        t = Table(
+            [('Employee Id', int), 'Name', 'Manager Id'],
+            [
+                [78, 'Jesee', 1],
+                [87, 'James', 1],
+                [1, 'Giovanni', None],
+            ])
+
+        new_col_names = ['manager.%s' % cn for cn in t.column_names]
+        m = t.rename(
+            t.column_names,
+            new_col_names
+        ).copy()
+
+        # j = t.left_join(
+        #     keys=('Manager Id',),
+        #     other = m,
+        #     other_keys = ('manager.Employee Id',),
+        # )
+
+        # self.assertEquals(
+        #     j[0],
+        #     [78, 'Jesee', 1, 'Giovanni', None]
+
+        # )
+
+
 if __name__ == '__main__':
     unittest.main()
