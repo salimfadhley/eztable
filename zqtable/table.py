@@ -167,10 +167,21 @@ class Table(object):
         """
         return xrange(len(self))
 
-    def _project(self, col_names):
+    def rename(self, old_names, new_names):
+        rename_dict = dict(zip(old_names, new_names))
+        return self._project(
+            col_names=self.column_names,
+            rename_dict=rename_dict
+        )
+
+    def _project(self, col_names, rename_dict=None):
         """Implementation of project and anti_project"""
+        rename_dict = rename_dict or {}
         cols = [self._get_column(c) for c in col_names]
-        return DerivedTable(self._indices_func, cols)
+        column_names = [rename_dict.get(cn) for cn in self.column_names]
+        return (
+            DerivedTable(self._indices_func, cols, rename_dict=rename_dict)
+        )
 
     def expand_const(self, name, value, type=object):
         """Returns a new DerivedTable in which a single column of
@@ -178,7 +189,7 @@ class Table(object):
         """
         return DerivedTable(
             self._indices_func,
-            self._columns + [StaticColumn(name, value, self.__len__, type)]
+            self._columns + [StaticColumn(name, value, self.__len__, type)],
         )
 
     def expand(self, name, input_columns, fn, type=object):
@@ -285,7 +296,10 @@ class Table(object):
                     key.stop,
                     key.step or None
                 )
-            return DerivedTable(f, self._columns[:])
+            return DerivedTable(
+                f,
+                self._columns[:],
+            )
         else:
             return self.get_row(key)
 
@@ -345,9 +359,16 @@ class DerivedTable(Table):
     for performance reasons, certain functions are prohibited.
     """
 
-    def __init__(self, indices_func, columns):
+    def __init__(self, indices_func, columns, rename_dict=None):
         self._indices_func = indices_func
         self._columns = columns
+        self._rename_dict = rename_dict or {}
+        self._inv_rename_dict = {v: k for k, v in self._rename_dict.items()}
+
+    @property
+    def column_names(self):
+        rd = self._rename_dict
+        return [rd.get(c.name, c.name) for c in self._columns]
 
     def __iter__(self):
         cs = self._columns
@@ -359,8 +380,9 @@ class DerivedTable(Table):
             yield cls(r, s)
 
     def _get_column(self, name):
-        actual_col = Table._get_column(self, name)
-        return DerivedTableColumn(self._indices_func, actual_col)
+        actual_name = self._inv_rename_dict.get(name, name)
+        actual_col = Table._get_column(self, actual_name)
+        return DerivedTableColumn(self._indices_func, actual_col, name=name)
 
     def append(self, row):
         raise TypeError("Cannot do append on a non-materialised table.")

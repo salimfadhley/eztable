@@ -50,7 +50,7 @@ class DerivedTableColumn(object):
     """Not so much a derived column, but a column on a
     derived table"""
 
-    def __init__(self, indices_func, column):
+    def __init__(self, indices_func, column, name=None):
         self._indices_func = indices_func
         self._column = column
 
