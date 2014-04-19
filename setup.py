@@ -3,7 +3,7 @@ from setuptools import setup
 import os
 
 PROJECT_ROOT, _ = os.path.split(__file__)
-REVISION = '0.0.14'
+REVISION = '0.0.15'
 PROJECT_NAME = 'zqtable'
 PROJECT_AUTHORS = "Salim Fadhley"
 # Please see readme.rst for a complete list of contributors
