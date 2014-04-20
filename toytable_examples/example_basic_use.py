@@ -14,3 +14,5 @@ j = p.left_join(
     other = o
 )
 print j
+j2 = j.project('Pokemon', 'Level', 'Name')
+print j2

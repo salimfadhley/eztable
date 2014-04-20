@@ -32,12 +32,54 @@ Or..
 You can also install this project from source. Check ou the code from mercurial
 and then build the project.
 
-.. code-block:: none
-    :linenos:
+
+Source code installation::
     hg clone https://salimfadhley@bitbucket.org/salimfadhley/toytable <project dir>
     cd <project dir>
     python setup.py install
 
+
+Example
+-------
+
+It's easy to make a Table::
+    >>> from toytable import Table
+    >>> p = Table([('Owner Id', int), 'Pokemon', ('Level', int)])
+    >>> p.extend([
+    ...     [1, 'Pikachu', 18],
+    ... ])
+
+Table objects can be printed::
+    >>> print p
+    | Owner Id (int) | Pokemon | Level (int) |
+    | 1              | Pikachu | 18          |
+
+You can add data to tables one row at a time. It has the same
+effect as using the extend function::
+    >>> o = Table([('Owner Id', int), ('Name', str)])
+    >>> o.append([1, 'Ash Ketchum'])
+    >>> o.append([2, 'Brock'])
+    >>> o.append([3, 'Misty'])
+    >>> print o
+    | Owner Id (int) | Name (str)  |
+    | 1              | Ash Ketchum |
+    | 2              | Brock       |
+    | 3              | Misty       |
+
+Tables can be joined to other tables::
+    >>> j = p.left_join(
+    ...     keys=('Owner Id',),
+    ...     other = o
+    ... )
+    >>> print j
+    | Owner Id (int) | Pokemon | Level (int) | Name (str)  |
+    | 1              | Pikachu | 18          | Ash Ketchum |
+
+The project method allows you to re-order and remove columns::
+    >>> j2 = j.project('Pokemon', 'Level', 'Name')
+    >>> print j2
+    | Pokemon | Level (int) | Name (str)  |
+    | Pikachu | 18          | Ash Ketchum |
 
 The Table Class
 ---------------
