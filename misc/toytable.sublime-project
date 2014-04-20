@@ -13,7 +13,7 @@
         {
             "before_test": "source .env/bin/activate",
             "after_test": "deactivate",
-            "test_root": "src/zqtable_tests",
+            "test_root": "src/toytable_tests",
             "test_delimeter": ":",
             "test_command": "nosetests"
         },
@@ -40,7 +40,7 @@
             "working_dir": "${project_path:${folder}}/src",
             "cmd":
             [
-                "${project_path}/bin/nosetests", "${project_path}/src/zqtable_tests"
+                "${project_path}/bin/nosetests", "${project_path}/src/toytable_tests"
             ]
         },
         {
