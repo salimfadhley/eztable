@@ -15,9 +15,9 @@
 import sys
 import os
 import pkg_resources
-import zqtable
+import toytable
 
-dist = pkg_resources.working_set.by_key[zqtable.__name__]
+dist = pkg_resources.working_set.by_key[toytable.__name__]
 version = release = dist.version
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -53,7 +53,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'zqtable'
+project = u'toytable'
 copyright = u'2014, Salim Fadhley'
 
 # The version info for the project you're documenting, acts as replacement for
