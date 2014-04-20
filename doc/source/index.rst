@@ -23,18 +23,18 @@ Egg-files for this project are hosted on PyPi. Most Python users should be able 
 
 Most users can do the following:
 ::
-    pip install zqtable
+    pip install toytable
 
 Or..
 ::
-    easy_install zqtable
+    easy_install toytable
 
 You can also install this project from source. Check ou the code from mercurial
 and then build the project.
 
 .. code-block:: none
     :linenos:
-    hg clone https://salimfadhley@bitbucket.org/salimfadhley/zqtable <project dir>
+    hg clone https://salimfadhley@bitbucket.org/salimfadhley/toytable <project dir>
     cd <project dir>
     python setup.py install
 
