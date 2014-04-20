@@ -220,6 +220,13 @@ class Table(object):
     def expand_const(self, name, value, type=object):
         """Returns a new DerivedTable in which a single column of
         static data has been added.
+
+        :param name: The name of the new column to be added
+        :type name: str
+        :param value: The constant value of the new column
+        :type value: object
+        :param type: Optional, specify a type constraint for the new column
+        :type type: type
         """
         return DerivedTable(
             self._indices_func,
