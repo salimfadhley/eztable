@@ -32,15 +32,8 @@ Or..
 You can also install this project from source. Check ou the code from mercurial
 and then build the project.
 
-
-Source code installation::
-    hg clone https://salimfadhley@bitbucket.org/salimfadhley/toytable <project dir>
-    cd <project dir>
-    python setup.py install
-
-
-Example
--------
+Examples
+--------
 
 It's easy to make a Table::
     >>> from toytable import Table
@@ -54,8 +47,7 @@ Table objects can be printed::
     | Owner Id (int) | Pokemon | Level (int) |
     | 1              | Pikachu | 18          |
 
-You can add data to tables one row at a time. It has the same
-effect as using the extend function::
+You can add data to tables one row at a time. It has the same effect as using the extend function::
     >>> o = Table([('Owner Id', int), ('Name', str)])
     >>> o.append([1, 'Ash Ketchum'])
     >>> o.append([2, 'Brock'])
