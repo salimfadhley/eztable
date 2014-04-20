@@ -1,5 +1,5 @@
 import unittest
-from zqtable import Table, InvalidSchema, InvalidData
+from toytable import Table, InvalidSchema, InvalidData
 
 
 class TestTableRowAccess(unittest.TestCase):

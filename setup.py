@@ -3,14 +3,13 @@ from setuptools import setup
 import os
 
 PROJECT_ROOT, _ = os.path.split(__file__)
-REVISION = '0.0.15'
-PROJECT_NAME = 'zqtable'
+REVISION = '0.0.16'
+PROJECT_NAME = 'toytable'
 PROJECT_AUTHORS = "Salim Fadhley"
 # Please see readme.rst for a complete list of contributors
 PROJECT_EMAILS = 'salimfadhley@gmail.com'
-PROJECT_URL = "https://bitbucket.org/salimfadhley/zqtable"
-SHORT_DESCRIPTION = 'Tabular and time-sequence data in pure python'
-
+PROJECT_URL = "https://bitbucket.org/salimfadhley/toytable"
+SHORT_DESCRIPTION = 'Simple in-memory tables in Python.'
 
 try:
     DESCRIPTION = open(os.path.join(PROJECT_ROOT, "readme.rst")).read()
@@ -23,7 +22,7 @@ setup(
     version=REVISION,
     author=PROJECT_AUTHORS,
     author_email=PROJECT_EMAILS,
-    packages=['zqtable', 'zqtable_tests'],
+    packages=['toytable', 'toytable_tests'],
     zip_safe=True,
     include_package_data=False,
     install_requires=['blist', 'six'],

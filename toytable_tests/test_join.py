@@ -1,7 +1,7 @@
 import unittest
 import collections
-from zqtable import Table, InvalidIndex
-from zqtable.table import JoinTable
+from toytable import Table, InvalidIndex
+from toytable.table import JoinTable
 
 
 class TestJoin(unittest.TestCase):

@@ -1,5 +1,5 @@
 import unittest
-from zqtable import Table
+from toytable import Table
 
 
 class TestRestrict(unittest.TestCase):

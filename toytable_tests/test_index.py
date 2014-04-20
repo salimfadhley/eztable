@@ -1,5 +1,5 @@
 import unittest
-from zqtable import Table, InvalidIndex
+from toytable import Table, InvalidIndex
 
 
 class TestIndex(unittest.TestCase):
@@ -29,7 +29,7 @@ class TestIndex(unittest.TestCase):
             cols=('A', 'C')
         )
         expected_str = 'A,C'
-        expected_repr = '<zqtable.index.Index %s>' % expected_str
+        expected_repr = '<toytable.index.Index %s>' % expected_str
 
         self.assertEquals(str(i), expected_str)
         self.assertEquals(repr(i), expected_repr)

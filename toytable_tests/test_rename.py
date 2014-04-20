@@ -1,5 +1,5 @@
 import unittest
-from zqtable import Table, InvalidIndex
+from toytable import Table, InvalidIndex
 
 
 class TestRename(unittest.TestCase):

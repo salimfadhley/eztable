@@ -1,7 +1,7 @@
 import unittest
 import datetime
 
-from zqtable import Table, InvalidSchema, InvalidData
+from toytable import Table, InvalidSchema, InvalidData
 
 
 class TestTable(unittest.TestCase):
