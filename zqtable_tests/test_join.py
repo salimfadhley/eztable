@@ -144,34 +144,40 @@ class TestJoinWithNonMatchingKeys(unittest.TestCase):
         )
 
 
-class TestJoinSelf(unittest.TestCase):
+class TestBrokenJoin(unittest.TestCase):
 
-    def test_simple(self):
-        t = Table(
-            [('Employee Id', int), 'Name', 'Manager Id'],
-            [
-                [78, 'Jesee', 1],
-                [87, 'James', 1],
-                [1, 'Giovanni', None],
-            ])
+    def test_incomplete_join(self):
+        p = Table([('Owner Id', int), 'Pokemon', ('Level', int)])
 
-        new_col_names = ['manager.%s' % cn for cn in t.column_names]
-        m = t.rename(
-            t.column_names,
-            new_col_names
-        ).copy()
+        p.extend([
+            [1, 'Pikachu', 18],
+            [2, 'Blastoise', 22],
+            [3, 'Weedle', 4],
+        ])
 
-        # j = t.left_join(
-        #     keys=('Manager Id',),
-        #     other = m,
-        #     other_keys = ('manager.Employee Id',),
-        # )
+        o = Table([('Owner Id', int), ('Owner Name', str)])
+        o.append([1, 'Ash Ketchum'])
+        o.append([2, 'Brock'])
+        o.append([2, 'Misty'])
 
-        # self.assertEquals(
-        #     j[0],
-        #     [78, 'Jesee', 1, 'Giovanni', None]
+        j = p.left_join(
+            keys=('Owner Id',),
+            other = o
+        )
 
-        # )
+        self.assertEquals(
+            j.column_names,
+            ['Owner Id', 'Pokemon', 'Level', 'Owner Name']
+        )
+
+    def test_joined_table_repr(self):
+        p = Table([('Owner Id', int), 'Pokemon', ('Level', int)])
+        o = Table([('Owner Id', int), ('Owner Name', str)])
+        j = p.left_join(keys=('Owner Id',), other = o)
+        self.assertEquals(
+            repr(j),
+            "| Owner Id (int) | Pokemon | Level (int) | Owner Name (str) |"
+        )
 
 
 if __name__ == '__main__':

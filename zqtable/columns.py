@@ -76,6 +76,10 @@ class DerivedTableColumn(object):
     def type(self):
         return self._column.type
 
+    @property
+    def description(self):
+        return self._column.description
+
     def __iter__(self):
         for i in self._indices_func():
             yield self._column[i]

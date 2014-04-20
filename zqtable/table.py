@@ -93,20 +93,24 @@ class Table(object):
         return s
 
     @property
+    def _all_columns(self):
+        return self._columns
+
+    @property
     def column_names(self):
         """Get the table's column names as a list of strings.
         """
-        return [c.name for c in self._columns]
+        return [c.name for c in self._all_columns]
 
     @property
     def column_types(self):
         """Get the table's column types as a list of types.
         """
-        return [c.type for c in self._columns]
+        return [c.type for c in self._all_columns]
 
     @property
     def _column_descriptions(self):
-        return [c.description for c in self._columns]
+        return [c.description for c in self._all_columns]
 
     def __iter__(self):
         """Iterate through the rows of this table.
@@ -275,7 +279,7 @@ class Table(object):
         other_keys = other_keys or keys
         return JoinTable(
             indices_func=self._indices_func,
-            columns=self._columns,
+            left_columns=self._columns,
             keys=keys,
             other=other,
             other_keys=other_keys
@@ -431,9 +435,9 @@ class JoinTable(DerivedTable):
     """The result of a table join operation.
     """
 
-    def __init__(self, indices_func, columns, keys, other, other_keys):
+    def __init__(self, indices_func, left_columns, keys, other, other_keys):
         self._indices_func = indices_func
-        self._columns = columns
+        self._left_columns = left_columns
         self._keys = keys
         self._other = other
         self._other_keys = other_keys
@@ -442,6 +446,10 @@ class JoinTable(DerivedTable):
         self._join_index = other.add_index(
             cols=other_keys
         ).reindex()
+
+    @property
+    def _columns(self):
+        return self._left_columns + self._join_columns
 
     def _both_indices_func(self):
         """Generator function which gives a sequence of pairs:
@@ -453,7 +461,7 @@ class JoinTable(DerivedTable):
             key = tuple(kc[i] for kc in kcs)
             try:
                 yield i, self._join_index.index(key)
-            except IndexError:
+            except ValueError:
                 yield i, None
 
     def _join_indices_func(self):
@@ -472,10 +480,6 @@ class JoinTable(DerivedTable):
         raise KeyError(name)
 
     @property
-    def _all_columns(self):
-        return self._columns + self._join_columns
-
-    @property
     def _key_columns(self):
         return [self._get_column(k) for k in self._keys]
 
@@ -491,7 +495,7 @@ class JoinTable(DerivedTable):
     def column_names(self):
         """Get the table's column names as a list of strings.
         """
-        return [c.name for c in (self._columns + self._join_columns)]
+        return [c.name for c in (self._left_columns + self._join_columns)]
 
     @property
     def schema(self):
@@ -503,17 +507,17 @@ class JoinTable(DerivedTable):
         and joined columns.
         """
         s = []
-        for c in self._all_columns:
+        for c in self._columns:
             s.append((c.name, c.type))
         return s
 
     def __getitem__(self, key):
-        cs = self._columns
+        cs = self._left_columns
         jcs = self._join_columns
         i, ji = itertools.islice(
             self._both_indices_func(), key, key + 1).next()
 
-        s = dict((c.name, i) for i, c in enumerate(self._all_columns))
+        s = dict((c.name, i) for i, c in enumerate(self._columns))
         r = itertools.chain(
             (c[i] for c in cs),
             (jc._column[ji]
@@ -522,13 +526,19 @@ class JoinTable(DerivedTable):
         return TableRow(r, s)
 
     def __iter__(self):
-        cs = self._columns
+        cs = self._left_columns
         jcs = self._join_columns
         kcs = self._key_columns
         s = dict((c.name, i) for i, c in enumerate(self._all_columns))
         for i, ji in self._both_indices_func():
-            r = itertools.chain(
-                (c[i] for c in cs),
-                (jc._column[ji] for jc in jcs)
-            )
+            if ji:
+                r = itertools.chain(
+                    (c[i] for c in cs),
+                    (jc._column[ji] for jc in jcs)
+                )
+            else:
+                r = itertools.chain(
+                    (c[i] for c in cs),
+                    (None for jc in jcs)
+                )
             yield TableRow(r, s)
