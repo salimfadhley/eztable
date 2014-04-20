@@ -17,7 +17,7 @@ class Table(object):
 
     def __init__(self, schema, data=[]):
         """
-        Every Table     object has a sschema. In it's simple form, the schema can be
+        Every Table object has a schema. In it's simplest form, the schema can be
         nothing more than a list of string column-names. Specifying a schema
         this way will produce a non-typed table, in which any Python type can be stored in
         any column.
@@ -30,10 +30,10 @@ class Table(object):
         types such as numbers and strings, however it is also possible to store any python
         object as long as they are hashable.
 
-        param schema: Column names as a sequence of strings, or ('col_name', type)
-        type schema: list
-        param data: Optional rows of data to initialize the table.
-        type data: list of lists
+        :param schema: Column names as a sequence of strings, or ('col_name', type)
+        :type schema: list
+        :param data: Optional rows of data to initialize the table.
+        :type data: list of lists
         """
         self._columns = []
         self.indexes = WeakValueDictionary()
@@ -56,6 +56,8 @@ class Table(object):
         positional element must conform to the required type of the corresponding
         schema column.
 
+        :param row: A single table row to be added
+        :type row: List of objects, types must correspond with schema
         """
         if len(row) != len(self._columns):
             raise InvalidData(
@@ -78,6 +80,8 @@ class Table(object):
     def extend(self, iterable):
         """Append all rows in iterable to this table. Each row
         must conform to this table's schema.
+        :param iterable: Iterator from which to extract rows
+        :type iterable: iterable
         """
         for row in iterable:
             self.append(row)
@@ -94,6 +98,8 @@ class Table(object):
 
     @property
     def _all_columns(self):
+        """Get all of the column objects in the table as a list of Columns.
+        """
         return self._columns
 
     @property
@@ -115,7 +121,7 @@ class Table(object):
     def __iter__(self):
         """Iterate through the rows of this table.
 
-        Each row is a namedtuple.
+        Each row behaves like a namedtuple.
         """
         s = self._tablerow_schema()
         for r in itertools.izip(*self._columns):
@@ -125,6 +131,8 @@ class Table(object):
         return dict((c.name, i) for i, c in enumerate(self._columns))
 
     def __getslice__(self, start, stop):
+        """Required to support slicing on Python 2.x
+        """
         return self.__getitem__(slice(start, stop, 1))
 
     def _get_column(self, name):
@@ -145,6 +153,9 @@ class Table(object):
 
         Ordering of the original columns will be retained, except that
         the specified columns will no longer be accessible.
+
+        :param col_names: List of colun names to remove
+        :type col_names: List of strings
         """
         if len(col_names) and not isinstance(col_names[0], string_types):
             col_names = col_names[0]
@@ -162,6 +173,9 @@ class Table(object):
     def project(self, *col_names):
         """Returns a new DerivedTable in which only the named
         columns remain in the order specified by col_names.
+
+        :param col_names: List of column names to keep
+        :type col_names: List of strings
         """
         if len(col_names) and not isinstance(col_names[0], string_types):
             col_names = col_names[0]
@@ -219,12 +233,12 @@ class Table(object):
         This column's value is determined by a function and
         a set of input columns.
 
-        param name: The name of the new derived coulumn.
-        type name: str
-        param input_columns: The input column names.
-        type input_columns: list of str
-        param fn; A function or lambda
-        param type: Optionally, constrain the value of this column by type
+        :param name: The name of the new derived coulumn.
+        :type name: str
+        :param input_columns: The input column names.
+        :type input_columns: list of str
+        :param fn; A function or lambda
+        :param type: Optionally, constrain the value of this column by type
         """
         incols = []
         for c in input_columns:
@@ -261,8 +275,8 @@ class Table(object):
         hence the user must retain a reference to the index
         in order to prevent it from being garbage collected.
 
-        param cols: Column names to be included into the index.
-        type cols: List of strings.
+        :param cols: Column names to be included into the index.
+        :type cols: List of strings.
         """
         i = Index(table=self, cols=cols)
         index_key = tuple(cols)
@@ -291,10 +305,10 @@ class Table(object):
         all visible rows satisfy some kind of logical
         constraint given by fn.
 
-        param col_names: List of column names to feed into fn
-        type col_names: list of strings
-        param fn: Should return True for any retained row.
-        type fn: fuunction or lambda
+        :param col_names: List of column names to feed into fn
+        :type col_names: list of strings
+        :param fn: Should return True for any retained row.
+        :type fn: fuunction or lambda
         """
         cols = [self._get_column(cn) for cn in col_names]
 

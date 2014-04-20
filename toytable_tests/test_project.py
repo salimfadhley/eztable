@@ -1,6 +1,7 @@
 import unittest
 from toytable import Table
 
+
 class TestProject(unittest.TestCase):
 
     def setUp(self):

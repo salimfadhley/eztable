@@ -3,6 +3,7 @@ from toytable.columns import Column
 
 
 class TestColumn(TestCase):
+
     def test_column(self):
         """A column can be constructed with no data."""
         c = Column('foo')

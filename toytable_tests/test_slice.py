@@ -3,6 +3,7 @@ from toytable import Table, InvalidSchema, InvalidData
 
 
 class TestTableRowAccess(unittest.TestCase):
+
     def setUp(self):
         self.s = [
             ('A', int),

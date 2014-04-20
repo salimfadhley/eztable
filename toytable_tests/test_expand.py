@@ -4,6 +4,7 @@ from toytable import Table, InvalidSchema, InvalidData
 
 
 class TestExpandTable(unittest.TestCase):
+
     def setUp(self):
         self.s = [
             ('A', int),
@@ -41,9 +42,6 @@ class TestExpandTable(unittest.TestCase):
             value='X'
         )
         self.assertEqual(len(t), len(self.t))
-
-    
-    
 
     def test_simple_expand(self):
         t = self.t.expand(

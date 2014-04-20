@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# zqtable documentation build configuration file, created by
+# toytable documentation build configuration file, created by
 # sphinx-quickstart on Fri Apr 18 01:04:13 2014.
 #
 # This file is execfile()d with the current directory set to its
@@ -181,7 +181,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'zqtabledoc'
+htmlhelp_basename = 'toytabledoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -201,7 +201,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    ('index', 'zqtable.tex', u'zqtable Documentation',
+    ('index', 'toytable.tex', u'toytable Documentation',
      u'Salim Fadhley', 'manual'),
 ]
 
@@ -231,7 +231,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'zqtable', u'zqtable Documentation',
+    ('index', 'toytable', u'toytable Documentation',
      [u'Salim Fadhley'], 1)
 ]
 
@@ -245,8 +245,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    ('index', 'zqtable', u'zqtable Documentation',
-     u'Salim Fadhley', 'zqtable', 'One line description of project.',
+    ('index', 'toytable', u'toytable Documentation',
+     u'Salim Fadhley', 'toytable', 'One line description of project.',
      'Miscellaneous'),
 ]
 
@@ -266,13 +266,13 @@ texinfo_documents = [
 # -- Options for Epub output ----------------------------------------------
 
 # Bibliographic Dublin Core info.
-epub_title = u'zqtable'
+epub_title = u'toytable'
 epub_author = u'Salim Fadhley'
 epub_publisher = u'Salim Fadhley'
 epub_copyright = u'2014, Salim Fadhley'
 
 # The basename for the epub file. It defaults to the project name.
-#epub_basename = u'zqtable'
+#epub_basename = u'toytable'
 
 # The HTML theme for the epub output. Since the default themes are not optimized
 # for small screen space, using the same theme for HTML and epub output is

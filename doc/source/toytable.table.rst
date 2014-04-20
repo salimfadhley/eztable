@@ -1,7 +1,7 @@
-zqtable.index module
+toytable.table module
 ====================
 
-.. automodule:: zqtable.index
+.. automodule:: zqtable.table
     :members:
     :undoc-members:
     :show-inheritance:

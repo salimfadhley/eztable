@@ -1,7 +1,7 @@
-zqtable
-=======
+toytable
+========
 
 .. toctree::
    :maxdepth: 4
 
-   zqtable
+   toytable
