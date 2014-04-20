@@ -179,6 +179,30 @@ class TestBrokenJoin(unittest.TestCase):
             "| Owner Id (int) | Pokemon | Level (int) | Owner Name (str) |"
         )
 
+    def test_joined_table_repr_one_row(self):
+        p = Table([('Owner Id', int), 'Pokemon', ('Level', int)])
+        p.extend([
+            [1, 'Pikachu', 18],
+        ])
+        print p
+        o = Table([('Owner Id', int), ('Name', str)])
+        o.append([1, 'Ash Ketchum'])
+        j = p.left_join(
+            keys=('Owner Id',),
+            other = o
+        )
+
+        self.assertEquals(
+            j[0],
+            (1, 'Pikachu', 18, 'Ash Ketchum')
+
+        )
+
+        self.assertEquals(
+            list(j)[0],
+            (1, 'Pikachu', 18, 'Ash Ketchum'),
+        )
+
 
 if __name__ == '__main__':
     unittest.main()

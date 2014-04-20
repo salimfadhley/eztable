@@ -357,23 +357,35 @@ class Table(object):
 
         return True
 
-    def __repr__(self):
+    def _get_column_widths(self):
+        """Get maximum column widths as a list
+        of integers"""
         cl = [len(cn) for cn in self._column_descriptions]
         for r in self:
             for i, (m, c) in enumerate(zip(cl, r)):
-                this_col_len = len(repr(c))
+                this_col_len = len(str(c))
                 if this_col_len > m:
                     cl[i] = this_col_len
+        return cl
 
+    def __repr__(self):
+        """Produce a handy representation of the table: The
+        first row will be column names and types (if specified),
+        subsequent rows will be the actual data in the table.
+
+        All columns will be sperated by | symbols and
+        padded with whitespace as required.
+        """
+        cl = self._get_column_widths()
         out = []
 
-        def row(r):
+        def format_row(r):
             out.append(
                 '| %s |' % (' | '.join(str(c).ljust(l) for l, c in zip(cl, r)))
             )
-        row(c.description for c in self._columns)
+        format_row(c.description for c in self._columns)
         for r in self:
-            row(r)
+            format_row(r)
         return '\n'.join(out)
 
 
@@ -529,16 +541,16 @@ class JoinTable(DerivedTable):
         cs = self._left_columns
         jcs = self._join_columns
         kcs = self._key_columns
-        s = dict((c.name, i) for i, c in enumerate(self._all_columns))
+        s = dict((c.name, i) for i, c in enumerate(self._columns))
         for i, ji in self._both_indices_func():
-            if ji:
+            if ji is None:  # Literally none!
                 r = itertools.chain(
                     (c[i] for c in cs),
-                    (jc._column[ji] for jc in jcs)
+                    (None for jc in jcs)
                 )
             else:
                 r = itertools.chain(
                     (c[i] for c in cs),
-                    (None for jc in jcs)
+                    (jc._column[ji] for jc in jcs)
                 )
             yield TableRow(r, s)
