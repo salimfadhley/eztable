@@ -6,10 +6,10 @@ PROJECT_ROOT, _ = os.path.split(__file__)
 REVISION = '0.0.19'
 PROJECT_NAME = 'toytable'
 PROJECT_AUTHORS = "Salim Fadhley"
-# Please see readme.rst for a complete list of contributors
 PROJECT_EMAILS = 'salimfadhley@gmail.com'
 PROJECT_URL = "https://bitbucket.org/salimfadhley/toytable"
 SHORT_DESCRIPTION = 'Simple in-memory tables in Python.'
+
 
 try:
     DESCRIPTION = open(os.path.join(PROJECT_ROOT, "readme.rst")).read()
