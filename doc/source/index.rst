@@ -87,6 +87,10 @@ The Table Class
     :undoc-members:
     :show-inheritance:
 
+Table Literals
+--------------
+
+.. autofunction:: toytable.table_literal
 
 Indices and tables
 ==================

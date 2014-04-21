@@ -18,29 +18,73 @@ def import_something(path):
     return mod
 
 
-def col_tuple_to_schema_item(ct):
+def col_tuple_to_schema_item(ct, default_type):
     name, typestr = ct
     if not typestr:
-        return name
+        return name, default_type
     modpath, _, classname = typestr.rpartition('.')
     if modpath:
         return name, getattr(import_something(modpath), classname)
     return name, __builtins__[classname]
 
 
-def table_literal(repr_string):
-    """Create a toytable.Table object from a multi-line
-    string expression. The input format is exactly the
-    same as the Table class's repr format.
+def split_row(str_row):
+    return [hs.strip() for hs in str_row.split('|')[1:-1]]
 
-    :param repr_string: table definition
-    :type repr_string: str
-    """
+
+def clean_rows(repr_string):
     for row in repr_string.split('\n'):
         clean_row = row.strip()
         if not clean_row:
             continue
-        header_strings = [hs.strip() for hs in clean_row.split('|')[1:-1]]
-        types_and_strings = [col_tuple_to_schema_item(parse_column_string(h))
-                             for h in header_strings]
-        return Table(types_and_strings)
+        yield split_row(clean_row)
+
+
+def table_literal(repr_string, default_type=str):
+    """Create a toytable.Table object from a multi-line
+    string expression. The input format is exactly the
+    same as the Table class's repr format::
+
+        >>> from toytable import table_literal
+        >>> pokedex = table_literal(\"\"\"
+        ...     | Pokemon (str) | Level (int) | Owner (str) | Type (str) |
+        ...     | Pikchu        | 12          | Ash Ketchum | Electric   |
+        ...     | Bulbasaur     | 16          | Ash Ketchum | Grass      |
+        ...     | Charmander    | 19          | Ash Ketchum | Fire       |
+        ...     | Raichu        | 23          | Lt. Surge   | Electric   |
+        ...     \"\"\")
+        >>>
+        >>> print pokedex.column_names
+        ['Pokemon', 'Level', 'Owner', 'Type']
+        >>> print pokedex.column_types
+        [<type 'str'>, <type 'int'>, <type 'str'>, <type 'str'>]
+        >>> print list(pokedex.Pokemon)
+        ['Pikchu', 'Bulbasaur', 'Charmander', 'Raichu']
+
+    Since table literal expressions are strings all columns
+    require a type to be explicitly specified. All untyped columns
+    are presumed to be strings.
+
+    The type column can be any importable object or function
+    capable of building the contents of the column from the
+    string values of each element in the column.
+
+    :param repr_string: table definition
+    :type repr_string: str
+    :param default_type: optional type to apply to columns where no type is given
+    :type default_type: type
+    """
+    rows_iter = clean_rows(repr_string)
+    column_names_and_types = [col_tuple_to_schema_item(parse_column_string(h), default_type=str)
+                              for h in rows_iter.next()]
+
+    t = Table(column_names_and_types)
+
+    def process_row(lst_row):
+            for ty, val in zip(t.column_types, lst_row):
+                yield ty(val)
+
+    data = (list(process_row(row)) for row in rows_iter)
+    t.extend(data)
+
+    return t

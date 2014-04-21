@@ -11,14 +11,14 @@ class TestTableLiteral(unittest.TestCase):
         t = table_literal("""
         | A | B | C |
         | 1 | 2 | 3 |
-        """)
+        """, default_type=int)
         self.assertIsInstance(t, Table)
 
     def test_table_literal_one_row(self):
         t = table_literal("""
         | A | B | C | D |
         | 1 | 2 | 3 | 4 |
-        """)
+        """, default_type=int)
 
         self.assertEquals(
             t.column_names,
@@ -39,8 +39,8 @@ class TestTableLiteral(unittest.TestCase):
 
     def test_convert_col_tuple_to_schema(self):
         self.assertEquals(
-            col_tuple_to_schema_item(('foo', None)),
-            'foo'
+            col_tuple_to_schema_item(('foo', None), default_type='ssqsswws'),
+            ('foo', 'ssqsswws')
         )
 
     def test_convert_col_tuple_to_schema_with_type(self):
@@ -57,20 +57,26 @@ class TestTableLiteral(unittest.TestCase):
 
     def test_convert_col_tuple_to_schema_with_type(self):
         self.assertEquals(
-            col_tuple_to_schema_item(('bof', 'datetime.datetime')),
+            col_tuple_to_schema_item(
+                ('bof', 'datetime.datetime'), default_type='zzzzz'),
             ('bof', datetime.datetime)
         )
 
     def test_table_literal_one_row_with_types(self):
         t = table_literal("""
-        | A (int) | B (float) | C (bool) | D |
-        | 1       | 2.2       | True     | 4 |
+        | A (int) | B (float) | C (bool) | D (int) |
+        | 1       | 2.2       | True     | 4       |
         """)
         self.assertEquals(
             t.column_names,
             ['A', 'B', 'C', 'D']
         )
 
+        self.assertEquals(
+            t[0],
+            (1, 2.2, True, 4)
+
+        )
 
 
 if __name__ == '__main__':

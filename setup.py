@@ -3,19 +3,14 @@ from setuptools import setup
 import os
 
 PROJECT_ROOT, _ = os.path.split(__file__)
-REVISION = '0.0.21'
+REVISION = '0.0.23'
 PROJECT_NAME = 'toytable'
 PROJECT_AUTHORS = "Salim Fadhley"
 PROJECT_EMAILS = 'salimfadhley@gmail.com'
 PROJECT_URL = "https://bitbucket.org/salimfadhley/toytable"
 SHORT_DESCRIPTION = 'Simple in-memory tables in Python.'
 
-DESCRIPTION = """Toytable is a toy table package. It is suitable for lightweight data analysis tasks. It provides a class
-which is suitable for representing one-dimensional tables (e.g. time-sequences).
-
-Toytable is built with an emphasis on simplicity, both in interface and internal design
-rather than performance or scalability. Toytable is intended to have as few dependancies
-as possible, and is therefore suitable for casual development tasks."""
+DESCRIPTION = open(os.path.join(PROJECT_ROOT, "readme.rst")).read()
 
 
 setup(

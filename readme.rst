@@ -1,7 +1,11 @@
 toytable
 ========
 
-Tables and time-series data in pure python.
+Toytable is a toy table package. It is suitable for lightweight data analysis tasks. It provides a class which is suitable for representing one-dimensional tables (e.g. time-sequences).
+
+Toytable is built with an emphasis on simplicity, both in interface and internal design rather than performance or scalability. Toytable is intended to have as few dependancies as possible, and is therefore suitable for casual development tasks.
+
+Toytable is not intended for high performance or scalability. Toytable is not complete. For these reasons, please consider evaluating other more mature packages (e.g. Pandas).
 
 Build Status
 ------------
