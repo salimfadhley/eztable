@@ -61,15 +61,16 @@ class TestTableLiteral(unittest.TestCase):
             ('bof', datetime.datetime)
         )
 
-    # def test_table_literal_one_row_with_types(self):
-    #     t = table_literal("""
-    #     | A (int) | B (float) | C (bool) | D |
-    #     | 1       | 2.2       | True     | 4 |
-    #     """)
-    #     self.assertEquals(
-    #         t.column_names,
-    #         ['A', 'B', 'C', 'D']
-    #     )
+    def test_table_literal_one_row_with_types(self):
+        t = table_literal("""
+        | A (int) | B (float) | C (bool) | D |
+        | 1       | 2.2       | True     | 4 |
+        """)
+        self.assertEquals(
+            t.column_names,
+            ['A', 'B', 'C', 'D']
+        )
+
 
 
 if __name__ == '__main__':

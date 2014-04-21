@@ -34,6 +34,6 @@ def table_literal(repr_string):
         if not clean_row:
             continue
         header_strings = [hs.strip() for hs in clean_row.split('|')[1:-1]]
-        types_and_strings = [parse_column_string(h) for h in header_strings]
-
-        return Table(header_strings)
+        types_and_strings = [col_tuple_to_schema_item(parse_column_string(h))
+                             for h in header_strings]
+        return Table(types_and_strings)
