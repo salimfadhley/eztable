@@ -29,6 +29,13 @@ def col_tuple_to_schema_item(ct):
 
 
 def table_literal(repr_string):
+    """Create a toytable.Table object from a multi-line
+    string expression. The input format is exactly the
+    same as the Table class's repr format.
+
+    :param repr_string: table definition
+    :type repr_string: str
+    """
     for row in repr_string.split('\n'):
         clean_row = row.strip()
         if not clean_row:
