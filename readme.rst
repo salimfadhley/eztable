@@ -1,7 +1,11 @@
-toytable
+Toytable
 ========
 
-Toytable is a toy table package. It is suitable for lightweight data analysis tasks. It provides a class which is suitable for representing one-dimensional tables (e.g. time-sequences).
+.. image:: toy_table.png
+
+Toytable is a lightweight python table library. It provides a class called Table  which is suitable for representing one-dimensional tables (e.g. time-sequences).
+
+It is suitable for data analysis tasks. 
 
 Toytable is built with an emphasis on simplicity, both in interface and internal design rather than performance or scalability. Toytable is intended to have as few dependancies as possible, and is therefore suitable for casual development tasks.
 
