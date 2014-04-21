@@ -554,15 +554,25 @@ class JoinTable(DerivedTable):
     def __getitem__(self, key):
         cs = self._left_columns
         jcs = self._join_columns
-        i, ji = itertools.islice(
-            self._both_indices_func(), key, key + 1).next()
+
+        try:
+            i, ji = itertools.islice(
+                self._both_indices_func(), key, key + 1).next()
+        except StopIteration:
+            raise IndexError(key)
 
         s = dict((c.name, i) for i, c in enumerate(self._columns))
-        r = itertools.chain(
-            (c[i] for c in cs),
-            (jc._column[ji]
-             for jc in jcs)  # Act on the underlying columns here
-        )
+
+        if ji is None:  # Literally none!
+            r = itertools.chain(
+                (c[i] for c in cs),
+                (None for jc in jcs)
+            )
+        else:
+            r = itertools.chain(
+                (c[i] for c in cs),
+                (jc._column[ji] for jc in jcs)
+            )
         return TableRow(r, s)
 
     def __iter__(self):

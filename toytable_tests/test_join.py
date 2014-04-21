@@ -16,6 +16,7 @@ class TestJoin(unittest.TestCase):
             ['Togepi', 'Misty', 5],
             ['Onyx', 'Brock', 22],
             ['Meowth', 'Team Rocket', 22],
+            ['Mew', None, 99],
         ])
 
         self.types = Table(['pokemon', 'type'])
@@ -30,19 +31,14 @@ class TestJoin(unittest.TestCase):
         ])
 
     def test_join_interface(self):
-
         t = self.pokedex.left_join(
             keys=('pokemon', ),
             other = self.types
         )
-
-        self.assertIsInstance(t, JoinTable)
-
         self.assertEquals(
             t._key_columns,
             [t.pokemon, ]
         )
-
         self.assertEquals(
             t.column_names,
             ['pokemon', 'owner', 'level', 'type']
@@ -53,14 +49,12 @@ class TestJoin(unittest.TestCase):
             keys=('pokemon', ),
             other = self.types
         )
-
         expected = [
             ('pokemon', object),
             ('owner', object),
             ('level', object),
             ('type', object),
         ]
-
         self.assertEquals(
             t.schema,
             expected
@@ -73,7 +67,7 @@ class TestJoin(unittest.TestCase):
         )
         self.assertEquals(
             list(t._join_indices_func()),
-            [6, 3, 4, 5, 0, 1, 2]
+            [6, 3, 4, 5, 0, 1, 2, None]
         )
 
     def test_join_row(self):
@@ -96,6 +90,24 @@ class TestJoin(unittest.TestCase):
             tl[1],
             ('Pikachu', 'Ash', 15, 'Electric')
         )
+
+    def test_impossible_join(self):
+        t = self.pokedex.left_join(
+            keys=('pokemon', ),
+            other = self.types
+        )
+        self.assertEquals(
+            t[7],
+            ('Mew', None, 99, None)
+        )
+
+    def test_over_read(self):
+        t = self.pokedex.left_join(
+            keys=('pokemon', ),
+            other = self.types
+        )
+        with self.assertRaises(IndexError):
+            t[99]
 
 
 class TestJoinWithNonMatchingKeys(unittest.TestCase):
