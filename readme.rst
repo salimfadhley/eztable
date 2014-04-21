@@ -19,4 +19,4 @@ How to contact the developer
 * Documentation: https://pythonhosted.org/toytable/
 * If you want the lastst released version: https://pypi.python.org/pypi/toytable/
 * Latest source: https://bitbucket.org/salimfadhley/toytable
-* Problems & Bugs: sal@stodge.org
+* Problems & Bugs: https://bitbucket.org/salimfadhley/toytable/issues?status=new&status=open

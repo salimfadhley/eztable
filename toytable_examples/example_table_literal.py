@@ -1,5 +1,4 @@
 from toytable import table_literal
-
 pokedex = table_literal("""
     | Pokemon (str) | Level (int) | Owner (str) | Type (str) |
     | Pikchu        | 12          | Ash Ketchum | Electric   |

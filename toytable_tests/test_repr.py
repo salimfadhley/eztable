@@ -64,6 +64,7 @@ class TestRepr(unittest.TestCase):
         p = Table([('Owner Id', int), 'Pokemon', ('Level', int)])
         p.extend([
             [1, 'Pikachu', 18],
+            [99, 'Mew', 43],  # Cannot be joined
         ])
         o = Table([('Owner Id', int), ('Name', str)])
         o.append([1, 'Ash Ketchum'])
@@ -74,7 +75,8 @@ class TestRepr(unittest.TestCase):
 
         expected = [
             "| Owner Id (int) | Pokemon | Level (int) | Name (str)  |",
-            "| 1              | Pikachu | 18          | Ash Ketchum |"
+            "| 1              | Pikachu | 18          | Ash Ketchum |",
+            "| 99             | Mew     | 43          | None        |"
         ]
 
         for resultrow, expectedrow in zip(
@@ -84,6 +86,27 @@ class TestRepr(unittest.TestCase):
                     resultrow,
                     expectedrow
                 )
+
+    def test_repr_bigger_broken_join_with_project(self):
+        p = Table([('Owner Id', int), 'Pokemon', ('Level', int)])
+        p.extend([
+            [1, 'Pikachu', 18],
+            [1, 'Bulbasaur', 22],
+            [1, 'Charmander', 12],
+            [3, 'Togepi', 5],
+            [1, 'Starmie', 44],
+            [9, 'Mew', 99],
+        ])
+        o = Table([('Owner Id', int), ('Name', str)])
+        o.append([1, 'Ash Ketchum'])
+        o.append([2, 'Brock'])
+        o.append([3, 'Misty'])
+        j = p.left_join(
+            keys=('Owner Id',),
+            other = o
+        )
+        j2 = j.project('Pokemon', 'Level', 'Name')
+        print repr(j2)
 
 
 if __name__ == '__main__':

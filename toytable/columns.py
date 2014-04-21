@@ -94,7 +94,7 @@ class DerivedTableColumn(object):
                 key,
                 key + 1
             ).next()
-            return self._column[i]
+            return None if i is None else self._column[i]
 
 
 class JoinColumn(DerivedTableColumn):

@@ -100,6 +100,14 @@ class TestTable(unittest.TestCase):
         with self.assertRaises(InvalidData):
             t.append([1, 2.2, 'hello'])
 
+    def test_nones_always_valid(self):
+        t = Table([
+            ('A', int),
+            ('B', float),
+            ('C', int),
+        ])
+        t.append([1, 2.2, None])
+
     def test_empty_table_equivalence_when_schemas_same(self):
         s = [
             ('A', int),

@@ -66,11 +66,12 @@ class Table(object):
         zipped = zip(row, self._columns)
         for v, c in zipped:
             if not isinstance(v, c.type):
-                raise InvalidData(
-                    '%r is incompatible with type %s for column %s' % (
-                        v, c.type, c.name
+                if not v is None:  # Nonetypes are always valid
+                    raise InvalidData(
+                        '%r is incompatible with type %s for column %s' % (
+                            v, c.type, c.name
+                        )
                     )
-                )
         for v, c in zipped:
             c.append(v)
 
@@ -438,7 +439,8 @@ class DerivedTable(Table):
         cls = TableRow
         for i in self._indices_func():
             # Slightly optimised, eg. we don't do LOAD_GLOBAL in this loop
-            r = (c[i] for c in cs)
+            # i can be None (because of broken joins)
+            r = (None if i is None else c[i] for c in cs)
             yield cls(r, s)
 
     def _get_column(self, name):
