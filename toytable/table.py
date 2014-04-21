@@ -359,6 +359,10 @@ class Table(object):
             )
 
     def get_row(self, key):
+        """Get a single row from the table.
+        :param key: Row index
+        :type key: int
+        """
         s = self._tablerow_schema()
         return TableRow([c[key] for c in self._columns], s)
 
@@ -466,6 +470,9 @@ class DerivedTable(Table):
 class JoinTable(DerivedTable):
 
     """The result of a table join operation.
+
+    Join tables extend the _indices_func behavior of DerivedTable,
+    with _both_indices_func, which provides a sequence of pairs.
     """
 
     def __init__(self, indices_func, left_columns, keys, other, other_keys):
