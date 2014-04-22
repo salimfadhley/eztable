@@ -9,8 +9,8 @@ Toytable is built with an emphasis on simplicity, both in interface and internal
 
 Toytable is not intended for high performance or scalability. Toytable is not complete. For these reasons, please consider evaluating other more mature packages (e.g. Pandas).
 
-Build Status
-------------
+Project Status
+--------------
 
 .. image:: https://drone.io/bitbucket.org/salimfadhley/toytable/status.png
    :target: https://drone.io/bitbucket.org/salimfadhley/toytable
@@ -21,10 +21,14 @@ Build Status
 .. image:: https://pypip.in/license/toytable/badge.png
         :target: https://pypi.python.org/pypi/toytable/
 
+.. image:: https://pypip.in/download/toytable/badge.png
+    :target: https://pypi.python.org/pypi//toytable/
+    :alt: Downloads
+
 About this project
 ------------------
 
 * Documentation: http://toytable.readthedocs.org
-* If you want the lastst released version: https://pypi.python.org/pypi/toytable/
+* Latest release: https://pypi.python.org/pypi/toytable/
 * Latest source: https://bitbucket.org/salimfadhley/toytable
 * Issues: https://bitbucket.org/salimfadhley/toytable/issues?status=new&status=open

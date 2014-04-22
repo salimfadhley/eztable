@@ -20,7 +20,22 @@ About this project
 * Documentation: http://toytable.readthedocs.org/
 * Released version: https://pypi.python.org/pypi/toytable/
 * Source code: https://bitbucket.org/salimfadhley/toytable
-* Problems, Suggestions & Bugs: https://bitbucket.org/salimfadhley/toytable/issues
+* Issues: https://bitbucket.org/salimfadhley/toytable/issues
+
+Project Status
+--------------
+
+.. image:: https://drone.io/bitbucket.org/salimfadhley/toytable/status.png
+   :target: https://drone.io/bitbucket.org/salimfadhley/toytable
+
+.. image:: https://pypip.in/wheel/toytable/badge.png
+        :target: https://pypi.python.org/pypi/toytable/
+
+.. image:: https://pypip.in/license/toytable/badge.png
+        :target: https://pypi.python.org/pypi/toytable/
+
+.. image:: https://pypip.in/download/toytable/badge.png
+    :target: https://pypi.python.org/pypi//toytable/
 
 Installation
 ------------
