@@ -1,8 +1,6 @@
 Toytable
 ========
 
-.. image:: toy_table.png
-
 Toytable is a lightweight python table library. It provides a class called Table  which is suitable for representing one-dimensional tables (e.g. time-sequences).
 
 It is suitable for data analysis tasks. 
