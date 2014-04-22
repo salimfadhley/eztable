@@ -1,5 +1,5 @@
-toytable
-========
+toytable: Lightweight python tables 
+===================================
 
 .. image:: toy_table.png
 
