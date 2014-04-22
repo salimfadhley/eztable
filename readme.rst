@@ -15,6 +15,12 @@ Build Status
 .. image:: https://drone.io/bitbucket.org/salimfadhley/toytable/status.png
    :target: https://drone.io/bitbucket.org/salimfadhley/toytable
 
+.. image:: https://pypip.in/wheel/toytable/badge.png
+        :target: https://pypi.python.org/pypi/toytable/
+
+.. image:: https://pypip.in/license/toytable/badge.png
+        :target: https://pypi.python.org/pypi/toytable/
+
 About this project
 ------------------
 
