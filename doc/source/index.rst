@@ -17,7 +17,7 @@ consider `Pandas`_, a very mature project which was a significant inspiration fo
 About this project
 ------------------
 
-* Documentation: https://pythonhosted.org/toytable/
+* Documentation: http://toytable.readthedocs.org/
 * Released version: https://pypi.python.org/pypi/toytable/
 * Source code: https://bitbucket.org/salimfadhley/toytable
 * Problems, Suggestions & Bugs: https://bitbucket.org/salimfadhley/toytable/issues
