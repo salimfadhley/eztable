@@ -3,7 +3,7 @@ from setuptools import setup
 import os
 
 PROJECT_ROOT, _ = os.path.split(__file__)
-REVISION = '0.0.24'
+REVISION = '0.0.25'
 PROJECT_NAME = 'toytable'
 PROJECT_AUTHORS = "Salim Fadhley"
 PROJECT_EMAILS = 'salimfadhley@gmail.com'
@@ -12,7 +12,7 @@ SHORT_DESCRIPTION = 'Simple in-memory tables in Python.'
 
 try:
     DESCRIPTION = open(os.path.join(PROJECT_ROOT, "readme.rst")).read()
-except OSError:
+except IOError:
     DESCRIPTION = SHORT_DESCRIPTION
 
 setup(
