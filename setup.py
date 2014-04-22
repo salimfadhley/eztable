@@ -3,15 +3,17 @@ from setuptools import setup
 import os
 
 PROJECT_ROOT, _ = os.path.split(__file__)
-REVISION = '0.0.23'
+REVISION = '0.0.24'
 PROJECT_NAME = 'toytable'
 PROJECT_AUTHORS = "Salim Fadhley"
 PROJECT_EMAILS = 'salimfadhley@gmail.com'
 PROJECT_URL = "https://bitbucket.org/salimfadhley/toytable"
 SHORT_DESCRIPTION = 'Simple in-memory tables in Python.'
 
-DESCRIPTION = open(os.path.join(PROJECT_ROOT, "readme.rst")).read()
-
+try:
+    DESCRIPTION = open(os.path.join(PROJECT_ROOT, "readme.rst")).read()
+except OSError:
+    DESCRIPTION = SHORT_DESCRIPTION
 
 setup(
     name=PROJECT_NAME.lower(),
