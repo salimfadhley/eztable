@@ -1,6 +1,5 @@
-
-Welcome to toytable's documentation!
-====================================
+toytable
+========
 
 .. image:: toy_table.png
 
