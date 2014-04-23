@@ -25,6 +25,17 @@ class TestTableLiteral(unittest.TestCase):
             ['A', 'B', 'C', 'D']
         )
 
+    def test_table_literal_columns_can_have_whitespace(self):
+        t = table_literal("""
+        | Attack Type (str) | Special Def (int) |
+        | Fire              | 2                 |
+        """)
+
+        self.assertEquals(
+            t.column_names,
+            ['Attack Type', 'Special Def']
+        )
+
     def test_parse_column_expression(self):
         self.assertEquals(
             ('foo', 'bar.baz'),

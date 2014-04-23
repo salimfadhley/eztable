@@ -2,12 +2,12 @@ from toytable import Table
 import re
 
 
-EXP_COLUMN = re.compile("([^\(\) ]+)(\s*\(([a-zA-Z0-9\.]+)\))?")
+EXP_COLUMN = re.compile("([^\(]+)(\s*\(([a-zA-Z0-9\.]+)\))?")
 
 
 def parse_column_string(cs):
     grps = EXP_COLUMN.search(cs).groups()
-    return grps[0], grps[2]
+    return grps[0].strip(), grps[2]
 
 
 def import_something(path):

@@ -1,3 +1,4 @@
+import logging
 import itertools
 from collections import namedtuple
 from six import string_types
@@ -7,6 +8,8 @@ from .columns import DerivedColumn, Column, DerivedTableColumn, StaticColumn, Jo
 from .row import TableRow
 from .exceptions import InvalidData
 from .index import Index
+
+log = logging.basicConfig()
 
 
 class Table(object):
@@ -117,7 +120,11 @@ class Table(object):
 
     @property
     def _column_descriptions(self):
-        return [c.description for c in self._all_columns]
+        try:
+            return [c.description for c in self._all_columns]
+        except AttributeError as ae:
+            import pdb
+            pdb.set_trace()
 
     def __iter__(self):
         """Iterate through the rows of this table.
@@ -290,6 +297,9 @@ class Table(object):
         index_key = tuple(cols)
         self.indexes[index_key] = i
         return i
+
+    def split(self):
+        return self, self, self
 
     def left_join(self, keys, other, other_keys=None):
         """Left join the other table onto this, return a table.

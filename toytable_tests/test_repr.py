@@ -108,6 +108,28 @@ class TestRepr(unittest.TestCase):
         j2 = j.project('Pokemon', 'Level', 'Name')
         print repr(j2)
 
+    def test_repr_on_expands(self):
+        t = Table([('A', int), ('B', int)])
+        t.append([1, 2])
+        e = t.expand('C', ['A', 'B'], lambda *args: sum(args), int)
+        self.assertEquals(repr(e),
+                          "\n".join([
+                              "| A (int) | B (int) | C (int) |",
+                              "| 1       | 2       | 3       |"
+                          ])
+                          )
+
+    def test_repr_on_expand_const(self):
+        t = Table([('A', int), ('B', int)])
+        t.append([1, 2])
+        e = t.expand_const('C', 3, int)
+        self.assertEquals(repr(e),
+                          "\n".join([
+                              "| A (int) | B (int) | C (int) |",
+                              "| 1       | 2       | 3       |"
+                          ])
+                          )
+
 
 if __name__ == '__main__':
     unittest.main()

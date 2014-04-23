@@ -2,6 +2,19 @@ import itertools
 import types
 
 
+def describe_column(name, typ):
+    if typ == object:
+        return name
+    if typ in vars(types).values():
+        return "%s (%s)" % (name, typ.__name__)
+
+    return "%s (%s.%s)" % (
+        name,
+        typ.__module__,
+        typ.__name__
+    )
+
+
 class Column(list):
 
     def __init__(self, name, values=[], type=object):
@@ -12,16 +25,7 @@ class Column(list):
 
     @property
     def description(self):
-        if self.type == object:
-            return self.name
-        if self.type in vars(types).values():
-            return "%s (%s)" % (self.name, self.type.__name__)
-
-        return "%s (%s.%s)" % (
-            self.name,
-            self.type.__module__,
-            self.type.__name__
-        )
+        return describe_column(self.name, self.type)
 
 
 class StaticColumn(object):
@@ -40,6 +44,10 @@ class StaticColumn(object):
     def __getitem__(self, _):
         return self._value
 
+    @property
+    def description(self):
+        return describe_column(self.name, self.type)
+
 
 class DerivedColumn(object):
 
@@ -57,6 +65,10 @@ class DerivedColumn(object):
     def __iter__(self):
         for row in itertools.izip(*self.inputs):
             yield self.func(*row)
+
+    @property
+    def description(self):
+        return describe_column(self.name, self.type)
 
 
 class DerivedTableColumn(object):

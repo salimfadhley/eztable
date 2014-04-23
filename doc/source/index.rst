@@ -56,7 +56,7 @@ and then build the project.
 Examples    
 --------
 
-Making a table is very easy::
+Making a table is trivial:
     >>> from toytable import Table
     >>> p = Table([('Owner Id', int), 'Pokemon', ('Level', int)])
     >>> p.extend([
@@ -69,7 +69,7 @@ Making a table is very easy::
     ... ])
 
 
-Table objects can be printed::
+Table objects can be printed:
     >>> print p
     | Owner Id (int) | Pokemon    | Level (int) |
     | 1              | Pikachu    | 18          |
@@ -79,7 +79,7 @@ Table objects can be printed::
     | 1              | Starmie    | 44          |
     | 9              | Mew        | 99          |
 
-You can add data to Tables one row at a time. It has the same effect as using the Table.extend(iter) function::
+You can add data to Tables one row at a time. It has the same effect as using the Table.extend(iter) function:
     >>> o = Table([('Owner Id', int), ('Name', str)])
     >>> o.append([1, 'Ash Ketchum'])
     >>> o.append([2, 'Brock'])
@@ -91,7 +91,7 @@ You can add data to Tables one row at a time. It has the same effect as using th
     | 3              | Misty       |
 
 
-Tables can be joined to other Tables::
+Tables can be joined to other Tables:
     >>> j = p.left_join(
     ...     keys=('Owner Id',),
     ...     other = o
@@ -106,7 +106,7 @@ Tables can be joined to other Tables::
     | 9              | Mew        | 99          | None        |
 
 
-The project method allows you to re-order and remove columns from a Table::
+The project method allows you to re-order and remove columns from a Table:
     >>> j2 = j.project('Pokemon', 'Level', 'Name')
     >>> print j2
     | Pokemon    | Level (int) | Name (str)  |
@@ -117,7 +117,7 @@ The project method allows you to re-order and remove columns from a Table::
     | Starmie    | 44          | Ash Ketchum |
     | Mew        | 99          | None        |
 
-The restrict method allows basic filtering of a Table::
+The restrict method allows basic filtering of a Table:
     >>> restricted = j2.restrict(['Name'], lambda n: n == 'Ash Ketchum')
     >>> print restricted
     | Pokemon    | Level (int) | Name (str)  |

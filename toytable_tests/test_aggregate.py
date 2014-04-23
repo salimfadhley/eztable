@@ -1,9 +1,12 @@
 import unittest
 from toytable import table_literal
 
+
 class TestAggregate(unittest.TestCase):
+
     """Verify the correctness of aggegation functions.
     """
+
     def setUp(self):
         self.t = table_literal("""
             | Attack (str)  | Pokemomn (str) | Level Obtained (int) | Attack Type (str) |
@@ -18,6 +21,19 @@ class TestAggregate(unittest.TestCase):
             | Sweet Kiss    | Pikachu        | 0                    | Fairy             |
         """)
 
-    def test_simple_aggregate(self):
-	pass
+    # def test_split_tables(self):
 
+    #     expected = [
+    #         self.t.restrict(('Attack Type',), lambda at: at == 'Electric'),
+    #         self.t.restrict(('Attack Type',), lambda at: at == 'Fairy'),
+    #         self.t.restrict(('Attack Type',), lambda at: at == 'Normal'),
+    #     ]
+
+    #     self.assertEquals(
+    #         list(self.t.split(key=('Attack Type',))),
+    #         expected
+    #     )
+
+
+if __name__ == '__main__':
+    unittest.main()
