@@ -1,3 +1,6 @@
+from six import string_types
+
+
 class TableRow(tuple):
 
     """Table row tuple.
