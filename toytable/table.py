@@ -424,6 +424,21 @@ class Table(object):
             format_row(r)
         return '\n'.join(out)
 
+    def _iter_subtables(self, column_names):
+        """Generator function that gives a sequnce of (values, table) which represents
+        this table if it were split by the unique values in the selected columns.
+        """
+        i = self.add_index(column_names).reindex()
+        for uv in i.unique_values():
+            iterfn = i._get_iterator_fn_for_value(uv)
+            yield uv, DerivedTable(
+                indices_func=iterfn,
+                columns=self._columns
+            )
+
+    def aggregate(self, keys, aggregations):
+        return self
+
 
 class DerivedTable(Table):
 

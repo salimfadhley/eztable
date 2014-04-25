@@ -9,7 +9,7 @@ class TestAggregate(unittest.TestCase):
 
     def setUp(self):
         self.t = table_literal("""
-            | Attack (str)  | Pokemomn (str) | Level Obtained (int) | Attack Type (str) |
+            | Attack (str)  | Pokemon (str)  | Level Obtained (int) | Attack Type (str) |
             | Thunder Shock | Pikachu        | 1                    | Electric          |
             | Tackle        | Pikachu        | 1                    | Normal            |
             | Tail Whip     | Pikachu        | 1                    | Normal            |
@@ -21,19 +21,56 @@ class TestAggregate(unittest.TestCase):
             | Sweet Kiss    | Pikachu        | 0                    | Fairy             |
         """)
 
-    # def test_split_tables(self):
+    def test_get_unique_values_from_index(self):
+        i = self.t.add_index(('Pokemon', 'Attack Type')).reindex()
+        self.assertEquals(
+            i.unique_values(),
+            set([('Pikachu', 'Electric'),
+                ('Pikachu', 'Normal'), ('Pikachu', 'Fairy')])
+        )
 
-    #     expected = [
-    #         self.t.restrict(('Attack Type',), lambda at: at == 'Electric'),
-    #         self.t.restrict(('Attack Type',), lambda at: at == 'Fairy'),
-    #         self.t.restrict(('Attack Type',), lambda at: at == 'Normal'),
-    #     ]
+    def test_get_iterator_for_value(self):
+        i = self.t.add_index(('Pokemon', 'Attack Type')).reindex()
+        result = i._get_iterator_fn_for_value(('Pikachu', 'Electric'))
+        self.assertEquals(
+            list(result()),
+            [0, 5, 6]
+        )
 
-    #     self.assertEquals(
-    #         list(self.t.split(key=('Attack Type',))),
-    #         expected
-    #     )
+    def test_get_key_and_subtable(self):
+        gen = self.t._iter_subtables(('Pokemon', 'Attack Type'))
+        k, st = gen.next()
+        self.assertEquals(k, ('Pikachu', 'Normal'))
 
+        expected = table_literal("""
+            | Attack (str)  | Pokemon (str)  | Level Obtained (int) | Attack Type (str) |
+            | Tackle        | Pikachu        | 1                    | Normal            |
+            | Tail Whip     | Pikachu        | 1                    | Normal            |
+            | Growl         | Pikachu        | 5                    | Normal            |
+            | Quick Attack  | Pikachu        | 10                   | Normal            |
+            """
+                                 )
+        self.assertEquals(
+            st.copy(),
+            expected
+        )
+
+    def test_simple_aggregate(self):
+
+        expected = table_literal("""
+            | Pokemon (str) | Attack Type (str) | Count (int) |
+            | Pikachu       | Normal            | 4           |
+            | Pikachu       | Electric          | 3           |
+            | Pikachu       | Fairy             | 2           |
+        """)
+
+        agg = self.t.aggregate(
+            keys=('Pokemon', 'Attack Type'),
+            aggregations = [
+                ('Count', int, lambda t:len(t))
+            ]
+
+        )
 
 if __name__ == '__main__':
     unittest.main()

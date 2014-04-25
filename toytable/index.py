@@ -65,3 +65,15 @@ class Index(blist.blist):
                 self.__class__.__name__,
                 str(self))
         )
+
+    def unique_values(self):
+        return set(self)
+
+    def _get_iterator_fn_for_value(self, value):
+        """Get an iterator that gives the indeces of any value in the index
+        """
+        def fn_iter():
+            for i, v in enumerate(self):
+                if v == value:
+                    yield i
+        return fn_iter
