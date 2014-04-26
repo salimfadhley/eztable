@@ -718,4 +718,3 @@ class JoinTable(DerivedTable):
                     (jc._column[ji] for jc in jcs)
                 )
             yield TableRow(r, s)
-ow(r, s)
