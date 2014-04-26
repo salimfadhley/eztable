@@ -58,12 +58,12 @@ class TestAggregate(unittest.TestCase):
 
     def test_simple_aggregate(self):
 
-        expected = table_literal("""
-            | Pokemon (str) | Attack Type (str) | Count (int) |
-            | Pikachu       | Normal            | 4           |
-            | Pikachu       | Electric          | 3           |
-            | Pikachu       | Fairy             | 2           |
-        """)
+        # expected = table_literal("""
+        #     | Pokemon (str) | Attack Type (str) | Count (int) |
+        #     | Pikachu       | Normal            | 4           |
+        #     | Pikachu       | Electric          | 3           |
+        #     | Pikachu       | Fairy             | 2           |
+        # """)
 
         agg = self.t.aggregate(
             keys=('Pokemon', 'Attack Type'),
@@ -83,7 +83,51 @@ class TestAggregate(unittest.TestCase):
             [str, str, int]
         )
 
-        #self.assertEquals(agg.copy(), expected)
+    def test_aggregate_indices_func(self):
+
+        agg = self.t.aggregate(
+            keys=('Pokemon', 'Attack Type'),
+            aggregations = [
+                ('Count', int, lambda t:len(t))
+            ]
+        )
+
+        self.assertEquals(
+            list(agg._indices_func()),
+            [0, 1, 2]
+        )
+
+    def test_get_schema(self):
+        t = self.t.aggregate(
+            keys=('Pokemon', 'Attack Type'),
+            aggregations = [
+                ('Count', int, lambda t:len(t))
+            ]
+        )
+
+        schema = t.schema
+
+        self.assertEquals(
+            schema,
+            [
+                ('Pokemon', str),
+                ('Attack Type', str),
+                ('Count', int)
+            ])
+
+    # def test_get_row(self):
+    #     agg = self.t.aggregate(
+    #         keys=('Pokemon', 'Attack Type'),
+    #         aggregations = [
+    #             ('Count', int, lambda t:len(t))
+    #         ]
+    #     )
+
+    #     self.assertEquals(
+    #         tuple(agg[0]),
+    #         ('Pikachu', 'Normal', 4)
+    #     )
+
 
 if __name__ == '__main__':
     unittest.main()

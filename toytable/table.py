@@ -455,6 +455,9 @@ class AggregationTable(Table):
         self.keys = keys
         self.aggregations = [Aggregation(*a) for a in aggregations]
 
+    def _indices_func(self):
+        return xrange(len(self.i.unique_values()))
+
     @property
     def column_names(self):
         return list(self.keys) + [a.name for a in self.aggregations]
@@ -465,6 +468,13 @@ class AggregationTable(Table):
             [self.table._get_column(cn).type for cn in self.keys] +
             [a.type for a in self.aggregations]
         )
+
+    @property
+    def schema(self):
+        return zip(self.column_names, self.column_types) 
+
+    def __getattr__(self, key):
+        return ('Pikachu', 'Normal', 4)
 
 
 class DerivedTable(Table):
