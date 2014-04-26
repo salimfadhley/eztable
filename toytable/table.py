@@ -474,7 +474,14 @@ class AggregationTable(Table):
             row,
             row + 1
         ).next()
-        return row_keys + tuple(a(subtable) for a in self.aggregations)
+        r = row_keys + tuple(a(subtable) for a in self.aggregations)
+        return TableRow(r, self.column_names)
+
+    def __iter__(self):
+        cn = self.column_names
+        for row_keys, subtable in self._iter_subtables():
+            r = row_keys + tuple(a(subtable) for a in self.aggregations)
+            yield TableRow(r, self.column_names)
 
     @property
     def schema(self):

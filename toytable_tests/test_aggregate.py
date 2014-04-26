@@ -1,6 +1,7 @@
 import unittest
 from toytable import table_literal
 from toytable.table import AggregationTable
+from toytable.row import TableRow
 
 
 class TestAggregate(unittest.TestCase):
@@ -132,6 +133,36 @@ class TestAggregate(unittest.TestCase):
             ('Pikachu', 'Normal', 4)
         )
 
+        self.assertEquals(
+            tuple(agg[1]),
+            ('Pikachu', 'Electric', 3)
+        )
+
+    def test_correct_row_type(self):
+        agg = self.t.aggregate(
+            keys=('Pokemon', 'Attack Type'),
+            aggregations = [
+                ('Count', int, lambda t:len(t))
+            ]
+        )
+        self.assertIsInstance(agg[0], TableRow)
+
+    def test_iter(self):
+        agg = self.t.aggregate(
+            keys=('Pokemon', 'Attack Type'),
+            aggregations = [
+                ('Count', int, lambda t:len(t))
+            ]
+        )
+        self.assertEquals(
+            list(agg),
+            [
+                ('Pikachu', 'Normal', 4),
+                ('Pikachu', 'Electric', 3),
+                ('Pikachu', 'Fairy', 2)
+            ]
+
+        )
 
 
 if __name__ == '__main__':
