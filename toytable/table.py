@@ -428,6 +428,45 @@ class Table(object):
     def aggregate(self, keys, aggregations):
         """Summarize a table by grouping by one or more keys, and then
         apply aggregation functions to generate additional summarized columns.
+
+        Aggregations are specified as a list of triples in the form:
+        (column name (str), column type (type), column function (callable))
+
+        The column function should be a function that returns the type
+        specified in the 2nd column. It's input will be each of the
+        sub-tables speified by the grouping keys.
+
+        >>> from toytable import table_literal
+        >>> t = table_literal(\"\"\"
+        ... | Attack(str)   | Pokemon(str) | Level Obtained(int) | Attack Type(str) |
+        ... | Thunder Shock | Pikachu      | 1                   | Electric         |
+        ... | Tackle        | Pikachu      | 1                   | Normal           |
+        ... | Tail Whip     | Pikachu      | 1                   | Normal           |
+        ... | Growl         | Pikachu      | 5                   | Normal           |
+        ... | Quick Attack  | Pikachu      | 10                  | Normal           |
+        ... | Thunder Wave  | Pikachu      | 13                  | Electric         |
+        ... | Electro Ball  | Pikachu      | 18                  | Electric         |
+        ... | Charm         | Pikachu      | 0                   | Fairy            |
+        ... | Sweet Kiss    | Pikachu      | 0                   | Fairy            |
+        ... \"\"\")
+        >>>
+        >>> agg = t.aggregate(
+        ...     keys=('Pokemon', 'Attack Type'),
+        ...     aggregations = [
+        ...         ('Count', int, lambda t:len(t))
+        ...     ]
+        ... )
+        >>>
+        >>> print agg
+        | Pokemon (str) | Attack Type (str) | Count (int) |
+        | Pikachu       | Normal            | 4           |
+        | Pikachu       | Electric          | 3           |
+        | Pikachu       | Fairy             | 2           |
+
+        :param keys: List of column names to group by
+        :type keys: List of strings
+        :param aggregations: List of aggregations to calculate
+        :type aggregations: list of tuples
         """
         i = self.add_index(keys).reindex()
         return AggregationTable(
@@ -679,3 +718,4 @@ class JoinTable(DerivedTable):
                     (jc._column[ji] for jc in jcs)
                 )
             yield TableRow(r, s)
+ow(r, s)
