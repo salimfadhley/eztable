@@ -425,18 +425,6 @@ class Table(object):
             format_row(r)
         return '\n'.join(out)
 
-    def _iter_subtables(self, column_names):
-        """Generator function that gives a sequnce of (values, table) which represents
-        this table if it were split by the unique values in the selected columns.
-        """
-        i = self.add_index(column_names).reindex()
-        for uv in i.unique_values():
-            iterfn = i._get_iterator_fn_for_value(uv)
-            yield uv, DerivedTable(
-                indices_func=iterfn,
-                columns=self._columns
-            )
-
     def aggregate(self, keys, aggregations):
         i = self.add_index(keys).reindex()
         return AggregationTable(
@@ -458,6 +446,17 @@ class AggregationTable(Table):
     def _indices_func(self):
         return xrange(len(self.i.unique_values()))
 
+    def _iter_subtables(self):
+        """Generator function that gives a sequnce of (values, table) which represents
+        this table if it were split by the unique values in the selected columns.
+        """
+        for uv in self.i.unique_values():
+            iterfn = self.i._get_iterator_fn_for_value(uv)
+            yield uv, DerivedTable(
+                indices_func=iterfn,
+                columns=self.table._columns
+            )
+
     @property
     def column_names(self):
         return list(self.keys) + [a.name for a in self.aggregations]
@@ -469,9 +468,17 @@ class AggregationTable(Table):
             [a.type for a in self.aggregations]
         )
 
+    def get_row(self, row):
+        row_keys, row_iter = itertools.islice(
+            self._iter_subtables(self.keys),
+            row,
+            row + 1
+        ).next()
+        return None
+
     @property
     def schema(self):
-        return zip(self.column_names, self.column_types) 
+        return zip(self.column_names, self.column_types)
 
     def __getattr__(self, key):
         return ('Pikachu', 'Normal', 4)

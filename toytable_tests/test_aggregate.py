@@ -39,7 +39,14 @@ class TestAggregate(unittest.TestCase):
         )
 
     def test_get_key_and_subtable(self):
-        gen = self.t._iter_subtables(('Pokemon', 'Attack Type'))
+        agg = self.t.aggregate(
+            keys=('Pokemon', 'Attack Type'),
+            aggregations = [
+                ('Count', int, lambda t:len(t))
+            ]
+        )
+
+        gen = agg._iter_subtables()
         k, st = gen.next()
         self.assertEquals(k, ('Pikachu', 'Normal'))
 
@@ -51,10 +58,7 @@ class TestAggregate(unittest.TestCase):
             | Quick Attack  | Pikachu        | 10                   | Normal            |
             """
                                  )
-        self.assertEquals(
-            st.copy(),
-            expected
-        )
+        self.assertEquals(st.copy(), expected)
 
     def test_simple_aggregate(self):
 
