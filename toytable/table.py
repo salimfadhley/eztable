@@ -17,7 +17,8 @@ class Table(object):
 
     """The basic table class. Table objects contain
     any Python data type, however some features may be unavailable
-    if the types are non-hashable."""
+    if the types are non-hashable.
+    """
 
     def __init__(self, schema, data=[]):
         """
@@ -38,6 +39,7 @@ class Table(object):
         :type schema: list
         :param data: Optional rows of data to initialize the table.
         :type data: list of lists
+
         """
         self._columns = []
         self.indexes = WeakValueDictionary()
@@ -255,6 +257,7 @@ class Table(object):
         :type input_columns: list of str
         :param fn; A function or lambda
         :param type: Optionally, constrain the value of this column by type
+        
         """
         incols = []
         for c in input_columns:

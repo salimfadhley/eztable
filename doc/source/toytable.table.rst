@@ -1,7 +1,7 @@
 toytable.table module
-====================
+=====================
 
-.. automodule:: zqtable.table
+.. automodule:: toytable.table
     :members:
     :undoc-members:
     :show-inheritance:
