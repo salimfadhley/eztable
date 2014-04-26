@@ -71,6 +71,12 @@ class DerivedColumn(object):
         return describe_column(self.name, self.type)
 
 
+class AggregationColumn(object):
+
+    def __init__(self):
+        pass
+
+
 class DerivedTableColumn(object):
 
     """Not so much a derived column, but a column on a
@@ -107,10 +113,6 @@ class DerivedTableColumn(object):
                 key + 1
             ).next()
             return None if i is None else self._column[i]
-
-
-class JoinColumn(DerivedTableColumn):
-    pass
 
 
 class JoinColumn(DerivedTableColumn):

@@ -4,10 +4,11 @@ from collections import namedtuple
 from six import string_types
 from weakref import WeakValueDictionary, WeakSet
 
-from .columns import DerivedColumn, Column, DerivedTableColumn, StaticColumn, JoinColumn
+from .columns import DerivedColumn, Column, DerivedTableColumn, StaticColumn, JoinColumn, AggregationColumn
 from .row import TableRow
 from .exceptions import InvalidData
 from .index import Index
+from .aggregation import Aggregation
 
 log = logging.basicConfig()
 
@@ -437,7 +438,33 @@ class Table(object):
             )
 
     def aggregate(self, keys, aggregations):
-        return self
+        i = self.add_index(keys).reindex()
+        return AggregationTable(
+            self,
+            i,
+            keys=keys,
+            aggregations=aggregations
+        )
+
+
+class AggregationTable(Table):
+
+    def __init__(self, table, index, keys, aggregations):
+        self.table = table
+        self.i = index
+        self.keys = keys
+        self.aggregations = [Aggregation(*a) for a in aggregations]
+
+    @property
+    def column_names(self):
+        return list(self.keys) + [a.name for a in self.aggregations]
+
+    @property
+    def column_types(self):
+        return (
+            [self.table._get_column(cn).type for cn in self.keys] +
+            [a.type for a in self.aggregations]
+        )
 
 
 class DerivedTable(Table):

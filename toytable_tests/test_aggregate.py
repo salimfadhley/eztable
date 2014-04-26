@@ -1,5 +1,6 @@
 import unittest
 from toytable import table_literal
+from toytable.table import AggregationTable
 
 
 class TestAggregate(unittest.TestCase):
@@ -69,8 +70,20 @@ class TestAggregate(unittest.TestCase):
             aggregations = [
                 ('Count', int, lambda t:len(t))
             ]
-
         )
+
+        self.assertEquals(
+            agg.column_names,
+            ['Pokemon',
+             'Attack Type',
+             'Count'])
+
+        self.assertEquals(
+            agg.column_types,
+            [str, str, int]
+        )
+
+        #self.assertEquals(agg.copy(), expected)
 
 if __name__ == '__main__':
     unittest.main()
