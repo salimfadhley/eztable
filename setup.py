@@ -3,12 +3,12 @@ from setuptools import setup
 import os
 
 PROJECT_ROOT, _ = os.path.split(__file__)
-REVISION = '0.0.29'
+REVISION = '0.0.30'
 PROJECT_NAME = 'toytable'
 PROJECT_AUTHORS = "Salim Fadhley"
 PROJECT_EMAILS = 'salimfadhley@gmail.com'
 PROJECT_URL = "https://bitbucket.org/salimfadhley/toytable"
-SHORT_DESCRIPTION = 'Simple in-memory tables in Python.'
+SHORT_DESCRIPTION = 'Simple in-memory tables in pure Python.'
 
 try:
     DESCRIPTION = open(os.path.join(PROJECT_ROOT, "readme.rst")).read()
@@ -23,7 +23,7 @@ setup(
     packages=['toytable', 'toytable_tests'],
     zip_safe=True,
     include_package_data=False,
-    install_requires=['blist', 'six'],
+    install_requires=['bintrees', 'six'],
     test_suite='nose.collector',
     tests_require=['mock', 'nose', 'coverage'],
     url=PROJECT_URL,

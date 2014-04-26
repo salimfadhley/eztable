@@ -107,6 +107,7 @@ class TestAggregate(unittest.TestCase):
             [0, 1, 2]
         )
 
+
     def test_get_schema(self):
         t = self.t.aggregate(
             keys=('Pokemon', 'Attack Type'),
@@ -206,7 +207,6 @@ class TestAggregate(unittest.TestCase):
             repr(agg),
             expected
         )
-
 
 if __name__ == '__main__':
     unittest.main()

@@ -24,6 +24,17 @@ class TestIndex(unittest.TestCase):
         with self.assertRaises(InvalidIndex):
             self.t.add_index(['ZQx9'])
 
+    def test_there_can_be_only_one(self):
+        i = self.t.add_index(
+            cols=('A', 'C')
+        )
+
+        j = self.t.add_index(
+            cols=('A', 'C')
+        )
+
+        self.assertTrue(i is j)
+
     def test_indexes_have_reprs(self):
         i = self.t.add_index(
             cols=('A', 'C')
@@ -44,6 +55,7 @@ class TestIndex(unittest.TestCase):
         i = self.t.add_index(
             cols=('A', 'C')
         )
+
         self.assertTrue(('A', 'C') in self.t.indexes)
         self.assertIn(i, self.t._listeners)
 
@@ -74,16 +86,6 @@ class TestIndex(unittest.TestCase):
             pos=0,
         )
 
-    def test_indexes_can_receive_events_that_grow_length(self):
-        i = self.t.add_index(
-            cols=('A', 'C')
-        )
-        i.notify(
-            op='append',
-            pos=0,
-        )
-        self.assertEquals(i[0], (1, 'hello', 0))
-
     def test_adding_to_a_table_adds_to_indexes(self):
         i = self.t.add_index(
             cols=('A', 'C')
@@ -105,7 +107,7 @@ class TestIndex(unittest.TestCase):
         i.reindex()
 
         self.assertEquals(
-            i[('fnuu',)],
+            i[('fnuu',)][0],
             self.t[3]
         )
 
@@ -116,6 +118,9 @@ class TestIndex(unittest.TestCase):
         i.reindex()
 
         self.assertEquals(
-            i.index(('fnuu',)),
+            i.index(('fnuu',))[0],
             3
         )
+
+if __name__ == '__main__':
+    unittest.main()

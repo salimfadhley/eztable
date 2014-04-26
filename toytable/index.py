@@ -1,28 +1,26 @@
 """An index is an ordered list-like object implemented using a btree.blist.
 """
 
-import blist
+import bintrees
 import itertools
 from .exceptions import InvalidIndex
 
 
-class Index(blist.blist):
+class Index(bintrees.RBTree):
 
     def __init__(self, table, cols):
+        bintrees.RBTree.__init__(self)
         if not cols:
             raise InvalidIndex('Please provide at least one column to index.')
 
         try:
-            self.cols = [getattr(table, c) for c in cols]
-        except AttributeError as ae:
-
+            self.cols = [table._get_column(c) for c in cols]
+        except KeyError as ke:
             raise InvalidIndex(
                 'Column %s does not exist. Valid columns are %s' % (
-                    ae[0],
+                    ke[0],
                     ', '.join(table.column_names)
                 ))
-
-        table._listeners.add(self)
         self.table = table
 
     def __hash__(self):
@@ -31,7 +29,7 @@ class Index(blist.blist):
     def notify(self, op, pos):
         if op == 'append':
             value = tuple(c[pos] for c in self.cols) + (pos,)
-            self.append(value)
+            self.setdefault(value, []).append(pos)
 
     def __getitem__(self, key):
         """If key is an integer this function returns that
@@ -42,17 +40,23 @@ class Index(blist.blist):
         from the table.
         """
         if isinstance(key, int):
-            return blist.blist.__getitem__(self, key)
+            return bintrees.RBTree.__getitem__(self, key)
         elif isinstance(key, tuple):
-            return self.table[self.index(key)]
+            return (
+                [self.table[i] for i in self.index(key)]
+            )
         raise TypeError(
             'Index keys must be an integer or a tuple, got %r (%s)' %
             (key, type(key))
         )
 
+    def index(self, key):
+        return bintrees.RBTree.__getitem__(self, key)
+
     def reindex(self):
         del self[:]
-        self.extend(itertools.izip(*self.cols))
+        for i, row in enumerate(itertools.izip(*self.cols)):
+            self.setdefault(row, []).append(i)
         return self
 
     def __str__(self):
@@ -72,8 +76,4 @@ class Index(blist.blist):
     def _get_iterator_fn_for_value(self, value):
         """Get an iterator that gives the indeces of any value in the index
         """
-        def fn_iter():
-            for i, v in enumerate(self):
-                if v == value:
-                    yield i
-        return fn_iter
+        return bintrees.RBTree.__getitem__(self, value).__iter__

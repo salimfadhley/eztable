@@ -294,9 +294,14 @@ class Table(object):
         :param cols: Column names to be included into the index.
         :type cols: List of strings.
         """
-        i = Index(table=self, cols=cols)
         index_key = tuple(cols)
+
+        if index_key in self.indexes:
+            return self.indexes[index_key]
+
+        i = Index(table=self, cols=cols)
         self.indexes[index_key] = i
+        self._listeners.add(i)
         return i
 
     def split(self):
@@ -626,8 +631,8 @@ class JoinTable(DerivedTable):
         for i in self._indices_func():
             key = tuple(kc[i] for kc in kcs)
             try:
-                yield i, self._join_index.index(key)
-            except ValueError:
+                yield i, self._join_index.index(key)[0]
+            except KeyError:
                 yield i, None
 
     def _join_indices_func(self):
