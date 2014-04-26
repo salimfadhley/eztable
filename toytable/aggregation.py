@@ -4,3 +4,6 @@ class Aggregation(object):
         self.name = name
         self.type = type
         self.fn = fn
+
+    def __call__(self, t):
+        return self.fn(t)

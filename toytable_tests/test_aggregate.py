@@ -119,18 +119,19 @@ class TestAggregate(unittest.TestCase):
                 ('Count', int)
             ])
 
-    # def test_get_row(self):
-    #     agg = self.t.aggregate(
-    #         keys=('Pokemon', 'Attack Type'),
-    #         aggregations = [
-    #             ('Count', int, lambda t:len(t))
-    #         ]
-    #     )
+    def test_get_row(self):
+        agg = self.t.aggregate(
+            keys=('Pokemon', 'Attack Type'),
+            aggregations = [
+                ('Count', int, lambda t:len(t))
+            ]
+        )
 
-    #     self.assertEquals(
-    #         tuple(agg[0]),
-    #         ('Pikachu', 'Normal', 4)
-    #     )
+        self.assertEquals(
+            tuple(agg[0]),
+            ('Pikachu', 'Normal', 4)
+        )
+
 
 
 if __name__ == '__main__':

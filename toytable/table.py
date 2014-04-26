@@ -469,12 +469,12 @@ class AggregationTable(Table):
         )
 
     def get_row(self, row):
-        row_keys, row_iter = itertools.islice(
-            self._iter_subtables(self.keys),
+        row_keys, subtable = itertools.islice(
+            self._iter_subtables(),
             row,
             row + 1
         ).next()
-        return None
+        return row_keys + tuple(a(subtable) for a in self.aggregations)
 
     @property
     def schema(self):
