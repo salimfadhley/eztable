@@ -63,12 +63,12 @@ class TestAggregate(unittest.TestCase):
 
     def test_simple_aggregate(self):
 
-        # expected = table_literal("""
-        #     | Pokemon (str) | Attack Type (str) | Count (int) |
-        #     | Pikachu       | Normal            | 4           |
-        #     | Pikachu       | Electric          | 3           |
-        #     | Pikachu       | Fairy             | 2           |
-        # """)
+        expected = table_literal("""
+            | Pokemon (str) | Attack Type (str) | Count (int) |
+            | Pikachu       | Normal            | 4           |
+            | Pikachu       | Electric          | 3           |
+            | Pikachu       | Fairy             | 2           |
+        """)
 
         agg = self.t.aggregate(
             keys=('Pokemon', 'Attack Type'),
@@ -86,6 +86,11 @@ class TestAggregate(unittest.TestCase):
         self.assertEquals(
             agg.column_types,
             [str, str, int]
+        )
+
+        self.assertEquals(
+            agg,
+            expected
         )
 
     def test_aggregate_indices_func(self):
@@ -179,6 +184,28 @@ class TestAggregate(unittest.TestCase):
              'Count (int)',
              'Hello (str)'
              ])
+
+    def test_repr(self):
+
+        lines = [
+            "| Pokemon (str) | Attack Type (str) | Count (int) |",
+            "| Pikachu       | Normal            | 4           |",
+            "| Pikachu       | Electric          | 3           |",
+            "| Pikachu       | Fairy             | 2           |"
+        ]
+        expected = '\n'.join(lines)
+
+        agg = self.t.aggregate(
+            keys=('Pokemon', 'Attack Type'),
+            aggregations = [
+                ('Count', int, lambda t:len(t))
+            ]
+        )
+
+        self.assertEquals(
+            repr(agg),
+            expected
+        )
 
 
 if __name__ == '__main__':

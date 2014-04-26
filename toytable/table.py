@@ -420,7 +420,7 @@ class Table(object):
             out.append(
                 '| %s |' % (' | '.join(str(c).ljust(l) for l, c in zip(cl, r)))
             )
-        format_row(c.description for c in self._columns)
+        format_row(self._column_descriptions)
         for r in self:
             format_row(r)
         return '\n'.join(out)
