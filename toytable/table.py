@@ -4,7 +4,7 @@ from collections import namedtuple
 from six import string_types
 from weakref import WeakValueDictionary, WeakSet
 
-from .columns import DerivedColumn, Column, DerivedTableColumn, StaticColumn, JoinColumn, AggregationColumn
+from .columns import DerivedColumn, Column, DerivedTableColumn, StaticColumn, JoinColumn, describe_column
 from .row import TableRow
 from .exceptions import InvalidData
 from .index import Index
@@ -124,8 +124,8 @@ class Table(object):
         try:
             return [c.description for c in self._all_columns]
         except AttributeError as ae:
-            import pdb
-            pdb.set_trace()
+            log.exception(ae[0])
+            raise RuntimeError(ae[0])
 
     def __iter__(self):
         """Iterate through the rows of this table.
@@ -426,6 +426,9 @@ class Table(object):
         return '\n'.join(out)
 
     def aggregate(self, keys, aggregations):
+        """Summarize a table by grouping by one or more keys, and then
+        apply aggregation functions to generate additional summarized columns.
+        """
         i = self.add_index(keys).reindex()
         return AggregationTable(
             self,
@@ -489,6 +492,12 @@ class AggregationTable(Table):
 
     def __getattr__(self, key):
         return ('Pikachu', 'Normal', 4)
+
+    @property
+    def _column_descriptions(self):
+        return (
+            [describe_column(name, typ) for (name, typ) in self.schema]
+        )
 
 
 class DerivedTable(Table):

@@ -164,6 +164,22 @@ class TestAggregate(unittest.TestCase):
 
         )
 
+    def test_column_descriptions(self):
+        agg = self.t.aggregate(
+            keys=('Pokemon', 'Attack Type'),
+            aggregations = [
+                ('Count', int, lambda t:len(t)),
+                ('Hello', str, lambda t:'hello'),
+            ]
+        )
+        self.assertEquals(
+            agg._column_descriptions,
+            ['Pokemon (str)',
+             'Attack Type (str)',
+             'Count (int)',
+             'Hello (str)'
+             ])
+
 
 if __name__ == '__main__':
     unittest.main()
