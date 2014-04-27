@@ -14,7 +14,7 @@ class TableTestMixin(object):
         self.assertEquals(
             A.column_types,
             B.column_types,
-            "Column types are different")        
+            "Column types are different")
 
         if len(A) != len(B):
             raise AssertionError(
@@ -22,7 +22,17 @@ class TableTestMixin(object):
                 (len(A), len(B))
             )
 
-        self.assertEquals(A, B)
+        for i, (a, b) in enumerate(zip(A, B)):
+            if not a == b:
+                brokenA = A[i:i + 1]
+                brokenB = B[i:i + 1]
+
+                msg = 'Differences at row %i\n\n%r\n\n%s' % (
+                    i,
+                    brokenA,
+                    brokenB
+                )
+                raise AssertionError(msg)
 
     def assertTablesNotEquals(self, A, B, msg=None):
 
