@@ -227,6 +227,31 @@ to provide more helpful table output::
     if __name__ == '__main__':
         unittest.main()
 
+In this case the expected output is:
+
+    >>> unittest.main()
+    F
+    ======================================================================
+    FAIL: test_foo (example_test_driven_development.ExampleTest)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "example_test_driven_development.py", line 23, in test_foo
+        self.assertTablesEqual(t0, t1)
+      File "/home/sal/workspace/toytable/src/toytable/table_test_mixin.py", line 35, in assertTablesEqual
+        raise AssertionError(_msg)
+    AssertionError: Differences at row 1
+
+    | A (int) | B (int) | C (str) |
+    | 2       | 3       | 4       |
+
+    | A (int) | B (int) | C (str) |
+    | 999     | 3       | 4       |
+
+    ----------------------------------------------------------------------
+    Ran 1 test in 0.002s
+
+    FAILED (failures=1)
+
 The Table Class
 ---------------
 
