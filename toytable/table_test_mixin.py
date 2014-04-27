@@ -27,12 +27,12 @@ class TableTestMixin(object):
                 brokenA = A[i:i + 1]
                 brokenB = B[i:i + 1]
 
-                msg = 'Differences at row %i\n\n%r\n\n%s' % (
+                _msg = 'Differences at row %i\n\n%r\n\n%s' % (
                     i,
                     brokenA,
                     brokenB
                 )
-                raise AssertionError(msg)
+                raise AssertionError(_msg)
 
     def assertTablesNotEquals(self, A, B, msg=None):
 
