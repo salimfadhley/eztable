@@ -1,6 +1,7 @@
 import unittest
 from toytable import table_literal, TableTestMixin
 
+
 class ExampleTest(TableTestMixin, unittest.TestCase):
 
     """An example of how to do test-driven
@@ -22,5 +23,9 @@ class ExampleTest(TableTestMixin, unittest.TestCase):
 
         self.assertTablesEqual(t0, t1)
 
-if __name__ == '__main__':
+
+def main():
     unittest.main()
+
+if __name__ == '__main__':
+    main()
