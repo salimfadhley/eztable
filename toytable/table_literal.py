@@ -66,7 +66,7 @@ def table_literal(repr_string, default_type=str):
     are presumed to be strings.
 
     The type column can be any importable object or function
-    capable of building the contents of the column from the
+    capable of building the contents of the column from the 
     string values of each element in the column.
 
     :param repr_string: table definition
@@ -76,7 +76,7 @@ def table_literal(repr_string, default_type=str):
     """
     rows_iter = clean_rows(repr_string)
     column_names_and_types = [col_tuple_to_schema_item(parse_column_string(h), default_type=str)
-                              for h in next(rows_iter)]
+                              for h in next(rows_iter)  ]
 
     t = Table(column_names_and_types)
 

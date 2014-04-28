@@ -2,7 +2,7 @@
 """
 
 import bintrees
-import itertools
+import six.moves
 from .exceptions import InvalidIndex
 
 
@@ -55,7 +55,7 @@ class Index(bintrees.RBTree):
 
     def reindex(self):
         del self[:]
-        for i, row in enumerate(itertools.izip(*self.cols)):
+        for i, row in enumerate(six.moves.zip(*self.cols)):
             self.setdefault(row, []).append(i)
         return self
 
