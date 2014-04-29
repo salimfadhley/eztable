@@ -46,10 +46,7 @@ class TestAggregate(TableTestMixin, unittest.TestCase):
                 ('Count', int, lambda t:len(t))
             ]
         )
-
         gen = agg._iter_subtables()
-        k, st = next(gen)
-
         expected = table_literal("""
             | Attack (str)  | Pokemon (str)  | Level Obtained (int) | Attack Type (str) |
             | Tackle        | Pikachu        | 1                    | Normal            |
@@ -57,9 +54,11 @@ class TestAggregate(TableTestMixin, unittest.TestCase):
             | Growl         | Pikachu        | 5                    | Normal            |
             | Quick Attack  | Pikachu        | 10                   | Normal            |
             """
-                                 )
-        st = st.copy()
-        self.assertTablesEqualAnyOrder(st, expected)
+        )
+        for (k, st) in gen:
+            if k == ('Pikachu', 'Normal'):
+                st = st.copy()
+                self.assertTablesEqualAnyOrder(st, expected)
 
     def simple_aggregate(self):
 
