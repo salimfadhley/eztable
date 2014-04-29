@@ -633,7 +633,7 @@ class JoinTable(DerivedTable):
         """
         kcs = self._key_columns
         for i in self._indices_func():
-            key = tuple(kc[i] for kc in kcs)
+            key = tuple(key[i] for key in kcs)
             try:
                 yield i, self._join_index.index(key)[0]
             except KeyError:

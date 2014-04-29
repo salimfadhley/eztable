@@ -1,4 +1,5 @@
 import itertools
+import array
 import six
 
 if six.PY2:
@@ -23,17 +24,26 @@ def describe_column(name, typ):
 
 
 class Column(list):
-
     def __init__(self, name, values=[], type=object):
         list.__init__(self)
         self.name = name
-        self.type = type
         self[:] = values
 
     @property
     def description(self):
         return describe_column(self.name, self.type)
 
+
+class ArrayColumn(array.array):
+    TYPE_CODES = 'bBuhHiIlLqQfd'
+
+    def __new__(cls, name, values=None, type='i'):
+        cls.type = type
+        return array.array.__new__(cls, type)
+
+    def __init__(self, name, values=None, type='i'):
+        self.name = name
+        self.extend(values or [])
 
 class StaticColumn(object):
 
