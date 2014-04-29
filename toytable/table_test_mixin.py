@@ -4,8 +4,7 @@ class TableTestMixin(object):
     table checking behaviors.
     """
 
-    def assertTablesEqual(self, A, B, msg=None):
-
+    def __validate_table_structures(self, A, B):
         self.assertEquals(
             A.column_names,
             B.column_names,
@@ -22,6 +21,8 @@ class TableTestMixin(object):
                 (len(A), len(B))
             )
 
+    def assertTablesEqual(self, A, B, msg=None):
+        self.__validate_table_structures(A, B)
         for i, (a, b) in enumerate(zip(A, B)):
             if not a == b:
                 brokenA = A[i:i + 1]
@@ -34,8 +35,13 @@ class TableTestMixin(object):
                 )
                 raise AssertionError(_msg)
 
-    def assertTablesNotEquals(self, A, B, msg=None):
+    def assertTablesEqualAnyOrder(self, A, B, msg=None):
+        self.__validate_table_structures(A, B)
+        rows_a = set(A)
+        rows_b = set(B)
+        self.assertEqual(rows_a, rows_b)
 
+    def assertTablesNotEquals(self, A, B, msg=None):
         self.assertNotEquals(A, B)
 
     assertTablesEquals = assertTablesEqual

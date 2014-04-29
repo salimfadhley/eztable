@@ -131,6 +131,5 @@ class TestTable(unittest.TestCase):
         self.assertNotEqual(t0, t1)
 
 
-
 if __name__ == '__main__':
     unittest.main()

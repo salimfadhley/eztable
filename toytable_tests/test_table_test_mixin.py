@@ -102,6 +102,37 @@ class TestTableTestMixin(unittest.TestCase, TableTestMixin):
             ae.exception.args[0]
         )
 
+    def test_assert_equal_any_order(self):
+        A = table_literal("""
+            | A (int) | B (int) | D (float) |
+            | 1       | 2       | 1.1       |
+            | 1       | 2       | 2.2       |
+        """)
+
+        B = table_literal("""
+            | A (int) | B (int) | D (float) |
+            | 1       | 2       | 2.2       |
+            | 1       | 2       | 1.1       |
+        """)
+
+        self.assertTablesEqualAnyOrder(A, B)
+
+    def test_assert_equal_any_order(self):
+        A = table_literal("""
+            | A (int) | B (int) | D (float) |
+            | 1       | 2       | 1.1       |
+            | 1       | 2       | 9.9       |
+        """)
+
+        B = table_literal("""
+            | A (int) | B (int) | D (float) |
+            | 1       | 2       | 2.2       |
+            | 1       | 2       | 1.1       |
+        """)
+
+        with self.assertRaises(AssertionError):
+            self.assertTablesEqualAnyOrder(A, B)
+
 
 if __name__ == '__main__':
     unittest.main()

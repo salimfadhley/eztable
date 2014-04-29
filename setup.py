@@ -29,7 +29,6 @@ setup(
     url=PROJECT_URL,
     description=SHORT_DESCRIPTION,
     long_description=DESCRIPTION,
-    use_2to3=True,
     license='MIT',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
