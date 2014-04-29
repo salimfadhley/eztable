@@ -81,3 +81,6 @@ class TestExpandTable(unittest.TestCase):
         ]
 
         self.assertEqual(list(t), expected)
+
+if __name__ == '__main__':
+    unittest.main()

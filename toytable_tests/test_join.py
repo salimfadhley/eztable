@@ -196,7 +196,6 @@ class TestBrokenJoin(unittest.TestCase):
         p.extend([
             [1, 'Pikachu', 18],
         ])
-        print p
         o = Table([('Owner Id', int), ('Name', str)])
         o.append([1, 'Ash Ketchum'])
         j = p.left_join(

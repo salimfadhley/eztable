@@ -1,8 +1,8 @@
-from unittest import TestCase
+import unittest
 from toytable.columns import Column
 
 
-class TestColumn(TestCase):
+class TestColumn(unittest.TestCase):
 
     def test_column(self):
         """A column can be constructed with no data."""
@@ -18,3 +18,6 @@ class TestColumn(TestCase):
         """A column can be constructed specifying a type."""
         c = Column('foo', range(3), type=int)
         self.assertEqual(list(c), [0, 1, 2])
+
+if __name__ == '__main__':
+    unittest.main()

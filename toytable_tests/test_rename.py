@@ -20,7 +20,7 @@ class TestRename(unittest.TestCase):
             new_names=['Pokemon', 'Level', 'Owner']
         )
 
-        self.assertEquals(
+        self.assertEqual(
             t._rename_dict,
             {'pkmn': 'Pokemon', 'lvl': 'Level', 'ownr': 'Owner'}
 
@@ -37,7 +37,10 @@ class TestRename(unittest.TestCase):
             new_names=['Pokemon', 'Level', 'Owner']
         )
         p = t._get_column('Pokemon')
-        self.assertEquals(
+        self.assertEqual(
             list(p),
             ['Pikachu', 'Squirtle', 'Starmie']
         )
+
+if __name__ == '__main__':
+    unittest.main()

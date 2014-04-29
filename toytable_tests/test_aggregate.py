@@ -1,10 +1,10 @@
 import unittest
-from toytable import table_literal
+from toytable import table_literal, TableTestMixin
 from toytable.table import AggregationTable
 from toytable.row import TableRow
 
 
-class TestAggregate(unittest.TestCase):
+class TestAggregate(TableTestMixin, unittest.TestCase):
 
     """Verify the correctness of aggegation functions.
     """
@@ -48,7 +48,7 @@ class TestAggregate(unittest.TestCase):
         )
 
         gen = agg._iter_subtables()
-        k, st = gen.next()
+        k, st = next(gen)
         self.assertEquals(k, ('Pikachu', 'Normal'))
 
         expected = table_literal("""
@@ -106,7 +106,6 @@ class TestAggregate(unittest.TestCase):
             list(agg._indices_func()),
             [0, 1, 2]
         )
-
 
     def test_get_schema(self):
         t = self.t.aggregate(

@@ -1,11 +1,18 @@
 import itertools
-import types
+import six
+
+if six.PY2:
+    import types
+    builtin_types = vars(types).values()
+else:
+    import builtins
+    builtin_types = vars(builtins).values()
 
 
 def describe_column(name, typ):
-    if typ == object:
+    if typ is object:
         return name
-    if typ in vars(types).values():
+    if typ in builtin_types:
         return "%s (%s)" % (name, typ.__name__)
 
     return "%s (%s.%s)" % (
@@ -107,11 +114,11 @@ class DerivedTableColumn(object):
 
     def __getitem__(self, key):
         if isinstance(key, int):
-            i = itertools.islice(
+            i = next(itertools.islice(
                 self._indices_func(),
                 key,
                 key + 1
-            ).next()
+            ))
             return None if i is None else self._column[i]
 
 

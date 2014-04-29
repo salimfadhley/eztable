@@ -27,7 +27,6 @@ class TestTable(unittest.TestCase):
         self.assertEqual(
             t.column_types,
             [int, float, str, datetime.datetime, object]
-
         )
 
     def test_formatted_column_descriptions(self):
@@ -67,6 +66,7 @@ class TestTable(unittest.TestCase):
             [1, 1.1, 'hello'],
             [2, 2.2, 'goodbye']
         ])
+
         self.assertEqual(len(t), 2)
 
     def test_append_invalid_row(self):
@@ -129,6 +129,8 @@ class TestTable(unittest.TestCase):
         t1 = Table(s)
         t0.append([2, 2.22, 1])
         self.assertNotEqual(t0, t1)
+
+
 
 if __name__ == '__main__':
     unittest.main()

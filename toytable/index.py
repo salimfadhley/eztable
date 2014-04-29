@@ -18,7 +18,7 @@ class Index(bintrees.RBTree):
         except KeyError as ke:
             raise InvalidIndex(
                 'Column %s does not exist. Valid columns are %s' % (
-                    ke[0],
+                    ke.args[0],
                     ', '.join(table.column_names)
                 ))
         self.table = table

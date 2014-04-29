@@ -1,12 +1,19 @@
 import unittest
 from toytable import Table
+from toytable.columns import describe_column
 
 
 class TestRepr(unittest.TestCase):
 
+    def test_describe_builtins(self):
+        self.assertEqual(
+            describe_column('foo', int),
+            'foo (int)'
+        )
+
     def test_repr_headers(self):
         t = Table([('A', int), 'B', ('C', float)])
-        self.assertEquals(
+        self.assertEqual(
             repr(t),
             "| A (int) | B | C (float) |"
         )
@@ -17,7 +24,7 @@ class TestRepr(unittest.TestCase):
             [1, "hello", 1.1],
             [2, "goodbye", 2.2],
         ])
-        print repr(t)
+        print(repr(t))
 
     def test_column_descriptions_on_join(self):
         p = Table([('Owner Id', int), 'Pokemon', ('Level', int)])
@@ -31,7 +38,7 @@ class TestRepr(unittest.TestCase):
             other = o
         )
 
-        self.assertEquals(
+        self.assertEqual(
             ['Owner Id (int)', 'Pokemon', 'Level (int)', 'Name (str)'],
             j._column_descriptions
         )
@@ -55,7 +62,8 @@ class TestRepr(unittest.TestCase):
         ]
 
         widths = j._get_column_widths()
-        self.assertEquals(
+
+        self.assertEqual(
             expected,
             widths
         )
@@ -82,7 +90,7 @@ class TestRepr(unittest.TestCase):
         for resultrow, expectedrow in zip(
             repr(j).split('\n'),
                 expected):
-                self.assertEquals(
+                self.assertEqual(
                     resultrow,
                     expectedrow
                 )
@@ -106,29 +114,29 @@ class TestRepr(unittest.TestCase):
             other = o
         )
         j2 = j.project('Pokemon', 'Level', 'Name')
-        print repr(j2)
+        print(repr(j2))
 
     def test_repr_on_expands(self):
         t = Table([('A', int), ('B', int)])
         t.append([1, 2])
         e = t.expand('C', ['A', 'B'], lambda *args: sum(args), int)
-        self.assertEquals(repr(e),
-                          "\n".join([
-                              "| A (int) | B (int) | C (int) |",
-                              "| 1       | 2       | 3       |"
-                          ])
-                          )
+        self.assertEqual(repr(e),
+                         "\n".join([
+                             "| A (int) | B (int) | C (int) |",
+                             "| 1       | 2       | 3       |"
+                         ])
+                         )
 
     def test_repr_on_expand_const(self):
         t = Table([('A', int), ('B', int)])
         t.append([1, 2])
         e = t.expand_const('C', 3, int)
-        self.assertEquals(repr(e),
-                          "\n".join([
-                              "| A (int) | B (int) | C (int) |",
-                              "| 1       | 2       | 3       |"
-                          ])
-                          )
+        self.assertEqual(repr(e),
+                         "\n".join([
+                             "| A (int) | B (int) | C (int) |",
+                             "| 1       | 2       | 3       |"
+                         ])
+                         )
 
 
 if __name__ == '__main__':

@@ -1,4 +1,5 @@
 import logging
+import six.moves
 import itertools
 from collections import namedtuple
 from six import string_types
@@ -69,7 +70,7 @@ class Table(object):
             raise InvalidData(
                 "Expected %d columns, got %d" % (len(row), len(self._columns))
             )
-        zipped = zip(row, self._columns)
+        zipped = list(six.moves.zip(row, self._columns))
         for v, c in zipped:
             if not isinstance(v, c.type):
                 if not v is None:  # Nonetypes are always valid
@@ -135,7 +136,7 @@ class Table(object):
         Each row behaves like a namedtuple.
         """
         s = self._tablerow_schema()
-        for r in itertools.izip(*self._columns):
+        for r in six.moves.zip(*self._columns):
             yield TableRow(r, s)
 
     def _tablerow_schema(self):
@@ -204,7 +205,7 @@ class Table(object):
         """Internal function: This specifies the order in which the
         __iter__ method retreives rows.
         """
-        return xrange(len(self))
+        return six.moves.range(len(self))
 
     def rename(self, old_names, new_names):
         """Rename columns in the table. Does not affect the order of
@@ -396,7 +397,7 @@ class Table(object):
         if self.schema != ano.schema:
             return False
 
-        for a, b in itertools.izip_longest(self, ano):
+        for a, b in six.moves.zip_longest(self, ano):
             if a != b:
                 return False
 
@@ -494,7 +495,7 @@ class AggregationTable(Table):
         self.aggregations = [Aggregation(*a) for a in aggregations]
 
     def _indices_func(self):
-        return xrange(len(self.i.unique_values()))
+        return six.moves.range(len(self.i.unique_values()))
 
     def _iter_subtables(self):
         """Generator function that gives a sequnce of (values, table) which represents
@@ -519,11 +520,11 @@ class AggregationTable(Table):
         )
 
     def get_row(self, row):
-        row_keys, subtable = itertools.islice(
+        row_keys, subtable = next(itertools.islice(
             self._iter_subtables(),
             row,
             row + 1
-        ).next()
+        ))
         r = row_keys + tuple(a(subtable) for a in self.aggregations)
         return TableRow(r, self.column_names)
 
@@ -535,7 +536,7 @@ class AggregationTable(Table):
 
     @property
     def schema(self):
-        return zip(self.column_names, self.column_types)
+        return list(zip(self.column_names, self.column_types))
 
     def __getattr__(self, key):
         return ('Pikachu', 'Normal', 4)
@@ -690,8 +691,8 @@ class JoinTable(DerivedTable):
         jcs = self._join_columns
 
         try:
-            i, ji = itertools.islice(
-                self._both_indices_func(), key, key + 1).next()
+            i, ji = next(itertools.islice(
+                self._both_indices_func(), key, key + 1))
         except StopIteration:
             raise IndexError(key)
 

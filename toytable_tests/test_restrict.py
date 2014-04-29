@@ -51,10 +51,10 @@ class TestRestrict(unittest.TestCase):
 
         self.assertEquals(
             list(r),
-            zip(list(r.A),
-                list(r.B),
-                list(r.C)
-                )
+            list(zip(list(r.A),
+                     list(r.B),
+                     list(r.C)
+                     ))
 
         )
 
