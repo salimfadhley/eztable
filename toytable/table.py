@@ -76,7 +76,6 @@ class Table(object):
             )
         zipped = list(six.moves.zip(row, self._columns))
 
-
         for v, c in zipped:
             if not c.validate(v): 
                 raise InvalidData(

@@ -42,15 +42,22 @@ class ArrayColumn(array.array):
     TYPE_CODES = 'bBuhHiIlLqQfd'
 
     def __new__(cls, name, values=None, type='i'):
-        cls.type = type
         return array.array.__new__(cls, type)
 
     def __init__(self, name, values=None, type='i'):
         self.name = name
         self.extend(values or [])
 
+    @property
+    def type(self):
+        return self.typecode
+
     def validate(self, v):
         return True # Delegate to underlying class
+
+    @property
+    def description(self):
+        return '%s (%s)' % (self.name, self.type)
 
 class StaticColumn(object):
 

@@ -22,5 +22,32 @@ class TestArrayTable(unittest.TestCase):
         )
 
 
+    def test_repr_column(self):
+        self.t.append(
+            (3, u'h', 2.5, 9)
+        )
+
+        expected = '\n'.join([
+            '| A (i) | B (u) | C (f) | D (int) |',
+            '| 3     | h     | 2.5   | 9       |'
+
+        ])
+
+        self.assertEquals(
+            self.t._get_column('A').type,
+            'i'
+        )
+
+        self.assertEquals(
+            self.t._get_column('C').type,
+            'f'
+        )
+
+        self.assertEquals(
+            repr(self.t),
+            expected
+        )
+
+
 if __name__ == '__main__':
     unittest.main()
