@@ -27,11 +27,15 @@ class Column(list):
     def __init__(self, name, values=[], type=object):
         list.__init__(self)
         self.name = name
+        self.type = type
         self[:] = values
 
     @property
     def description(self):
         return describe_column(self.name, self.type)
+
+    def validate(self, v):
+        return v is None or isinstance(v, self.type)
 
 
 class ArrayColumn(array.array):
@@ -44,6 +48,9 @@ class ArrayColumn(array.array):
     def __init__(self, name, values=None, type='i'):
         self.name = name
         self.extend(values or [])
+
+    def validate(self, v):
+        return True # Delegate to underlying class
 
 class StaticColumn(object):
 

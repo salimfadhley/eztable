@@ -5,7 +5,7 @@ from collections import namedtuple
 from six import string_types
 from weakref import WeakValueDictionary, WeakSet
 
-from .columns import DerivedColumn, Column, DerivedTableColumn, StaticColumn, JoinColumn, describe_column
+from .columns import DerivedColumn, Column, DerivedTableColumn, StaticColumn, JoinColumn, ArrayColumn, describe_column
 from .row import TableRow
 from .exceptions import InvalidData
 from .index import Index
@@ -50,8 +50,12 @@ class Table(object):
             if isinstance(s, string_types):
                 self._columns.append(Column(s))
             else:
-                name, type = s
-                self._columns.append(Column(name, type=type))
+                name, typ = s
+                if isinstance(typ, str):
+                    col = ArrayColumn(name, type=typ)
+                else:
+                    col = Column(name, type=typ)
+                self._columns.append(col)
 
         for row in data:
             self.append(row)
@@ -71,14 +75,15 @@ class Table(object):
                 "Expected %d columns, got %d" % (len(row), len(self._columns))
             )
         zipped = list(six.moves.zip(row, self._columns))
+
+
         for v, c in zipped:
-            if not isinstance(v, c.type):
-                if not v is None:  # Nonetypes are always valid
-                    raise InvalidData(
-                        '%r is incompatible with type %s for column %s' % (
-                            v, c.type, c.name
-                        )
+            if not c.validate(v): 
+                raise InvalidData(
+                    '%r is incompatible with type %s for column %s' % (
+                        v, c.type, c.name
                     )
+                )
         for v, c in zipped:
             c.append(v)
 
@@ -120,7 +125,11 @@ class Table(object):
     def column_types(self):
         """Get the table's column types as a list of types.
         """
-        return [c.type for c in self._all_columns]
+        try:
+            return [c.type for c in self._all_columns]
+        except AttributeError:
+            import pdb
+            pdb.set_trace()
 
     @property
     def _column_descriptions(self):
