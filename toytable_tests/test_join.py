@@ -7,7 +7,7 @@ from toytable.table import JoinTable
 class TestJoin(unittest.TestCase):
 
     def setUp(self):
-        self.pokedex = Table(['pokemon', 'owner', 'level'])
+        self.pokedex = Table(['pokemon', 'owner', ('level', 'i')])
         self.pokedex.extend([
             ['Charmander', 'Ash', 12],
             ['Pikachu', 'Ash', 15],
@@ -52,7 +52,7 @@ class TestJoin(unittest.TestCase):
         expected = [
             ('pokemon', object),
             ('owner', object),
-            ('level', object),
+            ('level', 'i'),
             ('type', object),
         ]
         self.assertEquals(
