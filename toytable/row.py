@@ -36,7 +36,7 @@ class TableRow(tuple):
             return tuple.__getitem__(self, k)
 
     def keys(self):
-        return self.schema
+        return tuple(self.schema.keys())
 
     def values(self):
         return list(self)

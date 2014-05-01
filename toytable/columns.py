@@ -37,9 +37,26 @@ class Column(list):
     def validate(self, v):
         return v is None or isinstance(v, self.type)
 
+    def fn_from_string(self):
+        return self.type
+
 
 class ArrayColumn(array.array):
-    TYPE_CODES = 'bBuhHiIlLqQfd'
+
+    PY_TYPE_MAPPING = {
+        'c':str,
+        'b':int,
+        'B':int,
+        'u':unicode,
+        'h':int,
+        'H':int,
+        'i':int,
+        'I':long,
+        'l':int,
+        'L':long,
+        'f':float,
+        'd':float
+    }
 
     def __new__(cls, name, values=None, type='i'):
         return array.array.__new__(cls, type)
@@ -47,6 +64,10 @@ class ArrayColumn(array.array):
     def __init__(self, name, values=None, type='i'):
         self.name = name
         self.extend(values or [])
+
+
+    def fn_from_string(self):
+        return self.PY_TYPE_MAPPING[self.typecode]
 
     @property
     def type(self):

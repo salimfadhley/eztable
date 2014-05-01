@@ -66,17 +66,28 @@
         },
         {
 
-            "name":"Nose 3.3 + 2.7 Tests",
+            "name":"Coverage 2.7",
             "working_dir": "${project_path:${folder}}/src",
             "cmd":
             [
-                "${project_path}/bin/nosetests-3.3", "${project_path}/src/toytable_tests"
-            ],
+                "${project_path}/bin/nosetests-2.7", 
+                "${project_path}/src/toytable_tests",
+                "--cover-package=toytable",
+                "--with-coverage"
+            ]
+        },
+        {
+            "name":"Coverage 3.3",
+            "working_dir": "${project_path:${folder}}/src",
             "cmd":
             [
-                "${project_path}/bin/nosetests-2.7", "${project_path}/src/toytable_tests"
+                "${project_path}/bin/nosetests-3.3", 
+                "${project_path}/src/toytable_tests",
+                "--cover-package=toytable",
+                "--with-coverage"
             ]
-        }
+        },
+
 
     ]
 }

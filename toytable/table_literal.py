@@ -22,6 +22,8 @@ def col_tuple_to_schema_item(ct, default_type):
     name, typestr = ct
     if not typestr:
         return name, default_type
+    if len(typestr) == 1:
+        return name, typestr # Array
     modpath, _, classname = typestr.rpartition('.')
     if modpath:
         return name, getattr(import_something(modpath), classname)
@@ -79,9 +81,10 @@ def table_literal(repr_string, default_type=str):
                               for h in next(rows_iter)  ]
 
     t = Table(column_names_and_types)
+    fns = [c.fn_from_string() for c in t._columns]
 
     def process_row(lst_row):
-            for ty, val in zip(t.column_types, lst_row):
+            for ty, val in zip(fns, lst_row):
                 yield ty(val)
 
     data = (list(process_row(row)) for row in rows_iter)
