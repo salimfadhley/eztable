@@ -92,6 +92,7 @@ class TestRow(unittest.TestCase):
             | 3     |   hello |
         """)
         r = t[0]
+
         self.assertEquals(
             list(r.items()),
             [('A', 3), ('B', 'hello')]
