@@ -1,5 +1,5 @@
 Aggregations
-------------
+============
 
 Toytable allows the contents of a table to be grouped according to the values
 of one or more column. 
