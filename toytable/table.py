@@ -266,7 +266,6 @@ class Table(object):
         :type input_columns: list of str
         :param fn; A function or lambda
         :param type: Optionally, constrain the value of this column by type
-
         """
         incols = []
         for c in input_columns:
