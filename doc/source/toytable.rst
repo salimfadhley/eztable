@@ -1,5 +1,5 @@
 toytable package
-===============
+================
 
 Submodules
 ----------
