@@ -1,5 +1,8 @@
 Examples    
---------
+========
+
+Building a table
+----------------
 
 Making a table is trivial:
     >>> from toytable import Table
@@ -14,6 +17,9 @@ Making a table is trivial:
     ... ])
 
 
+Printing tables
+---------------
+
 Table objects can be printed:
     >>> print p
     | Owner Id (int) | Pokemon    | Level (int) |
@@ -23,6 +29,9 @@ Table objects can be printed:
     | 3              | Togepi     | 5           |
     | 1              | Starmie    | 44          |
     | 9              | Mew        | 99          |
+
+Appending to tables
+-------------------
 
 You can add data to Tables one row at a time. It has the same effect as using the Table.extend(iter) function:
     >>> o = Table([('Owner Id', int), ('Name', str)])
@@ -35,6 +44,9 @@ You can add data to Tables one row at a time. It has the same effect as using th
     | 2              | Brock       |
     | 3              | Misty       |
 
+
+Joins on tables
+---------------
 
 Tables can be joined to other Tables:
     >>> j = p.left_join(
@@ -51,6 +63,9 @@ Tables can be joined to other Tables:
     | 9              | Mew        | 99          | None        |
 
 
+Re-ordering columns
+-------------------
+
 The project method allows you to re-order and remove columns from a Table:
     >>> j2 = j.project('Pokemon', 'Level', 'Name')
     >>> print j2
@@ -62,6 +77,9 @@ The project method allows you to re-order and remove columns from a Table:
     | Starmie    | 44          | Ash Ketchum |
     | Mew        | 99          | None        |
 
+Filtering rows of a table
+-------------------------
+
 The restrict method allows basic filtering of a Table:
     >>> restricted = j2.restrict(['Name'], lambda n: n == 'Ash Ketchum')
     >>> print restricted
@@ -71,6 +89,9 @@ The restrict method allows basic filtering of a Table:
     | Charmander | 12          | Ash Ketchum |
     | Starmie    | 44          | Ash Ketchum |
 
+Slicing Operations
+------------------
+
 Tables can also be sliced - and do exactly what you'd expect:
     >>> sliced = j2[1:-1]
     >>> print sliced
@@ -79,6 +100,9 @@ Tables can also be sliced - and do exactly what you'd expect:
     | Charmander | 12          | Ash Ketchum |
     | Togepi     | 5           | Misty       |
     | Starmie    | 44          | Ash Ketchum |
+
+Copying tables
+--------------
 
 Tables can be copied - that flattens their internal structure and can result
 in improved performance::
