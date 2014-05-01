@@ -51,9 +51,9 @@ class ArrayColumn(array.array):
         'h':int,
         'H':int,
         'i':int,
-        'I':long,
+        'I':int,
         'l':int,
-        'L':long,
+        'L':int,
         'f':float,
         'd':float
     }
