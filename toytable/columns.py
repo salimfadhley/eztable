@@ -47,7 +47,7 @@ class ArrayColumn(array.array):
         'c':str,
         'b':int,
         'B':int,
-        'u':unicode,
+        'u':six.u,
         'h':int,
         'H':int,
         'i':int,
