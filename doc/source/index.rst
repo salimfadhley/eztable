@@ -23,7 +23,8 @@ Contents
    examples.rst
    aggregations.rst
    tdd.rst
-   
+   toytable.table.rst
+
 
 Useful Links
 ------------
