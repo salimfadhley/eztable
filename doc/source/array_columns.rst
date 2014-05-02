@@ -9,6 +9,30 @@ An array column can be specified by using the single-char type code instead of a
 
 .. _array documentation: https://docs.python.org/3.3/library/array.html?highlight=array#module-array
 
+Building tables with array columns
+----------------------------------
+
+With table-literal::
+
+    table0 = table_literal("""
+    | foo (c) | bar (i) | baz (f) |
+    | x       | 2       | 2.2     |
+    """)
+
+Directly building a table::
+
+    table1 = Table([('foo', 'c'), ('bar', 'i'), ('baz', 'f')])
+    table1.append(['x', 2, 2.2])
+
+Both of the above examples create equivalent tables: They have the exact same content and schema. 
+
+The first column is type 'c' which can hold a single char. The second is 'i' which is a regular integer. The third column is type 'f' which defines columns that can hold floating-point numbers.
+
+Example
+-------
+
+Array columns look and work just like regular columns in the toytable package::
+
     >>> from toytable import table_literal, Table
     Warning: FastBinaryTree not available, using Python version BinaryTree.
     Warning: FastAVLTree not available, using Python version AVLTree.
