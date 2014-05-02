@@ -18,11 +18,12 @@ Contents
 ========
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    examples.rst
    aggregations.rst
    tdd.rst
+   array_columns.rst
 
 Useful Links
 ------------
