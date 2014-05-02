@@ -32,4 +32,12 @@ to provide more helpful table output::
     if __name__ == '__main__':
         unittest.main()
 
-Toytable can be used as an alternative to Lettuce style tests.
+Toytable can be used as an alternative to Lettuce style tests. 
+
+Testing Mixin
+-------------
+
+.. autoclass:: toytable.TableTestMixin
+    :members:
+    :undoc-members:
+    :show-inheritance:
