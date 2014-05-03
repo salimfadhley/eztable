@@ -13,3 +13,6 @@ class InvalidData(TypeError):
 class InvalidIndex(ValueError):
     """An index cannot be created because it has no columns or it refers to
     columns which do not exist in it's table."""
+
+class InvalidJoinMode(KeyError):
+    """The requested join mode is not knowm"""

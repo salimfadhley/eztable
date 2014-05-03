@@ -1,6 +1,6 @@
 import unittest
 import collections
-from toytable import Table, InvalidIndex
+from toytable import Table, InvalidIndex, table_literal, TableTestMixin
 from toytable.table import JoinTable
 
 
@@ -108,6 +108,50 @@ class TestJoin(unittest.TestCase):
         )
         with self.assertRaises(IndexError):
             t[99]
+
+class TestInnerJoin(unittest.TestCase, TableTestMixin):
+
+    def setUp(self):
+        self.pokedex = Table([('pokemon', str), ('owner', str), ('level', 'i')])
+        self.pokedex.extend([
+            ['Charmander', 'Ash', 12],
+            ['Pikachu', 'Ash', 15],
+            ['Squirtle', 'Ash', 19],
+            ['Starmie', 'Misty', 19],
+            ['Togepi', 'Misty', 5],
+            ['Onyx', 'Brock', 22],
+            ['Meowth', 'Team Rocket', 22],
+            ['Mew', None, 1],
+            ['Mewtwo', None, 1],
+        ])
+
+        self.types = Table([('pokemon', str), ('type', str)])
+        self.types.extend([
+            ['Togepi', 'Fairy'],
+            ['Onyx', 'Rock'],
+            ['Meowth', 'Normal'],
+            ['Charmander', 'Fire'],
+            ['Snorlax', 'Normal']
+        ])
+
+    def test_inner_join_simple(self):
+        j = self.pokedex.inner_join(
+            keys=('pokemon',),
+            other=self.types
+        )
+
+        expected = table_literal("""
+            | pokemon (str) | owner (str) | level (i) | type (str) |
+            | Charmander    | Ash         | 12        | Fire       |
+            | Togepi        | Misty       | 5         | Fairy      |
+            | Onyx          | Brock       | 22        | Rock       |
+            | Meowth        | Team Rocket | 22        | Normal     |
+        """)
+
+        self.assertTablesEqual(
+            j.copy(),
+            expected
+        )
 
 
 class TestJoinWithNonMatchingKeys(unittest.TestCase):

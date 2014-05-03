@@ -7,7 +7,7 @@ from weakref import WeakValueDictionary, WeakSet
 
 from .columns import DerivedColumn, Column, DerivedTableColumn, StaticColumn, JoinColumn, ArrayColumn, describe_column
 from .row import TableRow
-from .exceptions import InvalidData
+from .exceptions import InvalidData, InvalidJoinMode
 from .index import Index
 from .aggregation import Aggregation
 
@@ -326,12 +326,37 @@ class Table(object):
         :param other_keys: Optional list of foreign keys
         """
         other_keys = other_keys or keys
+        return self._join(
+            keys=keys,
+            other=other,
+            other_keys=other_keys,
+            mode='left'
+        )
+
+    def inner_join(self, keys, other, other_keys=None):
+        """Left join the other table onto this, return a table.
+
+        :param keys: List of column names which will be matched.
+        :param other: the other table to join on to this table.
+        :param other_keys: Optional list of foreign keys
+        """
+        other_keys = other_keys or keys
+        return self._join(
+            keys=keys,
+            other=other,
+            other_keys=other_keys,
+            mode='inner'
+        )
+
+    def _join(self, keys, other, other_keys=None, mode='left'):
+        other_keys = other_keys or keys
         return JoinTable(
             indices_func=self._indices_func,
             left_columns=self._columns,
             keys=keys,
             other=other,
-            other_keys=other_keys
+            other_keys=other_keys,
+            mode=mode
         )
 
     def restrict(self, col_names, fn=None):
@@ -617,12 +642,13 @@ class JoinTable(DerivedTable):
     with _left_join_indices_func, which provides a sequence of pairs.
     """
 
-    def __init__(self, indices_func, left_columns, keys, other, other_keys):
+    def __init__(self, indices_func, left_columns, keys, other, other_keys, mode='left'):
         self._indices_func = indices_func
         self._left_columns = left_columns
         self._keys = keys
         self._other = other
         self._other_keys = other_keys
+        self._mode = mode
 
         # Finally build an index
         self._join_index = other.add_index(
@@ -646,12 +672,33 @@ class JoinTable(DerivedTable):
             except KeyError:
                 yield i, None
 
+    def _inner_join_indices_func(self):
+        """Generator function which provides the sequence of
+        indexes for an inner join.
+        """
+        kcs = self._key_columns
+        for i in self._indices_func():
+            key = tuple(key[i] for key in kcs)
+            try:
+                yield i, self._join_index.index(key)[0]
+            except KeyError:
+                pass
+
     def _join_indices_func(self):
         """Generator function giving only the sequence
         of indices in the joined columns
         """
-        for _, ji in self._left_join_indices_func():
+        for _, ji in self.get_indeces_function()():
             yield ji
+
+    def get_indeces_function(self):
+        try:
+            return {
+                'left':self._left_join_indices_func,
+                'inner':self._inner_join_indices_func,
+            }[self._mode]
+        except KeyError:
+            raise InvalidJoinMode(self._mode)
 
     def _get_column(self, name):
         """Get a single Column object by name. Columns are list-like sequences.
@@ -699,7 +746,7 @@ class JoinTable(DerivedTable):
 
         try:
             i, ji = next(itertools.islice(
-                self._left_join_indices_func(), key, key + 1))
+                self.get_indeces_function()(), key, key + 1))
         except StopIteration:
             raise IndexError(key)
 
@@ -721,8 +768,9 @@ class JoinTable(DerivedTable):
         cs = self._left_columns
         jcs = self._join_columns
         kcs = self._key_columns
+        fn_i = self.get_indeces_function()
         s = dict((c.name, i) for i, c in enumerate(self._columns))
-        for i, ji in self._left_join_indices_func():
+        for i, ji in fn_i():
             if ji is None:  # Literally none!
                 r = itertools.chain(
                     (c[i] for c in cs),
