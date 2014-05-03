@@ -28,6 +28,19 @@ Both of the above examples create equivalent tables: They have the exact same co
 
 The first column is type 'c' which can hold a single char. The second is 'i' which is a regular integer. The third column is type 'f' which defines columns that can hold floating-point numbers.
 
+Type validations
+----------------
+
+Array columns are strongly typed. They can **only** store objects of the type specified in the colum's description. A TypeError will be raised if an incompatible object is stored::
+
+    >>> table1.append(['x', '!!!', 2.2])
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+      File "toytable/table.py", line 87, in append
+        c.append(v)
+    TypeError: an integer is required
+    >>>
+
 Example
 -------
 

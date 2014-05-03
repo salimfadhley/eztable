@@ -1,7 +1,7 @@
 Test Driven Development
 -----------------------
 
-Toytable provides a testing mixin called TableTestMixin which can be used
+Toytable provides a testing mixin called **TableTestMixin** which can be used
 to provide more helpful table output::
 
     import unittest

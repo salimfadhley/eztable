@@ -1,7 +1,7 @@
 import logging
 import six.moves
 import itertools
-from collections import namedtuple
+from collections import namedtuple, OrderedDict
 from six import string_types
 from weakref import WeakValueDictionary, WeakSet
 
@@ -148,7 +148,7 @@ class Table(object):
             yield TableRow(r, s)
 
     def _tablerow_schema(self):
-        return dict((c.name, i) for i, c in enumerate(self._columns))
+        return OrderedDict((c.name, i) for i, c in enumerate(self._columns))
 
     def __getslice__(self, start, stop):
         """Required to support slicing on Python 2.x
@@ -614,7 +614,7 @@ class JoinTable(DerivedTable):
     """The result of a table join operation.
 
     Join tables extend the _indices_func behavior of DerivedTable,
-    with _both_indices_func, which provides a sequence of pairs.
+    with _left_join_indices_func, which provides a sequence of pairs.
     """
 
     def __init__(self, indices_func, left_columns, keys, other, other_keys):
@@ -633,7 +633,7 @@ class JoinTable(DerivedTable):
     def _columns(self):
         return self._left_columns + self._join_columns
 
-    def _both_indices_func(self):
+    def _left_join_indices_func(self):
         """Generator function which gives a sequence of pairs:
         The first value is the index for the row in this table.
         The second value is the index for the row in the joined table.
@@ -650,7 +650,7 @@ class JoinTable(DerivedTable):
         """Generator function giving only the sequence
         of indices in the joined columns
         """
-        for _, ji in self._both_indices_func():
+        for _, ji in self._left_join_indices_func():
             yield ji
 
     def _get_column(self, name):
@@ -699,7 +699,7 @@ class JoinTable(DerivedTable):
 
         try:
             i, ji = next(itertools.islice(
-                self._both_indices_func(), key, key + 1))
+                self._left_join_indices_func(), key, key + 1))
         except StopIteration:
             raise IndexError(key)
 
@@ -722,7 +722,7 @@ class JoinTable(DerivedTable):
         jcs = self._join_columns
         kcs = self._key_columns
         s = dict((c.name, i) for i, c in enumerate(self._columns))
-        for i, ji in self._both_indices_func():
+        for i, ji in self._left_join_indices_func():
             if ji is None:  # Literally none!
                 r = itertools.chain(
                     (c[i] for c in cs),
