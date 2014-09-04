@@ -14,7 +14,7 @@ t = table_literal("""
 
 agg = t.aggregate(
     keys=('Pokemon', 'Attack Type'),
-    aggregations = [
+    aggregations=[
         ('Count', int, lambda t:len(t))
     ]
 )

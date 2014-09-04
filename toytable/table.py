@@ -547,7 +547,7 @@ class AggregationTable(Table):
     @property
     def column_types(self):
         return (
-            [self.table._get_column(cn).type for cn in self.keys] +
+            [self.table._get_column(cn).type for cn in self.keys] + 
             [a.type for a in self.aggregations]
         )
 

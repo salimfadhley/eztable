@@ -32,8 +32,8 @@ class TestJoin(unittest.TestCase):
 
     def test_join_interface(self):
         t = self.pokedex.left_join(
-            keys=('pokemon', ),
-            other = self.types
+            keys=('pokemon',),
+            other=self.types
         )
         self.assertEquals(
             t._key_columns,
@@ -46,8 +46,8 @@ class TestJoin(unittest.TestCase):
 
     def test_join_schema(self):
         t = self.pokedex.left_join(
-            keys=('pokemon', ),
-            other = self.types
+            keys=('pokemon',),
+            other=self.types
         )
         expected = [
             ('pokemon', object),
@@ -62,8 +62,8 @@ class TestJoin(unittest.TestCase):
 
     def test_join_indeces_function(self):
         t = self.pokedex.left_join(
-            keys=('pokemon', ),
-            other = self.types
+            keys=('pokemon',),
+            other=self.types
         )
         self.assertEquals(
             list(t._join_indices_func()),
@@ -72,8 +72,8 @@ class TestJoin(unittest.TestCase):
 
     def test_join_row(self):
         t = self.pokedex.left_join(
-            keys=('pokemon', ),
-            other = self.types
+            keys=('pokemon',),
+            other=self.types
         )
         self.assertEquals(
             t[0],
@@ -82,8 +82,8 @@ class TestJoin(unittest.TestCase):
 
     def test_join_iter(self):
         t = self.pokedex.left_join(
-            keys=('pokemon', ),
-            other = self.types
+            keys=('pokemon',),
+            other=self.types
         )
         tl = list(t)
         self.assertEquals(
@@ -93,8 +93,8 @@ class TestJoin(unittest.TestCase):
 
     def test_impossible_join(self):
         t = self.pokedex.left_join(
-            keys=('pokemon', ),
-            other = self.types
+            keys=('pokemon',),
+            other=self.types
         )
         self.assertEquals(
             t[7],
@@ -103,8 +103,8 @@ class TestJoin(unittest.TestCase):
 
     def test_over_read(self):
         t = self.pokedex.left_join(
-            keys=('pokemon', ),
-            other = self.types
+            keys=('pokemon',),
+            other=self.types
         )
         with self.assertRaises(IndexError):
             t[99]
@@ -182,9 +182,9 @@ class TestJoinWithNonMatchingKeys(unittest.TestCase):
     def test_basic_join(self):
 
         t = self.pokedex.left_join(
-            keys=('pokemon', ),
-            other = self.types,
-            other_keys = ('pkmn',),
+            keys=('pokemon',),
+            other=self.types,
+            other_keys=('pkmn',),
         )
 
         self.assertIsInstance(t, JoinTable)
@@ -218,7 +218,7 @@ class TestBrokenJoin(unittest.TestCase):
 
         j = p.left_join(
             keys=('Owner Id',),
-            other = o
+            other=o
         )
 
         self.assertEquals(
@@ -229,7 +229,7 @@ class TestBrokenJoin(unittest.TestCase):
     def test_joined_table_repr(self):
         p = Table([('Owner Id', int), 'Pokemon', ('Level', int)])
         o = Table([('Owner Id', int), ('Owner Name', str)])
-        j = p.left_join(keys=('Owner Id',), other = o)
+        j = p.left_join(keys=('Owner Id',), other=o)
         self.assertEquals(
             repr(j),
             "| Owner Id (int) | Pokemon | Level (int) | Owner Name (str) |"
@@ -244,7 +244,7 @@ class TestBrokenJoin(unittest.TestCase):
         o.append([1, 'Ash Ketchum'])
         j = p.left_join(
             keys=('Owner Id',),
-            other = o
+            other=o
         )
 
         self.assertEquals(

@@ -15,7 +15,7 @@ t = table_literal("""
 """)
 
 pokedex = t.left_join(
-    keys=('Type Id', ),
+    keys=('Type Id',),
     other=types
 )
 print pokedex

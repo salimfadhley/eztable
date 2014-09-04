@@ -22,7 +22,7 @@ class TableTestMixin(object):
 
         if len(A) != len(B):
             raise AssertionError(
-                "Table lengths are different: %i != %i" %
+                "Table lengths are different: %i != %i" % 
                 (len(A), len(B))
             )
 

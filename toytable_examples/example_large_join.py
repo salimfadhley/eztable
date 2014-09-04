@@ -29,7 +29,7 @@ for i in range(100000):
     rnd = random.choice(STRINGS1)
     cyc = next(ENDLESS)
 
-    t.append([i,rnd, cyc])
+    t.append([i, rnd, cyc])
 
 @do_cprofile
 def main():

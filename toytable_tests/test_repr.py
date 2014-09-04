@@ -35,7 +35,7 @@ class TestRepr(unittest.TestCase):
         o.append([1, 'Ash Ketchum'])
         j = p.left_join(
             keys=('Owner Id',),
-            other = o
+            other=o
         )
 
         self.assertEqual(
@@ -52,7 +52,7 @@ class TestRepr(unittest.TestCase):
         o.append([1, 'Ash Ketchum'])
         j = p.left_join(
             keys=('Owner Id',),
-            other = o
+            other=o
         )
         expected = [
             len(j._get_column('Owner Id').description),
@@ -78,7 +78,7 @@ class TestRepr(unittest.TestCase):
         o.append([1, 'Ash Ketchum'])
         j = p.left_join(
             keys=('Owner Id',),
-            other = o
+            other=o
         )
 
         expected = [
@@ -111,7 +111,7 @@ class TestRepr(unittest.TestCase):
         o.append([3, 'Misty'])
         j = p.left_join(
             keys=('Owner Id',),
-            other = o
+            other=o
         )
         j2 = j.project('Pokemon', 'Level', 'Name')
         print(repr(j2))

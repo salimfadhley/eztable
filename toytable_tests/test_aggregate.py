@@ -42,7 +42,7 @@ class TestAggregate(TableTestMixin, unittest.TestCase):
     def test_get_key_and_subtable(self):
         agg = self.t.aggregate(
             keys=('Pokemon', 'Attack Type'),
-            aggregations = [
+            aggregations=[
                 ('Count', int, lambda t:len(t))
             ]
         )
@@ -71,7 +71,7 @@ class TestAggregate(TableTestMixin, unittest.TestCase):
 
         agg = self.t.aggregate(
             keys=('Pokemon', 'Attack Type'),
-            aggregations = [
+            aggregations=[
                 ('Count', int, lambda t:len(t))
             ]
         )
@@ -96,7 +96,7 @@ class TestAggregate(TableTestMixin, unittest.TestCase):
 
         agg = self.t.aggregate(
             keys=('Pokemon', 'Attack Type'),
-            aggregations = [
+            aggregations=[
                 ('Count', int, lambda t:len(t))
             ]
         )
@@ -109,7 +109,7 @@ class TestAggregate(TableTestMixin, unittest.TestCase):
     def test_get_schema(self):
         t = self.t.aggregate(
             keys=('Pokemon', 'Attack Type'),
-            aggregations = [
+            aggregations=[
                 ('Count', int, lambda t:len(t))
             ]
         )
@@ -127,7 +127,7 @@ class TestAggregate(TableTestMixin, unittest.TestCase):
     def test_get_row(self):
         agg = self.t.aggregate(
             keys=('Pokemon', 'Attack Type'),
-            aggregations = [
+            aggregations=[
                 ('Count', int, lambda t:len(t))
             ]
         )
@@ -140,7 +140,7 @@ class TestAggregate(TableTestMixin, unittest.TestCase):
     def test_correct_row_type(self):
         agg = self.t.aggregate(
             keys=('Pokemon', 'Attack Type'),
-            aggregations = [
+            aggregations=[
                 ('Count', int, lambda t:len(t))
             ]
         )
@@ -149,7 +149,7 @@ class TestAggregate(TableTestMixin, unittest.TestCase):
     def test_iter(self):
         agg = self.t.aggregate(
             keys=('Pokemon', 'Attack Type'),
-            aggregations = [
+            aggregations=[
                 ('Count', int, lambda t:len(t))
             ]
         )
@@ -166,7 +166,7 @@ class TestAggregate(TableTestMixin, unittest.TestCase):
     def test_column_descriptions(self):
         agg = self.t.aggregate(
             keys=('Pokemon', 'Attack Type'),
-            aggregations = [
+            aggregations=[
                 ('Count', int, lambda t:len(t)),
                 ('Hello', str, lambda t:'hello'),
             ]
@@ -190,7 +190,7 @@ class TestAggregate(TableTestMixin, unittest.TestCase):
 
         agg = self.t.aggregate(
             keys=('Pokemon', 'Attack Type'),
-            aggregations = [
+            aggregations=[
                 ('Count', int, lambda t:len(t))
             ]
         )

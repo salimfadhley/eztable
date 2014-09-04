@@ -24,6 +24,10 @@ Project Status
 .. image:: https://pypip.in/download/toytable/badge.png
     :target: https://pypi.python.org/pypi//toytable/
     :alt: Downloads
+    
+.. image:: https://requires.io/bitbucket/salimfadhley/toytable/requirements.png?branch=default
+     :target: https://requires.io/bitbucket/salimfadhley/toytable/requirements/?branch=default
+     :alt: Requirements Status
 
 About this project
 ------------------

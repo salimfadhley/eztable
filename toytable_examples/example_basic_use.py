@@ -16,7 +16,7 @@ o.append([3, 'Misty'])
 print o
 j = p.left_join(
     keys=('Owner Id',),
-    other = o
+    other=o
 )
 print j
 j2 = j.project('Pokemon', 'Level', 'Name')
@@ -28,4 +28,4 @@ print sliced
 
 j3 = j2.copy()
 i = j3.add_index(('Pokemon',)).reindex()
-print i[('Pikachu', )]
+print i[('Pikachu',)]

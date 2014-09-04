@@ -74,7 +74,7 @@ class ArrayColumn(array.array):
         return self.typecode
 
     def validate(self, v):
-        return True # Delegate to underlying class
+        return True  # Delegate to underlying class
 
     @property
     def description(self):

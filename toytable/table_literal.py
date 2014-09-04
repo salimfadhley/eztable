@@ -23,7 +23,7 @@ def col_tuple_to_schema_item(ct, default_type):
     if not typestr:
         return name, default_type
     if len(typestr) == 1:
-        return name, typestr # Array
+        return name, typestr  # Array
     modpath, _, classname = typestr.rpartition('.')
     if modpath:
         return name, getattr(import_something(modpath), classname)

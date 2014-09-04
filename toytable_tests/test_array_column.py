@@ -11,15 +11,15 @@ class TestArrayColumn(unittest.TestCase):
         self.assertIsInstance(c, array.array)
 
     def test_array_column_unpack(self):
-        c = ArrayColumn(name='foo', type='i', values=[1,2,3,4])
+        c = ArrayColumn(name='foo', type='i', values=[1, 2, 3, 4])
         self.assertEqual(
             list(c),
-            [1,2,3,4]
+            [1, 2, 3, 4]
         )
 
     def test_array_column_invalid_type(self):
         with self.assertRaises(ValueError):
-            ArrayColumn(name='foo', type='X', values=[1,2,3,4])
+            ArrayColumn(name='foo', type='X', values=[1, 2, 3, 4])
         
 
     def test_array_column_unpack(self):
@@ -28,7 +28,7 @@ class TestArrayColumn(unittest.TestCase):
         c.append(2)
         self.assertEqual(
             list(c),
-            [1,2,]
+            [1, 2, ]
         )
 
     def test_array_column_type_f(self):
