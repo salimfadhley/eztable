@@ -9,5 +9,3 @@ build
 *.egg-info
 cover
 .coverage
-.project
-.pydevproject
