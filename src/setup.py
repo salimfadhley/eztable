@@ -23,7 +23,7 @@ setup(
     packages=['toytable', 'toytable_tests'],
     zip_safe=True,
     include_package_data=False,
-    install_requires=['bintrees>=2.0.1', 'six>=1.6.1'],
+    install_requires=['bintrees>=2.0.1', 'six>=1.7.3'],
     test_suite='nose.collector',
     tests_require=['mock', 'nose', 'coverage'],
     url=PROJECT_URL,
