@@ -232,7 +232,7 @@ class Table(object):
         """Implementation of project, anti_project and rename function"""
         rename_dict = rename_dict or {}
         cols = [self._get_column(c) for c in col_names]
-        column_names = [rename_dict.get(cn) for cn in self.column_names]
+        [rename_dict.get(cn) for cn in self.column_names]
         return (
             DerivedTable(self._indices_func, cols, rename_dict=rename_dict)
         )
@@ -253,7 +253,7 @@ class Table(object):
             self._columns + [StaticColumn(name, value, self.__len__, type)],
         )
 
-    def expand(self, name, input_columns, fn, type=object):
+    def expand(self, name, input_columns, fn, col_type=object):
         """Returns a new DerivedTable in which a new calculated
         column has been added.
 
@@ -272,7 +272,7 @@ class Table(object):
             incols.append(self._get_column(c))
         return DerivedTable(
             self._indices_func,
-            self._columns + [DerivedColumn(name, incols, fn, type)]
+            self._columns + [DerivedColumn(name, incols, fn, col_type)]
         )
 
     def hash(self, name, input_columns):

@@ -46,7 +46,7 @@ class TestExpandTable(unittest.TestCase):
     def test_simple_expand(self):
         t = self.t.expand(
             name='D',
-            type=int,
+            col_type=int,
             input_columns=['C'],
             fn=lambda C: len(C)
         )
@@ -55,7 +55,7 @@ class TestExpandTable(unittest.TestCase):
     def test_simple_expand_and_materialize(self):
         t = self.t.expand(
             name='D',
-            type=int,
+            col_type=int,
             input_columns=['C'],
             fn=lambda C: len(C) + 1
         ).copy()
@@ -71,7 +71,7 @@ class TestExpandTable(unittest.TestCase):
     def test_simple_expand_and_slice(self):
         t = self.t.expand(
             name='D',
-            type=int,
+            col_type=int,
             input_columns=['C'],
             fn=lambda C: len(C) + 1
         )[1:]
