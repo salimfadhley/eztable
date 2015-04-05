@@ -52,6 +52,44 @@ class TestExpandTable(unittest.TestCase):
         )
         self.assertEqual(list(t.D), [5, 5])
 
+    def test_derived_columns_are_iterable(self):
+        t = self.t.expand(
+            name='D',
+            col_type=int,
+            input_columns=['C'],
+            fn=lambda C: len(C)
+        )
+        for _ in t.D:
+            pass
+
+    def test_derived_columns_can_be_printed(self):
+        t = self.t.expand(
+            name='D',
+            col_type=int,
+            input_columns=['C'],
+            fn=lambda C: len(C)
+        )
+        str(t.D)
+        repr(t.D)
+
+    def test_derived_columns_have_descriptions(self):
+        t = self.t.expand(
+            name='D',
+            col_type=int,
+            input_columns=['C'],
+            fn=lambda C: len(C)
+        )
+        self.assertEqual(t.D.description, "D (int)")
+
+    def test_that_float_columns_have_descriptions(self):
+        t = self.t.expand(
+            name='D',
+            input_columns=['A', 'B', 'C'],
+            fn=lambda a,b,c: float(len(c) + a + b),
+            col_type='float'
+        )
+        self.assertEqual(t.D.description, "D (float)")
+
     def test_simple_expand_and_materialize(self):
         t = self.t.expand(
             name='D',

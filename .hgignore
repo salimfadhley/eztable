@@ -9,3 +9,7 @@ build
 *.egg-info
 cover
 .coverage
+venv
+local
+.idea
+

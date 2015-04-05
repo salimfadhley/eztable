@@ -115,7 +115,7 @@ class DerivedColumn(object):
         return self.func(*row)
 
     def __iter__(self):
-        for row in itertools.izip(*self.inputs):
+        for row in six.moves.zip(*self.inputs):
             yield self.func(*row)
 
     @property
