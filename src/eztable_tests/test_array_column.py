@@ -1,8 +1,6 @@
 import unittest
 import array
-from eztable import Table, table_literal
 from eztable.columns import ArrayColumn
-
 
 
 class TestArrayColumn(unittest.TestCase):
@@ -10,19 +8,14 @@ class TestArrayColumn(unittest.TestCase):
         c = ArrayColumn(name='foo', type='u', values=None)
         self.assertIsInstance(c, array.array)
 
-    def test_array_column_unpack(self):
+    def test_array_column_unpack_4(self):
         c = ArrayColumn(name='foo', type='i', values=[1, 2, 3, 4])
         self.assertEqual(
             list(c),
             [1, 2, 3, 4]
         )
 
-    def test_array_column_invalid_type(self):
-        with self.assertRaises(ValueError):
-            ArrayColumn(name='foo', type='X', values=[1, 2, 3, 4])
-        
-
-    def test_array_column_unpack(self):
+    def test_array_column_unpack_2(self):
         c = ArrayColumn(name='foo', type='i')
         c.append(1)
         c.append(2)
@@ -30,6 +23,11 @@ class TestArrayColumn(unittest.TestCase):
             list(c),
             [1, 2, ]
         )
+    def test_array_column_invalid_type(self):
+        with self.assertRaises(ValueError):
+            ArrayColumn(name='foo', type='X', values=[1, 2, 3, 4])
+
+
 
     def test_array_column_type_f(self):
         c = ArrayColumn(name='foo', type='f')
@@ -50,6 +48,7 @@ class TestArrayColumn(unittest.TestCase):
         c = ArrayColumn(name='foo', type='u')
         c.append(u'j')
         self.assertEqual(c.description, 'foo (u)')
+
 
 if __name__ == '__main__':
     unittest.main()
