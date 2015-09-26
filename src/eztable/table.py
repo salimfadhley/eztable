@@ -13,8 +13,7 @@ from .exceptions import InvalidData, InvalidJoinMode
 from .index import Index
 from .aggregation import Aggregation
 
-log = logging.basicConfig()
-
+log = logging.getLogger(__name__)
 
 class Table(object):
 
@@ -23,7 +22,7 @@ class Table(object):
     if the types are non-hashable.
     """
 
-    def __init__(self, schema, data=[]):
+    def __init__(self, schema, data=None):
         """
         Every Table object has a schema. In it's simplest form, the schema can be
         nothing more than a list of string column-names. Specifying a schema
@@ -44,6 +43,7 @@ class Table(object):
         :type data: list of lists
 
         """
+        data = data or []
         self._columns = []
         self.indexes = WeakValueDictionary()
         self._listeners = WeakSet()

@@ -24,7 +24,8 @@ def describe_column(name, typ):
 
 
 class Column(list):
-    def __init__(self, name, values=[], type=object):
+    def __init__(self, name, values=None, type=object):
+        values = values or []
         list.__init__(self)
         self.name = name
         self.type = type
