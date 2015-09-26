@@ -36,7 +36,7 @@ Array columns are strongly typed. They can **only** store objects of the type sp
     >>> table1.append(['x', '!!!', 2.2])
     Traceback (most recent call last):
       File "<stdin>", line 1, in <module>
-      File "toytable/table.py", line 87, in append
+      File "eztable/table.py", line 87, in append
         c.append(v)
     TypeError: an integer is required
     >>>
@@ -44,9 +44,9 @@ Array columns are strongly typed. They can **only** store objects of the type sp
 Example
 -------
 
-Array columns look and work just like regular columns in the toytable package::
+Array columns look and work just like regular columns in the eztable package::
 
-    >>> from toytable import table_literal, Table
+    >>> from eztable import table_literal, Table
     Warning: FastBinaryTree not available, using Python version BinaryTree.
     Warning: FastAVLTree not available, using Python version AVLTree.
     Warning: FastRBTree not available, using Python version RBTree.

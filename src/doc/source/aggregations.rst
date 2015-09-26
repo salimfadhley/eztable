@@ -15,7 +15,7 @@ Aggregations are specified as a triple containing name, type and function.
 The function must be a callable which takes a subtable as it's input
 and returns a value of the type specfied in the 2nd column.
 
-    >>> from toytable import table_literal
+    >>> from eztable import table_literal
     >>> t = table_literal(\"\"\"
     ... | Attack(str)   | Pokemon(str) | Level Obtained(int) | Attack Type(str) |
     ... | Thunder Shock | Pikachu      | 1                   | Electric         |

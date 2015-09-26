@@ -5,7 +5,7 @@ Toytable provides a testing mixin called **TableTestMixin** which can be used
 to provide more helpful table output::
 
     import unittest
-    from toytable import table_literal, TableTestMixin
+    from eztable import table_literal, TableTestMixin
 
 
     class ExampleTest(TableTestMixin, unittest.TestCase):

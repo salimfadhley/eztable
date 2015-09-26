@@ -12,12 +12,10 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys
-import os
 import pkg_resources
-import toytable
+import eztable
 
-dist = pkg_resources.working_set.by_key[toytable.__name__]
+dist = pkg_resources.working_set.by_key[eztable.__name__]
 version = release = dist.version
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -53,8 +51,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'toytable'
-copyright = u'2014, Salim Fadhley'
+project = u'eztable'
+copyright = u'2015, Salim Fadhley'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -201,7 +199,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    ('index', 'toytable.tex', u'toytable Documentation',
+    ('index', 'eztable.tex', u'Eztable Documentation',
      u'Salim Fadhley', 'manual'),
 ]
 
