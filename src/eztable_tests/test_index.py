@@ -40,7 +40,7 @@ class TestIndex(unittest.TestCase):
             cols=('A', 'C')
         )
         expected_str = 'A,C'
-        expected_repr = '<toytable.index.Index %s>' % expected_str
+        expected_repr = '<eztable.index.Index %s>' % expected_str
 
         self.assertEquals(str(i), expected_str)
         self.assertEquals(repr(i), expected_repr)

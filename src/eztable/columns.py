@@ -13,7 +13,7 @@ else:
 def describe_column(name, typ):
     if typ is object:
         return name
-    if typ in builtin_types:
+    if typ in builtin_types or typ is str:
         return "%s (%s)" % (name, typ.__name__)
 
     return "%s (%s.%s)" % (

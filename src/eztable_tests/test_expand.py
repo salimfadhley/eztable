@@ -86,7 +86,7 @@ class TestExpandTable(unittest.TestCase):
             name='D',
             input_columns=['A', 'B', 'C'],
             fn=lambda a,b,c: float(len(c) + a + b),
-            col_type='float'
+            col_type=float
         )
         self.assertEqual(t.D.description, "D (float)")
 
