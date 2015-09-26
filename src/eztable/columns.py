@@ -172,3 +172,74 @@ class DerivedTableColumn(object):
 
 class JoinColumn(DerivedTableColumn):
     pass
+
+class FunctionColumn(object):
+    """Base class for columns which simply apply a function to
+    another column.
+    """
+
+    @property
+    def name(self):
+        return self._column.name
+
+    @property
+    def type(self):
+        return self._column.type
+
+    @property
+    def description(self):
+        return self._column.description
+
+class NormalizedColumn(FunctionColumn):
+    """Normalize all of the values in a column
+
+    Remaps the lowst value to 0, and the highest value to self._normal,
+    lineraly scaling all of the values inbetween.
+    """
+
+    def __init__(self, column, normal=1.0):
+        self._column = column
+        self._normal = normal
+
+    def normalize_func(self):
+        col_max = max(self._column)
+        col_min = min(self._column)
+        col_range = col_max - col_min
+        return lambda x: self._normal * (x-col_min) / col_range
+
+    def __iter__(self):
+        return six.moves.map(self.normalize_func(), self._column.__iter__())
+
+    def __getitem__(self, index):
+        fn = self.normalize_func()
+        val = self._column.__getitem__(index)
+        return fn(val)
+
+class StandardizedColumn(FunctionColumn):
+    """Standardize all of the values in a column
+
+    Remaps the average value to zero, and normalizes
+    all of the scores.
+    """
+
+    def __init__(self, column, range=1.0):
+        self._column = column
+        self._range = range
+
+    def _average(self):
+        return sum(self._column) / float(len(self._column))
+
+    def _standard_deviation(self):
+        average  = self._average()
+        return (sum((a-average)**2 for a in self._column.__iter__()) / len(self._column)) ** 0.5
+
+    def standardize_func(self):
+        return lambda x: self._range * (x-self._average()) / self._standard_deviation()
+
+    def __iter__(self):
+        return six.moves.map(self.standardize_func(), self._column.__iter__())
+
+    def __getitem__(self, index):
+        fn = self.standardize_func()
+        val = self._column.__getitem__(index)
+        return fn(val)

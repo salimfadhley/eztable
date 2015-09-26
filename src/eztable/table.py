@@ -1,3 +1,4 @@
+import csv
 import logging
 import six.moves
 import itertools
@@ -5,7 +6,8 @@ from collections import OrderedDict
 from six import string_types
 from weakref import WeakValueDictionary, WeakSet
 
-from .columns import DerivedColumn, Column, DerivedTableColumn, StaticColumn, JoinColumn, ArrayColumn, describe_column
+from .columns import DerivedColumn, Column, DerivedTableColumn, StaticColumn, JoinColumn, ArrayColumn, describe_column, \
+    NormalizedColumn, StandardizedColumn
 from .row import TableRow
 from .exceptions import InvalidData, InvalidJoinMode
 from .index import Index
@@ -516,6 +518,65 @@ class Table(object):
             keys=keys,
             aggregations=aggregations
         )
+
+    def to_csv(self, output_file, dialect="excel", descriptions=False):
+        """
+        Save this table to a file in CSV format (or any dialect variation supported
+        by Python's CSV library).
+
+        :param output_file: A file or file-like object (not a filename)
+        :param dialect: Any previously registered CSV writer dialect name
+        :param descriptions: Set to True if you want to include column descriptions rather than column-names
+        :return: None
+        """
+        writer = csv.writer(output_file, dialect=dialect)
+
+        if descriptions:
+            writer.writerow(self._column_descriptions)
+        else:
+            writer.writerow(self.column_names)
+
+        for row in self:
+            writer.writerow(row)
+
+    def standardize(self, standardizations):
+        def standardize_col(c):
+            """
+            Inner function, normalize a column c if required
+            :param c:  toytable.column.Column
+            :return: either a normalized colukn or the original column
+            """
+            if c.name in standardizations:
+                return StandardizedColumn(c, standardizations[c.name])
+            else:
+                return c
+
+        return DerivedTable(indices_func=self._indices_func,
+                            columns = [standardize_col(c) for c in self._all_columns]
+                            )
+
+    def normalize(self, normalizations):
+        """
+        Return a version of the table with columns normalized.
+
+        :param normalizations: dict mapping column names to their normalized range (typically 1).
+        :return: A derived ToyTable with the normalizations applied.
+        """
+
+        def normalize_col(c):
+            """
+            Inner function, normalize a column c if required
+            :param c:  toytable.column.Column
+            :return: either a normalized colukn or the original column
+            """
+            if c.name in normalizations:
+                return NormalizedColumn(c, normalizations[c.name])
+            else:
+                return c
+
+        return DerivedTable(indices_func=self._indices_func,
+                            columns = [normalize_col(c) for c in self._all_columns]
+                            )
 
 
 class AggregationTable(Table):
