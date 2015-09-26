@@ -23,11 +23,10 @@ class TestArrayColumn(unittest.TestCase):
             list(c),
             [1, 2, ]
         )
+
     def test_array_column_invalid_type(self):
         with self.assertRaises(ValueError):
             ArrayColumn(name='foo', type='X', values=[1, 2, 3, 4])
-
-
 
     def test_array_column_type_f(self):
         c = ArrayColumn(name='foo', type='f')
