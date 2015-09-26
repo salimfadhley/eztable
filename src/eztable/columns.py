@@ -59,7 +59,10 @@ class ArrayColumn(array.array):
     }
 
     def __new__(cls, name, values=None, type='i'):
-        return array.array.__new__(cls, type)
+        try:
+            return array.array.__new__(cls, type)
+        except ValueError as ve:
+            raise ValueError("Invalid typecode: %s" % type)
 
     def __init__(self, name, values=None, type='i'):
         self.name = name
