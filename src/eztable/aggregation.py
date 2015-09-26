@@ -1,8 +1,8 @@
 class Aggregation(object):
 
-    def __init__(self, name, type, fn):
+    def __init__(self, name, column_type, fn):
         self.name = name
-        self.type = type
+        self.type = column_type
         self.fn = fn
 
     def __call__(self, t):

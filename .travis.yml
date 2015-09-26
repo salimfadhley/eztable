@@ -9,4 +9,4 @@ python:
 # command to install dependencies
 install: "pip install -e src"
 # command to run tests
-script: nosetests src/eztable_tests
+script: nosetests tests

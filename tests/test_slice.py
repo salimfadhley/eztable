@@ -1,5 +1,5 @@
 import unittest
-from eztable import Table, InvalidSchema, InvalidData
+from eztable import Table
 
 
 class TestTableRowAccess(unittest.TestCase):
@@ -47,4 +47,4 @@ class TestTableRowAccess(unittest.TestCase):
     def test_get_sliced_row_indexerror(self):
         t = self.t[1:]
         with self.assertRaises(IndexError):
-            t[3]
+            assert t[3]

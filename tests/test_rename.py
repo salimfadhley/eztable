@@ -1,5 +1,5 @@
 import unittest
-from eztable import Table, InvalidIndex
+from eztable import Table
 
 
 class TestRename(unittest.TestCase):

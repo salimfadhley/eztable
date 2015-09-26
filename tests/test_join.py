@@ -1,5 +1,5 @@
 import unittest
-from eztable import Table, InvalidIndex, table_literal, TableTestMixin
+from eztable import Table, table_literal, TableTestMixin
 from eztable.table import JoinTable
 
 
