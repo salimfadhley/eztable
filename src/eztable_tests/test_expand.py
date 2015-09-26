@@ -1,6 +1,6 @@
 import unittest
 
-from toytable import Table, InvalidSchema, InvalidData
+from eztable import Table, InvalidSchema, InvalidData
 
 
 class TestExpandTable(unittest.TestCase):

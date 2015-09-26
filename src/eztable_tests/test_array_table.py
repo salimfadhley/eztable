@@ -1,6 +1,6 @@
 import unittest
-from toytable import Table
-from toytable.columns import Column, ArrayColumn
+from eztable import Table
+from eztable.columns import Column, ArrayColumn
 
 class TestArrayTable(unittest.TestCase):
 

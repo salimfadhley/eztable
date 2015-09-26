@@ -1,5 +1,5 @@
 
-from zqtable import Table
+from eztable import Table
 
 
 t = Table([

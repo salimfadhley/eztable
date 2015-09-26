@@ -1,4 +1,4 @@
-from toytable import table_literal, Table
+from eztable import table_literal, Table
 
 types = Table([('Type Id', 'i'), ('Type', str)])
 types.append([1, 'water'])

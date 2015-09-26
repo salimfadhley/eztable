@@ -1,5 +1,5 @@
 import unittest
-from toytable import table_literal
+from eztable import table_literal
 
 
 class TestRow(unittest.TestCase):

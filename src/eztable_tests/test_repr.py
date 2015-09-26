@@ -1,6 +1,6 @@
 import unittest
-from toytable import Table
-from toytable.columns import describe_column
+from eztable import Table
+from eztable.columns import describe_column
 
 
 class TestRepr(unittest.TestCase):

@@ -1,7 +1,6 @@
 import unittest
-import collections
-from toytable import Table, InvalidIndex, table_literal, TableTestMixin
-from toytable.table import JoinTable
+from eztable import Table, InvalidIndex, table_literal, TableTestMixin
+from eztable.table import JoinTable
 
 
 class TestJoin(unittest.TestCase):

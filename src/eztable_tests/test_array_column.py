@@ -1,7 +1,7 @@
 import unittest
 import array
-from toytable import Table, table_literal
-from toytable.columns import ArrayColumn
+from eztable import Table, table_literal
+from eztable.columns import ArrayColumn
 
 
 

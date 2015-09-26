@@ -1,6 +1,5 @@
-from toytable import Table
 import re
-
+from eztable.table import Table
 
 EXP_COLUMN = re.compile("([^\(]+)(\s*\(([a-zA-Z0-9\.]+)\))?")
 

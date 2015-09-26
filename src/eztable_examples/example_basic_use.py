@@ -1,4 +1,4 @@
-from toytable import Table
+from eztable import Table
 p = Table([('Owner Id', int), 'Pokemon', ('Level', int)])
 p.extend([
     [1, 'Pikachu', 18],

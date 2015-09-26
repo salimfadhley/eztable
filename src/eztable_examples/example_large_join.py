@@ -1,4 +1,4 @@
-from toytable import Table
+from eztable import Table
 import itertools
 import random
 import cProfile

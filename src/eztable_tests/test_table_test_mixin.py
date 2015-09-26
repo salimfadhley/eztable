@@ -1,6 +1,6 @@
 import unittest
 
-from toytable import TableTestMixin, table_literal
+from eztable import TableTestMixin, table_literal
 
 
 class TestTableTestMixin(unittest.TestCase, TableTestMixin):

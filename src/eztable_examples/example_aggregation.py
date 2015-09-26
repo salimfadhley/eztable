@@ -1,4 +1,4 @@
-from toytable import table_literal
+from eztable import table_literal
 t = table_literal("""
 | Attack(str)   | Pokemon(str) | Level Obtained(int) | Attack Type(str) |
 | Thunder Shock | Pikachu      | 1                   | Electric         |

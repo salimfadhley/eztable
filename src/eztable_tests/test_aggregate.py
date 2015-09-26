@@ -1,7 +1,7 @@
 import unittest
-from toytable import table_literal, TableTestMixin
-from toytable.table import AggregationTable
-from toytable.row import TableRow
+from eztable import table_literal, TableTestMixin
+from eztable.table import AggregationTable
+from eztable.row import TableRow
 
 
 class TestAggregate(TableTestMixin, unittest.TestCase):

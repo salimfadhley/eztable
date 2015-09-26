@@ -2,5 +2,4 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source venv/bin/activate
-cd $DIR/src
-python setup.py develop
+venv/bin/pip3 install -e src

@@ -3,8 +3,8 @@ from setuptools import setup
 import os
 
 PROJECT_ROOT, _ = os.path.split(__file__)
-REVISION = '0.0.38'
-PROJECT_NAME = 'toytable'
+REVISION = '0.1.0'
+PROJECT_NAME = 'eztable'
 PROJECT_AUTHORS = "Salim Fadhley"
 PROJECT_EMAILS = 'salimfadhley@gmail.com'
 PROJECT_URL = "https://bitbucket.org/salimfadhley/toytable"
@@ -20,10 +20,10 @@ setup(
     version=REVISION,
     author=PROJECT_AUTHORS,
     author_email=PROJECT_EMAILS,
-    packages=['toytable', 'toytable_tests'],
+    packages=['eztable', 'eztable_tests'],
     zip_safe=True,
     include_package_data=False,
-    install_requires=['bintrees>=2.0.1', 'six>=1.7.3'],
+    install_requires=['bintrees>=2.0.2', 'six>=1.9.0'],
     test_suite='nose.collector',
     tests_require=['mock', 'nose', 'coverage'],
     url=PROJECT_URL,

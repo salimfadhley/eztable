@@ -1,7 +1,7 @@
 import logging
 import six.moves
 import itertools
-from collections import namedtuple, OrderedDict
+from collections import OrderedDict
 from six import string_types
 from weakref import WeakValueDictionary, WeakSet
 

@@ -1,8 +1,8 @@
 import unittest
 import datetime
-from toytable import Table
-from toytable import table_literal
-from toytable.table_literal import parse_column_string, col_tuple_to_schema_item
+from eztable import Table
+from eztable import table_literal
+from eztable.table_literal import parse_column_string, col_tuple_to_schema_item
 
 
 class TestTableLiteral(unittest.TestCase):
