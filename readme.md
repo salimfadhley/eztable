@@ -9,6 +9,11 @@ EZTable is built with an emphasis on simplicity, both in interface and internal 
 
 EZTable is not intended for high performance or scalability. Toytable is not complete. For these reasons, please consider evaluating other more mature packages (e.g. Pandas).
 
+Basic Usage
+-----------
+
+[![asciicast](https://asciinema.org/a/1gll4ddmgvp0grq705y5f7l8s.png)](https://asciinema.org/a/1gll4ddmgvp0grq705y5f7l8s)
+
 Project Status
 --------------
 

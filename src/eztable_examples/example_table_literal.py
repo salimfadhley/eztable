@@ -7,6 +7,6 @@ pokedex = table_literal("""
     | Raichu        | 23          | Lt. Surge   | Electric   |
     """)
 
-print pokedex.column_names
-print pokedex.column_types
-print list(pokedex.Pokemon)
+print(pokedex)
+print(pokedex.column_types)
+print(list(pokedex.Pokemon))
