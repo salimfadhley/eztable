@@ -12,11 +12,11 @@ EZTable is not intended for high performance or scalability. Toytable is not com
 Project Status
 --------------
 
-[![Build Status](https://travis-ci.org/salimfadhley/eztable.svg?branch=master)](https://travis-ci.org/salimfadhley/eztable)
+* Current test status: [![Build Status](https://travis-ci.org/salimfadhley/eztable.svg?branch=master)](https://travis-ci.org/salimfadhley/eztable)
 
-[![Requirements Status](https://requires.io/github/salimfadhley/eztable/requirements.svg?branch=master)](https://requires.io/github/salimfadhley/eztable/requirements/?branch=master)
+* Dependencies: [![Requirements Status](https://requires.io/github/salimfadhley/eztable/requirements.svg?branch=master)](https://requires.io/github/salimfadhley/eztable/requirements/?branch=master)
 
-[![Code Health](https://landscape.io/github/salimfadhley/eztable/master/landscape.svg?style=flat)](https://landscape.io/github/salimfadhley/eztable/master)
+* Code Quality: [![Code Health](https://landscape.io/github/salimfadhley/eztable/master/landscape.svg?style=plastic)](https://landscape.io/github/salimfadhley/eztable/master)
 
 About this project
 ------------------
