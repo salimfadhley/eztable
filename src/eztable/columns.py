@@ -60,12 +60,9 @@ class ArrayColumn(array.array):
     }
 
     def __new__(cls, name, values=None, column_type='i'):
-        name
-        values
         return array.array.__new__(cls, column_type)
 
     def __init__(self, name, values=None, column_type=None):
-        column_type
         self.name = name
         self.extend(values or [])
 
@@ -81,7 +78,7 @@ class ArrayColumn(array.array):
         return '%s (%s)' % (self.name, self.typecode)
 
     @staticmethod
-    def validate(value):
+    def validate(_):
         return True
 
 class StaticColumn(object):
@@ -159,7 +156,7 @@ class DerivedTableColumn(object):
             yield self._column[i]
 
     def __len__(self):
-        return len([None for i in self._indices_func()])
+        return len([None for _ in self._indices_func()])
 
     def __getitem__(self, key):
         if isinstance(key, int):
@@ -223,9 +220,9 @@ class StandardizedColumn(FunctionColumn):
     all of the scores.
     """
 
-    def __init__(self, column, range=1.0):
+    def __init__(self, column, deviation=1.0):
         self._column = column
-        self._range = range
+        self._range = deviation
 
     def _average(self):
         return sum(self._column) / float(len(self._column))

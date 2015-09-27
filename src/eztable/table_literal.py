@@ -83,8 +83,8 @@ def table_literal(repr_string, default_type=str):
     fns = [c.fn_from_string() for c in t._columns]
 
     def process_row(lst_row):
-            for ty, val in zip(fns, lst_row):
-                yield ty(val)
+        for ty, val in zip(fns, lst_row):
+            yield ty(val)
 
     data = (list(process_row(row)) for row in rows_iter)
     t.extend(data)

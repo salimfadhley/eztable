@@ -68,7 +68,7 @@ class TestStandardizedColumn(BaseTest, unittest.TestCase):
 
     def setUp(self):
         input_col = Column(self.expected_name, [-1, 0, 1], column_type=float)
-        self.col = StandardizedColumn(column=input_col, range=1.0)
+        self.col = StandardizedColumn(column=input_col, deviation=1.0)
 
 
 class TestArrayColumn(BaseTest, unittest.TestCase):

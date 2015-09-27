@@ -179,7 +179,7 @@ class Table(object):
                 "arguments of type string"
             )
 
-        keep_cols = [c for c in self.column_names if not c in col_names]
+        keep_cols = [c for c in self.column_names if c not in col_names]
         return self._project(keep_cols)
 
     def project(self, *col_names):
@@ -767,7 +767,7 @@ class JoinTable(DerivedTable):
         all_keys = set(self._keys + self._other_keys)
         return (
             [JoinColumn(indices_func=self._join_indices_func, column=c)
-             for c in self._other._columns if not c.name in all_keys]
+             for c in self._other._columns if c.name not in all_keys]
         )
 
     @property
