@@ -20,7 +20,7 @@ setup(
     version=REVISION,
     author=PROJECT_AUTHORS,
     author_email=PROJECT_EMAILS,
-    packages=['eztable', 'eztable_tests'],
+    packages=['eztable',],
     zip_safe=True,
     include_package_data=False,
     install_requires=['bintrees>=2.0.2', 'six>=1.9.0'],
