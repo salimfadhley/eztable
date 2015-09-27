@@ -3,11 +3,11 @@ from setuptools import setup
 import os
 
 PROJECT_ROOT, _ = os.path.split(__file__)
-REVISION = '0.1.0'
+REVISION = '0.1.1'
 PROJECT_NAME = 'eztable'
 PROJECT_AUTHORS = "Salim Fadhley"
 PROJECT_EMAILS = 'salimfadhley@gmail.com'
-PROJECT_URL = "https://bitbucket.org/salimfadhley/toytable"
+PROJECT_URL = "https://github.com/salimfadhley/eztable"
 SHORT_DESCRIPTION = 'Simple in-memory tables in pure Python.'
 
 try:
@@ -31,14 +31,16 @@ setup(
     long_description=DESCRIPTION,
     license='MIT',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Environment :: Console',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
         'Topic :: Software Development :: Testing',
+        'Topic :: Utilities'
     ],
 )
