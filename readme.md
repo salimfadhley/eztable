@@ -12,6 +12,8 @@ EZTable is not intended for high performance or scalability. Toytable is not com
 Basic Usage
 -----------
 
+This Asciinema explains how to programatically build, filter and join EZTable's table object:
+
 [![asciicast](https://asciinema.org/a/1gll4ddmgvp0grq705y5f7l8s.png)](https://asciinema.org/a/1gll4ddmgvp0grq705y5f7l8s)
 
 Project Status
