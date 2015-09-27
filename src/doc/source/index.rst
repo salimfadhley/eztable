@@ -1,18 +1,15 @@
-toytable: Lightweight python tables 
-===================================
+EZTable: Lightweight python tables
+==================================
 
 .. image:: toy_table.png
 
-Toytable is a lightweight python table library. It provides a class called Table  which is suitable for representing one-dimensional tables (e.g. time-sequences).
+EZTable is a lightweight python table library. It provides a class called Table which is suitable for representing
+one-dimensional tables.
 
-Toytable is built with an emphasis on simplicity, both in interface and internal design
-rather than performance or scalability. Toytable is intended to have as few dependancies
-as possible, and is therefore suitable for casual development tasks.
-
-Toytable is not complete. If you require a higher performance, more feature-rich table class, please
-consider `Pandas`_, a very mature project which was a significant inspiration for this project. 
-
-.. _Pandas: http://pandas.pydata.org/
+EZTable is built with an emphasis on simplicity, both in interface and internal design
+rather than performance or scalability. EZTable is intended to have as few requirments
+as possible, and is therefore suitable for casual development tasks or environments where
+installation of compilers may be impossible.
 
 Contents
 ========
@@ -28,27 +25,11 @@ Contents
 Useful Links
 ------------
 
-* Documentation: http://toytable.readthedocs.org/
-* Releases: https://pypi.python.org/pypi/toytable/
-* Source code: https://bitbucket.org/salimfadhley/toytable
+* Current build status: https://travis-ci.org/salimfadhley/eztable
+* Documentation: http://pythonhosted.org/eztable/
+* Releases: https://pypi.python.org/pypi/eztable
+* Source code: https://github.com/salimfadhley/eztable
 * Issues: https://bitbucket.org/salimfadhley/toytable/issues
-* Python 3.3 build status: https://drone.io/bitbucket.org/salimfadhley/toytable
-* Python 2.7 build status: https://www.codeship.io/projects/19984
-
-Project Status
---------------
-
-.. image:: https://drone.io/bitbucket.org/salimfadhley/toytable/status.png
-   :target: https://drone.io/bitbucket.org/salimfadhley/toytable
-
-.. image:: https://pypip.in/wheel/toytable/badge.png
-        :target: https://pypi.python.org/pypi/toytable/
-
-.. image:: https://pypip.in/license/toytable/badge.png
-        :target: https://pypi.python.org/pypi/toytable/
-
-.. image:: https://pypip.in/download/toytable/badge.png
-    :target: https://pypi.python.org/pypi//toytable/
 
 Installation
 ------------
@@ -58,12 +39,12 @@ Egg-files for this project are hosted on PyPi. Most Python users should be able 
 Most users can do the following:
 ::
 
-    pip install toytable
+    pip install eztable
 
 Or..
 ::
 
-    easy_install toytable
+    easy_install eztable
 
 You can also install this project from source. Check ou the code from mercurial
 and then build the project.
