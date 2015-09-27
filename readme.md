@@ -21,7 +21,7 @@ Project Status
 About this project
 ------------------
 
-* Documentation: http://eztable.readthedocs.org
+* Documentation: http://pythonhosted.org/eztable/
 * Latest release: https://pypi.python.org/pypi/eztable/
 * Latest source: https://github.com/salimfadhley/eztable
 * Issues: https://github.com/salimfadhley/eztable/issues
