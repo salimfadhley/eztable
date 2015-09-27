@@ -24,22 +24,22 @@ def describe_column(name, typ):
 
 
 class Column(list):
-    def __init__(self, name, values=None, type=object):
+    def __init__(self, name, values=None, column_type=object):
         values = values or []
         list.__init__(self)
         self.name = name
-        self.type = type
+        self.column_type = column_type
         self[:] = values
 
     @property
     def description(self):
-        return describe_column(self.name, self.type)
+        return describe_column(self.name, self.column_type)
 
     def validate(self, v):
-        return v is None or isinstance(v, self.type)
+        return v is None or isinstance(v, self.column_type)
 
     def fn_from_string(self):
-        return self.type
+        return self.column_type
 
 
 class ArrayColumn(array.array):
@@ -59,38 +59,38 @@ class ArrayColumn(array.array):
         'd':float
     }
 
-    def __new__(cls, name, values=None, type='i'):
-        try:
-            return array.array.__new__(cls, type)
-        except ValueError as ve:
-            raise ValueError("Invalid typecode: %s" % type)
+    def __new__(cls, name, values=None, column_type='i'):
+        name
+        values
+        return array.array.__new__(cls, column_type)
 
-    def __init__(self, name, values=None, type='i'):
+    def __init__(self, name, values=None, column_type=None):
+        column_type
         self.name = name
         self.extend(values or [])
-
 
     def fn_from_string(self):
         return self.PY_TYPE_MAPPING[self.typecode]
 
     @property
-    def type(self):
+    def column_type(self):
         return self.typecode
-
-    def validate(self, v):
-        return True  # Delegate to underlying class
 
     @property
     def description(self):
-        return '%s (%s)' % (self.name, self.type)
+        return '%s (%s)' % (self.name, self.typecode)
+
+    @staticmethod
+    def validate(value):
+        return True
 
 class StaticColumn(object):
 
-    def __init__(self, name, value, len_func, type=object):
+    def __init__(self, name, value, len_func, column_type=object):
         self.name = name
         self._value = value
         self._len_func = len_func
-        self.type = type
+        self.column_type = column_type
 
     def __iter__(self):
         return (
@@ -102,14 +102,14 @@ class StaticColumn(object):
 
     @property
     def description(self):
-        return describe_column(self.name, self.type)
+        return describe_column(self.name, self.column_type)
 
 
 class DerivedColumn(object):
 
-    def __init__(self, name, inputs, func, type=object):
+    def __init__(self, name, inputs, func, column_type=object):
         self.name = name
-        self.type = type
+        self.column_type = column_type
 
         self.func = func
         self.inputs = inputs
@@ -124,7 +124,7 @@ class DerivedColumn(object):
 
     @property
     def description(self):
-        return describe_column(self.name, self.type)
+        return describe_column(self.name, self.column_type)
 
 
 class AggregationColumn(object):
@@ -138,7 +138,7 @@ class DerivedTableColumn(object):
     """Not so much a derived column, but a column on a
     derived table"""
 
-    def __init__(self, indices_func, column, name=None):
+    def __init__(self, indices_func, column):
         self._indices_func = indices_func
         self._column = column
 
@@ -147,8 +147,8 @@ class DerivedTableColumn(object):
         return self._column.name
 
     @property
-    def type(self):
-        return self._column.type
+    def column_type(self):
+        return self._column.column_type
 
     @property
     def description(self):
@@ -184,8 +184,8 @@ class FunctionColumn(object):
         return self._column.name
 
     @property
-    def type(self):
-        return self._column.type
+    def column_type(self):
+        return self._column.column_type
 
     @property
     def description(self):

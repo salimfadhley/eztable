@@ -34,12 +34,12 @@ class TestArrayTable(unittest.TestCase):
         ])
 
         self.assertEquals(
-            self.t._get_column('A').type,
+            self.t._get_column('A').column_type,
             'i'
         )
 
         self.assertEquals(
-            self.t._get_column('C').type,
+            self.t._get_column('C').column_type,
             'f'
         )
 

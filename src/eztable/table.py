@@ -54,9 +54,9 @@ class Table(object):
             else:
                 name, typ = s
                 if isinstance(typ, str):
-                    col = ArrayColumn(name, type=typ)
+                    col = ArrayColumn(name, column_type=typ)
                 else:
-                    col = Column(name, type=typ)
+                    col = Column(name, column_type=typ)
                 self._columns.append(col)
 
         for row in data:
@@ -82,7 +82,7 @@ class Table(object):
             if not c.validate(v): 
                 raise InvalidData(
                     '%r is incompatible with type %s for column %s' % (
-                        v, c.type, c.name
+                        v, c.column_type, c.name
                     )
                 )
         for v, c in zipped:
@@ -107,35 +107,25 @@ class Table(object):
         """
         s = []
         for c in self._columns:
-            s.append((c.name, c.type))
+            s.append((c.name, c.column_type))
         return s
-
-    @property
-    def _all_columns(self):
-        """Get all of the column objects in the table as a list of Columns.
-        """
-        return self._columns
 
     @property
     def column_names(self):
         """Get the table's column names as a list of strings.
         """
-        return [c.name for c in self._all_columns]
+        return [c.name for c in self._columns]
 
     @property
     def column_types(self):
         """Get the table's column types as a list of types.
         """
-        try:
-            return [c.type for c in self._all_columns]
-        except AttributeError:
-            import pdb
-            pdb.set_trace()
+        return [c.column_type for c in self._columns]
 
     @property
     def _column_descriptions(self):
         try:
-            return [c.description for c in self._all_columns]
+            return [c.description for c in self._columns]
         except AttributeError as ae:
             log.exception(ae[0])
             raise RuntimeError(ae[0])
@@ -267,7 +257,7 @@ class Table(object):
         :param input_columns: The input column names.
         :type input_columns: list of str
         :param fn; A function or lambda
-        :param type: Optionally, constrain the value of this column by type
+        :param col_type: Optionally, constrain the value of this column by type
         """
         incols = []
         for c in input_columns:
@@ -440,7 +430,7 @@ class Table(object):
     def _get_column_widths(self):
         """Get maximum column widths as a list
         of integers"""
-        cl = [len(cn) for cn in self._column_descriptions]
+        cl = [len(cd) for cd in self._column_descriptions]
         for r in self:
             for i, (m, c) in enumerate(zip(cl, r)):
                 this_col_len = len(str(c))
@@ -479,8 +469,8 @@ class Table(object):
         specified in the 2nd column. It's input will be each of the
         sub-tables speified by the grouping keys.
 
-        >>> from toytable import table_literal
-        >>> t = table_literal(\"\"\"
+        >>> from eztable import table_literal
+        >>> t = table_literal(\'\'\'
         ... | Attack(str)   | Pokemon(str) | Level Obtained(int) | Attack Type(str) |
         ... | Thunder Shock | Pikachu      | 1                   | Electric         |
         ... | Tackle        | Pikachu      | 1                   | Normal           |
@@ -491,7 +481,7 @@ class Table(object):
         ... | Electro Ball  | Pikachu      | 18                  | Electric         |
         ... | Charm         | Pikachu      | 0                   | Fairy            |
         ... | Sweet Kiss    | Pikachu      | 0                   | Fairy            |
-        ... \"\"\")
+        ... \'\'\')
         >>>
         >>> agg = t.aggregate(
         ...     keys=('Pokemon', 'Attack Type'),
@@ -552,7 +542,7 @@ class Table(object):
                 return c
 
         return DerivedTable(indices_func=self._indices_func,
-                            columns = [standardize_col(c) for c in self._all_columns]
+                            columns = [standardize_col(c) for c in self._columns]
                             )
 
     def normalize(self, normalizations):
@@ -575,7 +565,7 @@ class Table(object):
                 return c
 
         return DerivedTable(indices_func=self._indices_func,
-                            columns = [normalize_col(c) for c in self._all_columns]
+                            columns=[normalize_col(c) for c in self._columns]
                             )
 
 
@@ -607,10 +597,10 @@ class AggregationTable(Table):
 
     @property
     def column_types(self):
-        return (
-            [self.table._get_column(cn).type for cn in self.keys] + 
-            [a.type for a in self.aggregations]
-        )
+        table_types = [self.table._get_column(cn).column_type for cn in self.keys]
+        aggregation_types = [a.column_type for a in self.aggregations]
+
+        return table_types + aggregation_types
 
     def get_row(self, row):
         row_keys, subtable = next(itertools.islice(
@@ -622,7 +612,6 @@ class AggregationTable(Table):
         return TableRow(r, self.column_names)
 
     def __iter__(self):
-        cn = self.column_names
         for row_keys, subtable in self._iter_subtables():
             r = row_keys + tuple(a(subtable) for a in self.aggregations)
             yield TableRow(r, self.column_names)
@@ -672,7 +661,7 @@ class DerivedTable(Table):
     def _get_column(self, name):
         actual_name = self._inv_rename_dict.get(name, name)
         actual_col = Table._get_column(self, actual_name)
-        return DerivedTableColumn(self._indices_func, actual_col, name=name)
+        return DerivedTableColumn(self._indices_func, actual_col)
 
     def append(self, row):
         raise TypeError("Cannot do append on a non-materialised table.")
@@ -792,13 +781,13 @@ class JoinTable(DerivedTable):
         """Get the table's schema. This is a list of
         (name (string), type) tuples.
 
-        The method on Table is overriden because
+        The method on Table is overridden because
         we need to get the schema from both the original
         and joined columns.
         """
         s = []
         for c in self._columns:
-            s.append((c.name, c.type))
+            s.append((c.name, c.column_type))
         return s
 
     def __getitem__(self, key):

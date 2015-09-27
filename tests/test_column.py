@@ -1,4 +1,3 @@
-import array
 import unittest
 from eztable.columns import Column
 
@@ -17,7 +16,7 @@ class TestColumn(unittest.TestCase):
 
     def test_column_type(self):
         """A column can be constructed specifying a type."""
-        c = Column('foo', range(3), type=int)
+        c = Column('foo', range(3), column_type=int)
         self.assertEqual(list(c), [0, 1, 2])
 
 
