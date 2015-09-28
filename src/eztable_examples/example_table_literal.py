@@ -1,12 +1,11 @@
 from eztable import table_literal
 pokedex = table_literal("""
-    | Pokemon (str) | Level (int) | Owner (str) | Type (str) |
-    | Pikchu        | 12          | Ash Ketchum | Electric   |
-    | Bulbasaur     | 16          | Ash Ketchum | Grass      |
-    | Charmander    | 19          | Ash Ketchum | Fire       |
-    | Raichu        | 23          | Lt. Surge   | Electric   |
+    | Owner Id (int) | Pokemon    | Level (int) |
+    | 1              | Pikachu    | 18          |
+    | 1              | Bulbasaur  | 22          |
+    | 1              | Charmander | 12          |
+    | 3              | Togepi     | 5           |
+    | 1              | Starmie    | 44          |
+    | 9              | Mew        | 99          |
     """)
-
 print(pokedex)
-print(pokedex.column_types)
-print(list(pokedex.Pokemon))
