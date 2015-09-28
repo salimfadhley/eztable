@@ -29,7 +29,3 @@ print(sliced)
 j3 = j2.copy()
 i = j3.add_index(('Pokemon',)).reindex()
 print(i[('Pikachu',)])
-
-# Have a nice day!
-exit
-exit
