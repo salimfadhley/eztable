@@ -24,6 +24,7 @@ def describe_column(name, typ):
 
 
 class Column(list):
+
     def __init__(self, name, values=None, column_type=object):
         values = values or []
         list.__init__(self)
@@ -45,18 +46,18 @@ class Column(list):
 class ArrayColumn(array.array):
 
     PY_TYPE_MAPPING = {
-        'c':str,
-        'b':int,
-        'B':int,
-        'u':six.u,
-        'h':int,
-        'H':int,
-        'i':int,
-        'I':int,
-        'l':int,
-        'L':int,
-        'f':float,
-        'd':float
+        'c': str,
+        'b': int,
+        'B': int,
+        'u': six.u,
+        'h': int,
+        'H': int,
+        'i': int,
+        'I': int,
+        'l': int,
+        'L': int,
+        'f': float,
+        'd': float
     }
 
     def __new__(cls, name, values=None, column_type='i'):
@@ -80,6 +81,7 @@ class ArrayColumn(array.array):
     @staticmethod
     def validate(_):
         return True
+
 
 class StaticColumn(object):
 
@@ -171,6 +173,7 @@ class DerivedTableColumn(object):
 class JoinColumn(DerivedTableColumn):
     pass
 
+
 class FunctionColumn(object):
     """Base class for columns which simply apply a function to
     another column.
@@ -188,6 +191,7 @@ class FunctionColumn(object):
     def description(self):
         return self._column.description
 
+
 class NormalizedColumn(FunctionColumn):
     """Normalize all of the values in a column
 
@@ -203,7 +207,7 @@ class NormalizedColumn(FunctionColumn):
         col_max = max(self._column)
         col_min = min(self._column)
         col_range = col_max - col_min
-        return lambda x: self._normal * (x-col_min) / col_range
+        return lambda x: self._normal * (x - col_min) / col_range
 
     def __iter__(self):
         return six.moves.map(self.normalize_func(), self._column.__iter__())
@@ -212,6 +216,7 @@ class NormalizedColumn(FunctionColumn):
         fn = self.normalize_func()
         val = self._column.__getitem__(index)
         return fn(val)
+
 
 class StandardizedColumn(FunctionColumn):
     """Standardize all of the values in a column
@@ -228,11 +233,11 @@ class StandardizedColumn(FunctionColumn):
         return sum(self._column) / float(len(self._column))
 
     def _standard_deviation(self):
-        average  = self._average()
-        return (sum((a-average)**2 for a in self._column.__iter__()) / len(self._column)) ** 0.5
+        average = self._average()
+        return (sum((a - average)**2 for a in self._column.__iter__()) / len(self._column)) ** 0.5
 
     def standardize_func(self):
-        return lambda x: self._range * (x-self._average()) / self._standard_deviation()
+        return lambda x: self._range * (x - self._average()) / self._standard_deviation()
 
     def __iter__(self):
         return six.moves.map(self.standardize_func(), self._column.__iter__())

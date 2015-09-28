@@ -77,7 +77,7 @@ def table_literal(repr_string, default_type=str):
     """
     rows_iter = clean_rows(repr_string)
     column_names_and_types = [col_tuple_to_schema_item(parse_column_string(h), default_type=str)
-                              for h in next(rows_iter)  ]
+                              for h in next(rows_iter)]
 
     t = Table(column_names_and_types)
     fns = [c.fn_from_string() for c in t._columns]

@@ -46,7 +46,7 @@ class Index(bintrees.RBTree):
                 [self.table[i] for i in self.index(key)]
             )
         raise TypeError(
-            'Index keys must be an integer or a tuple, got %r (%s)' % 
+            'Index keys must be an integer or a tuple, got %r (%s)' %
             (key, type(key))
         )
 

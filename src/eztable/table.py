@@ -15,6 +15,7 @@ from .aggregation import Aggregation
 
 log = logging.getLogger(__name__)
 
+
 class Table(object):
 
     """The basic table class. Table objects contain
@@ -79,7 +80,7 @@ class Table(object):
         zipped = list(six.moves.zip(row, self._columns))
 
         for v, c in zipped:
-            if not c.validate(v): 
+            if not c.validate(v):
                 raise InvalidData(
                     '%r is incompatible with type %s for column %s' % (
                         v, c.column_type, c.name
@@ -542,7 +543,7 @@ class Table(object):
                 return c
 
         return DerivedTable(indices_func=self._indices_func,
-                            columns = [standardize_col(c) for c in self._columns]
+                            columns=[standardize_col(c) for c in self._columns]
                             )
 
     def normalize(self, normalizations):
@@ -597,7 +598,8 @@ class AggregationTable(Table):
 
     @property
     def column_types(self):
-        table_types = [self.table._get_column(cn).column_type for cn in self.keys]
+        table_types = [self.table._get_column(
+            cn).column_type for cn in self.keys]
         aggregation_types = [a.column_type for a in self.aggregations]
 
         return table_types + aggregation_types
@@ -744,8 +746,8 @@ class JoinTable(DerivedTable):
     def get_indeces_function(self):
         try:
             return {
-                'left':self._left_join_indices_func,
-                'inner':self._inner_join_indices_func,
+                'left': self._left_join_indices_func,
+                'inner': self._inner_join_indices_func,
             }[self._mode]
         except KeyError:
             raise InvalidJoinMode(self._mode)
