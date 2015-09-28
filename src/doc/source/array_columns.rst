@@ -1,7 +1,7 @@
 Array Columns
 =============
 
-Ordinarily the columns in toytable.Table objects are lists, however the class also supports columns which are arrays.
+Ordinarily the columns in eztable.Table objects are lists, however the class also supports columns which are arrays.
 
 These behave virtually identically to the normal kind of column, but ofer greater memory efficiency. They may be used alongside other kinds of column. 
 

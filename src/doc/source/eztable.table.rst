@@ -4,13 +4,13 @@ toytable.table module
 The Table Class
 ---------------
 
-The Table class (toytable.Table) is the most important component of this package.
+The Table class (eztable.Table) is the most important component of this package.
 It is intended to represent a 'normal' table - that is one which has no 
 special colums or has not undergone any transformations (e.g. project, expand).
 
-.. automethod:: toytable.Table.__init__
+.. automethod:: eztable.Table.__init__
 
-.. automodule:: toytable
+.. automodule:: eztable
     :members: Table, DerivedTable
     :undoc-members:
     :show-inheritance:
@@ -18,4 +18,4 @@ special colums or has not undergone any transformations (e.g. project, expand).
 Table Literals
 --------------
 
-.. autofunction:: toytable.table_literal
+.. autofunction:: eztable.table_literal

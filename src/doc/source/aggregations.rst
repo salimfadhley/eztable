@@ -1,7 +1,7 @@
 Aggregations
 ============
 
-Toytable allows the contents of a table to be grouped according to the values
+EZTable allows the contents of a table to be grouped according to the values
 of one or more column. 
 
 Internally the aggregation function splits the main table into a number of

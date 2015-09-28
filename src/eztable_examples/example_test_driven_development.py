@@ -5,7 +5,7 @@ from eztable import table_literal, TableTestMixin
 class ExampleTest(TableTestMixin, unittest.TestCase):
 
     """An example of how to do test-driven
-    development with toytable.
+    development with eztable.
     """
 
     def test_foo(self):

@@ -1,7 +1,7 @@
 toytable.row module
 ===================
 
-.. automodule:: toytable.row
+.. automodule:: eztable.row
     :members:
     :undoc-members:
     :show-inheritance:

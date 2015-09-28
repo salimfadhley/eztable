@@ -1,7 +1,7 @@
 toytable.exceptions module
 ==========================
 
-.. automodule:: toytable.exceptions
+.. automodule:: eztable.exceptions
     :members:
     :undoc-members:
     :show-inheritance:

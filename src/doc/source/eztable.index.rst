@@ -1,7 +1,7 @@
 toytable.index module
 =====================
 
-.. automodule:: toytable.index
+.. automodule:: eztable.index
     :members:
     :undoc-members:
     :show-inheritance:

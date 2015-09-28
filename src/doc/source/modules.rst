@@ -1,5 +1,5 @@
-toytable
-========
+EZTable
+=======
 
 .. toctree::
    :maxdepth: 4

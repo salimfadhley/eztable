@@ -6,9 +6,9 @@ Submodules
 
 .. toctree::
 
-   toytable.columns
-   toytable.exceptions
-   toytable.index
-   toytable.row
-   toytable.table
+   eztable.columns
+   eztable.exceptions
+   eztable.index
+   eztable.row
+   eztable.table
 

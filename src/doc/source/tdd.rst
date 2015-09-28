@@ -1,7 +1,7 @@
 Test Driven Development
 -----------------------
 
-Toytable provides a testing mixin called **TableTestMixin** which can be used
+EZTable provides a testing mixin called **TableTestMixin** which can be used
 to provide more helpful table output::
 
     import unittest
@@ -32,12 +32,12 @@ to provide more helpful table output::
     if __name__ == '__main__':
         unittest.main()
 
-Toytable can be used as an alternative to Lettuce style tests. 
+EZTable can be used as an alternative to Lettuce style tests.
 
 Testing Mixin
 -------------
 
-.. autoclass:: toytable.TableTestMixin
+.. autoclass:: eztable.TableTestMixin
     :members:
     :undoc-members:
     :show-inheritance:

@@ -1,6 +1,6 @@
 class TableTestMixin(object):
     """Mix this class into any unit test test-cases in order
-    to add methods for asserting equality on toytable objects.
+    to add methods for asserting equality on eztable.Table objects.
 
     Typically the class definition for a unittest will look
     something like this::

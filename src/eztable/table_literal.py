@@ -42,11 +42,11 @@ def clean_rows(repr_string):
 
 
 def table_literal(repr_string, default_type=str):
-    """Create a toytable.Table object from a multi-line
+    """Create a eztable.Table object from a multi-line
     string expression. The input format is exactly the
     same as the Table class's repr format::
 
-        >>> from toytable import table_literal
+        >>> from eztable import table_literal
         >>> pokedex = table_literal(\"\"\"
         ...     | Pokemon (str) | Level (int) | Owner (str) | Type (str) |
         ...     | Pikchu        | 12          | Ash Ketchum | Electric   |

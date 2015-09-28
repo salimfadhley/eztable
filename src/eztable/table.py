@@ -533,8 +533,8 @@ class Table(object):
         def standardize_col(c):
             """
             Inner function, normalize a column c if required
-            :param c:  toytable.column.Column
-            :return: either a normalized colukn or the original column
+            :param c:  eztable.column.Column
+            :return: either a normalized column or the original column
             """
             if c.name in standardizations:
                 return StandardizedColumn(c, standardizations[c.name])
@@ -550,7 +550,7 @@ class Table(object):
         Return a version of the table with columns normalized.
 
         :param normalizations: dict mapping column names to their normalized range (typically 1).
-        :return: A derived ToyTable with the normalizations applied.
+        :return: A derived eztable.Table with the normalizations applied.
         """
 
         def normalize_col(c):
