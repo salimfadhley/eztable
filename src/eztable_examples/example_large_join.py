@@ -3,6 +3,7 @@ import itertools
 import random
 import cProfile
 
+
 def do_cprofile(func):
     def profiled_func(*args, **kwargs):
         profile = cProfile.Profile()
@@ -30,6 +31,7 @@ for i in range(100000):
     cyc = next(ENDLESS)
 
     t.append([i, rnd, cyc])
+
 
 @do_cprofile
 def main():
