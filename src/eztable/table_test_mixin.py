@@ -9,39 +9,47 @@ class TableTestMixin(object):
             ...
     """
 
-    def __validate_table_structures(self, A, B):
-        self.assertEquals(
-            A.column_names,
-            B.column_names,
-            "Column names are different")
+    def __validate_table_structures(self, A, B, msg=None):
 
-        self.assertEquals(
-            A.column_types,
-            B.column_types,
-            "Column types are different")
+        try:
+            self.assertEquals(
+                A.column_names,
+                B.column_names,
+                "Column names are different")
 
-        if len(A) != len(B):
-            raise AssertionError(
-                "Table lengths are different: %i != %i" % 
-                (len(A), len(B))
-            )
+            self.assertEquals(
+                A.column_types,
+                B.column_types,
+                "Column types are different")
+
+            if len(A) != len(B):
+                raise AssertionError(
+                    "Table lengths are different: %i != %i" % (len(A), len(B))
+                )
+        except AssertionError as ae:
+            if msg:
+                raise AssertionError(msg)
+            raise
 
     def assertTablesEqual(self, A, B, msg=None):
         """Verfy that two tables are exactly equal.
         Raises an AssertionError if not.
         """
-        self.__validate_table_structures(A, B)
+        self.__validate_table_structures(A, B, msg=msg)
+
         for i, (a, b) in enumerate(zip(A, B)):
             if not a == b:
                 brokenA = A[i:i + 1]
                 brokenB = B[i:i + 1]
 
-                _msg = 'Differences at row %i\n\n%r\n\n%s' % (
+                default_error_message = 'Differences at row %i\n\n%r\n\n%s' % (
                     i,
                     brokenA,
                     brokenB
                 )
-                raise AssertionError(_msg)
+
+                msg = msg or default_error_message
+                raise AssertionError(msg)
 
     def assertTablesEqualAnyOrder(self, A, B, msg=None):
         """Verify that two tables contain the exact same
@@ -51,12 +59,12 @@ class TableTestMixin(object):
         self.__validate_table_structures(A, B)
         rows_a = set(A)
         rows_b = set(B)
-        self.assertEqual(rows_a, rows_b)
+        self.assertEqual(rows_a, rows_b, msg)
 
     def assertTablesNotEquals(self, A, B, msg=None):
         """Verify that two tables are not equal.
         Raises an AssertionError if the two tables are equal.
         """
-        self.assertNotEquals(A, B)
+        self.assertNotEquals(A, B, msg)
 
     assertTablesEquals = assertTablesEqual

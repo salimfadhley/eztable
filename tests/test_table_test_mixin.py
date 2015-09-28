@@ -64,7 +64,22 @@ class TestTableTestMixin(unittest.TestCase, TableTestMixin):
             "Column names are different" in ae.exception.args[0]
         )
 
-    def test_inconsitent_column_types(self):
+    def test_custom_error_message(self):
+        A = table_literal("""
+            | A (int) | B (int) |
+            | 1       | 2       |
+        """)
+
+        B = table_literal("""
+            | A (int) | B (int) | D (str) |
+        """)
+
+        with self.assertRaises(AssertionError) as ae:
+            self.assertTablesEqual(A, B, msg="fod_fan_fo")
+
+        self.assertEqual("fod_fan_fo",ae.exception.args[0])
+
+    def test_inconsistent_column_types(self):
         A = table_literal("""
             | A (int) | B (int) | D (float) |
             | 1       | 2       | 2.2       |
@@ -81,7 +96,7 @@ class TestTableTestMixin(unittest.TestCase, TableTestMixin):
             "Column types are different" in ae.exception.args[0]
         )
 
-    def test_detect_first_dfferent_row(self):
+    def test_detect_first_different_row(self):
         A = table_literal("""
             | A (int) | B (int) | D (float) |
             | 1       | 2       | 2.2       |
