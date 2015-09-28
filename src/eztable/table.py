@@ -224,7 +224,7 @@ class Table(object):
         """Implementation of project, anti_project and rename function"""
         rename_dict = rename_dict or {}
         cols = [self._get_column(c) for c in col_names]
-        [rename_dict.get(cn) for cn in self.column_names]
+
         return (
             DerivedTable(self._indices_func, cols, rename_dict=rename_dict)
         )

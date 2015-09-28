@@ -3,16 +3,15 @@ EZTable
 
 EZTable is a lightweight python table library. It is designed to be as easy as possible:
 
-It's easy to install because it's pure python, and is packaged both sdist (.tar.gz format) and also as a Python Wheel.
+It's easy to install because it's pure python, you don't need to compile any C extensions, however if you do have a compiler
+then a few of the components can be made to work faster.
 
+It's easy to deploy because it's packaged both sdist (.tar.gz format) and also as a Python Wheel. You can use the Pip command
+to install it or add it as a dependency of your project without introducing any extra hassle.
 
-It provides a class called Table  which is suitable for representing one-dimensional tables (e.g. time-sequences).
+It's easy to learn: There's plenty of documentation and examples of how to use EZTable's main features. 
 
-It is suitable for data analysis tasks. 
-
-EZTable is built with an emphasis on simplicity, both in interface and internal design rather than performance or scalability. Toytable is intended to have as few dependancies as possible, and is therefore suitable for casual development tasks.
-
-EZTable is not intended for high performance or scalability. Toytable is not complete. For these reasons, please consider evaluating other more mature packages (e.g. Pandas).
+It's easy to use, because the API is familiar to anybody who has used lists and common Python sequences.
 
 Basic Usage
 -----------
