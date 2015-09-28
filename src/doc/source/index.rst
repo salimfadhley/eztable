@@ -48,13 +48,6 @@ Or..
 You can also install this project from source. Check ou the code from mercurial
 and then build the project.
 
-
-Basic Use
----------
-
-.. raw:: html
-   <script type="text/javascript" src="https://asciinema.org/a/26938.js" id="asciicast-26938" async></script>
-
 Indices and tables
 ------------------
 

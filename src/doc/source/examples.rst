@@ -21,7 +21,7 @@ Printing tables
 ---------------
 
 Table objects can be printed:
-    >>> print p
+    >>> print(p)
     | Owner Id (int) | Pokemon    | Level (int) |
     | 1              | Pikachu    | 18          |
     | 1              | Bulbasaur  | 22          |
@@ -38,7 +38,7 @@ You can add data to Tables one row at a time. It has the same effect as using th
     >>> o.append([1, 'Ash Ketchum'])
     >>> o.append([2, 'Brock'])
     >>> o.append([3, 'Misty'])
-    >>> print o
+    >>> print(o)
     | Owner Id (int) | Name (str)  |
     | 1              | Ash Ketchum |
     | 2              | Brock       |
@@ -68,7 +68,7 @@ Re-ordering columns
 
 The project method allows you to re-order and remove columns from a Table:
     >>> j2 = j.project('Pokemon', 'Level', 'Name')
-    >>> print j2
+    >>> print(j2)
     | Pokemon    | Level (int) | Name (str)  |
     | Pikachu    | 18          | Ash Ketchum |
     | Bulbasaur  | 22          | Ash Ketchum |
@@ -82,7 +82,7 @@ Filtering rows of a table
 
 The restrict method allows basic filtering of a Table:
     >>> restricted = j2.restrict(['Name'], lambda n: n == 'Ash Ketchum')
-    >>> print restricted
+    >>> print(restricted)
     | Pokemon    | Level (int) | Name (str)  |
     | Pikachu    | 18          | Ash Ketchum |
     | Bulbasaur  | 22          | Ash Ketchum |
@@ -94,7 +94,7 @@ Slicing Operations
 
 Tables can also be sliced - and do exactly what you'd expect:
     >>> sliced = j2[1:-1]
-    >>> print sliced
+    >>> print(sliced)
     | Pokemon    | Level (int) | Name (str)  |
     | Bulbasaur  | 22          | Ash Ketchum |
     | Charmander | 12          | Ash Ketchum |
@@ -114,5 +114,5 @@ can be used to quickly look up rows by part of their value. Indexes
 eliminate the need for time-consuming search operations::
 
     >>> i = j3.add_index(('Pokemon',)).reindex()
-    >>> print i[('Pikachu', )]
+    >>> print(i[('Pikachu', )])
     ('Pikachu', 18, 'Ash Ketchum')

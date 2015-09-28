@@ -16,7 +16,10 @@ The function must be a callable which takes a subtable as it's input
 and returns a value of the type specfied in the 2nd column.
 
     >>> from eztable import table_literal
-    >>> t = table_literal(\"\"\"
+    Warning: FastBinaryTree not available, using Python version BinaryTree.
+    Warning: FastAVLTree not available, using Python version AVLTree.
+    Warning: FastRBTree not available, using Python version RBTree.
+    >>> t = table_literal("""
     ... | Attack(str)   | Pokemon(str) | Level Obtained(int) | Attack Type(str) |
     ... | Thunder Shock | Pikachu      | 1                   | Electric         |
     ... | Tackle        | Pikachu      | 1                   | Normal           |
@@ -27,17 +30,18 @@ and returns a value of the type specfied in the 2nd column.
     ... | Electro Ball  | Pikachu      | 18                  | Electric         |
     ... | Charm         | Pikachu      | 0                   | Fairy            |
     ... | Sweet Kiss    | Pikachu      | 0                   | Fairy            |
-    ... \"\"\")
+    ... """)
     >>>
     >>> agg = t.aggregate(
     ...     keys=('Pokemon', 'Attack Type'),
-    ...     aggregations = [
-    ...         ('Count', int, lambda t:len(t))
+    ...     aggregations=[
+    ...         ('Count', int, len)
     ...     ]
     ... )
     >>>
-    >>> print agg
+    >>> print(agg)
     | Pokemon (str) | Attack Type (str) | Count (int) |
-    | Pikachu       | Normal            | 4           |
     | Pikachu       | Electric          | 3           |
+    | Pikachu       | Normal            | 4           |
     | Pikachu       | Fairy             | 2           |
+    >>>
