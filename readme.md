@@ -1,7 +1,12 @@
 EZTable
 =======
 
-EZTable is a lightweight python table library. It provides a class called Table  which is suitable for representing one-dimensional tables (e.g. time-sequences).
+EZTable is a lightweight python table library. It is designed to be as easy as possible:
+
+It's easy to install because it's pure python, and is packaged both sdist (.tar.gz format) and also as a Python Wheel.
+
+
+It provides a class called Table  which is suitable for representing one-dimensional tables (e.g. time-sequences).
 
 It is suitable for data analysis tasks. 
 

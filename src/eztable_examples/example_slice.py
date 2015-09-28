@@ -15,4 +15,4 @@ t.extend([
     (4, 4.4, 'fnuu'),
 ])
 
-print t[::]
+print(t[::])
